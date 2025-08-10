@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { Activity, Workflow, TrendingUp, Clock, Loader2 } from "lucide-react"
 import { useDashboardTranslations } from '@/hooks/use-translations'
+import { createClient } from '@/lib/supabase/client'
 
 interface DashboardMetrics {
   total_executions: number
@@ -37,12 +38,26 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const t = useDashboardTranslations()
+  const supabase = createClient()
 
   useEffect(() => {
     const fetchDashboardData = async () => {
       setLoading(true)
       try {
-        const response = await fetch('/api/dashboard')
+        // Get user session and token
+        const { data: { session }, error: sessionError } = await supabase.auth.getSession()
+        
+        if (sessionError || !session) {
+          throw new Error('No valid session found')
+        }
+
+        const response = await fetch('/.netlify/functions/dashboard', {
+          headers: {
+            'Authorization': `Bearer ${session.access_token}`,
+            'Content-Type': 'application/json'
+          }
+        })
+        
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`)
         }
@@ -76,7 +91,7 @@ export default function Dashboard() {
     }
 
     fetchDashboardData()
-  }, [])
+  }, [supabase])
 
   const formatDuration = (ms: number | null) => {
     if (!ms) return '0s'
