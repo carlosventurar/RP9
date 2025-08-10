@@ -2,6 +2,7 @@
   "name": "rp9-portal",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
@@ -9,7 +10,9 @@
     "start": "next start",
     "lint": "next lint --fix",
     "lint:check": "next lint",
-    "export": "next export"
+    "export": "next export",
+    "populate-templates": "node scripts/populate-templates.js",
+    "migrate-templates": "node scripts/run-migration.js"
   },
   "dependencies": {
     "@netlify/functions": "^4.2.1",
