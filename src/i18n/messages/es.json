@@ -19,13 +19,15 @@
     "close": "Cerrar"
   },
   "navigation": {
+    "platform": "Plataforma",
     "dashboard": "Panel Principal",
     "workflows": "Flujos de Trabajo",
     "templates": "Plantillas",
     "analytics": "Analíticas", 
     "settings": "Configuración",
     "billing": "Facturación",
-    "logout": "Cerrar Sesión"
+    "logout": "Cerrar Sesión",
+    "accountSettings": "Configuración de Cuenta"
   },
   "auth": {
     "title": "Portal RP9",
@@ -50,7 +52,9 @@
     "accountCreated": "¡Cuenta creada exitosamente! Por favor revisa tu correo para verificar tu cuenta.",
     "enterEmail": "Por favor ingresa tu dirección de correo electrónico",
     "magicLinkFailed": "Error al enviar enlace mágico", 
-    "authError": "Ocurrió un error durante la autenticación"
+    "authError": "Ocurrió un error durante la autenticación",
+    "demoUser": "Usuario Demo",
+    "signOut": "Cerrar Sesión"
   },
   "dashboard": {
     "title": "Panel Principal",

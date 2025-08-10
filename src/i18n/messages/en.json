@@ -19,13 +19,15 @@
     "close": "Close"
   },
   "navigation": {
+    "platform": "Platform",
     "dashboard": "Dashboard",
     "workflows": "Workflows", 
     "templates": "Templates",
     "analytics": "Analytics",
     "settings": "Settings",
     "billing": "Billing",
-    "logout": "Logout"
+    "logout": "Logout",
+    "accountSettings": "Account Settings"
   },
   "auth": {
     "title": "RP9 Portal",
@@ -50,7 +52,9 @@
     "accountCreated": "Account created successfully! Please check your email to verify your account.",
     "enterEmail": "Please enter your email address",
     "magicLinkFailed": "Failed to send magic link",
-    "authError": "An error occurred during authentication"
+    "authError": "An error occurred during authentication",
+    "demoUser": "Demo User",
+    "signOut": "Sign out"
   },
   "dashboard": {
     "title": "Dashboard",
