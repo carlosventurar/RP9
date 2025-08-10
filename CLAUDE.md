@@ -14,6 +14,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 10. Please explain the functionality and code you just built out in detail. Walk me through what you changed and how you're solving the problem
 11. When I am coding with AI there are long breaks into between me giving me commands to the AI. Typically I spend that time doom scrolling which distracts me and puts me in a bad mental state. I'd like to use that time now to chat with you and generate new ideas, and also reflect on my other ideas and businesses and content. I'm not sure how I'd like to use this chat or what role I'd like you to play, but I think it could be much more useful than me doom scrolling. What do you think? What could be the best way for us to use this chat?
 12. Después de cada cambio, haz automaticamente el commit, push y verifica si hay un Pull Request pendiente. Si no hay conflictos y es posible, haz merge automático a main. 
+13. haz un task-$date.md and add a summary of the changes you made and any other relevant information tambien organiza todas las tareas que tienes que hacer en ese dia.
 ## Project Overview
 
 This is a new repository (RP9) that is currently empty. The project structure and architecture will be defined as development progresses.

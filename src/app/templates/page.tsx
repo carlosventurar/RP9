@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useAuth } from '@/lib/hooks/useAuth'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -151,6 +152,12 @@ const mockTemplates: Template[] = [
 ]
 
 const categoryIcons = {
+  'E-commerce': Mail,
+  'CRM & Sales': Zap, 
+  'Marketing': Star,
+  'DevOps & IT': Database,
+  'Finance & Operations': Clock,
+  // Legacy categories for backward compatibility
   notifications: Mail,
   integrations: Webhook,
   data: Database,
@@ -166,6 +173,7 @@ const difficultyColors = {
 }
 
 export default function TemplatesPage() {
+  const { token, isAuthenticated } = useAuth()
   const [templates, setTemplates] = useState<Template[]>([])
   const [filteredTemplates, setFilteredTemplates] = useState<Template[]>([])
   const [loading, setLoading] = useState(true)
@@ -175,25 +183,27 @@ export default function TemplatesPage() {
   const [installLoading, setInstallLoading] = useState<string | null>(null)
 
   useEffect(() => {
-    // Simulate API call - in production this would fetch from Supabase
     const fetchTemplates = async () => {
       setLoading(true)
       try {
-        // TODO: Replace with actual API call to /api/templates
-        // const response = await fetch('/api/templates')
-        // const data = await response.json()
-        // setTemplates(data.data || [])
+        const response = await fetch('/api/templates')
+        const data = await response.json()
         
-        // For now, use mock data
-        setTimeout(() => {
+        if (data.success && data.data) {
+          setTemplates(data.data)
+          setFilteredTemplates(data.data)
+        } else {
+          console.error('API Error:', data.error)
+          // Fallback to mock data if API fails
           setTemplates(mockTemplates)
           setFilteredTemplates(mockTemplates)
-          setLoading(false)
-        }, 800)
+        }
       } catch (error) {
         console.error('Failed to fetch templates:', error)
+        // Fallback to mock data if API fails
         setTemplates(mockTemplates)
         setFilteredTemplates(mockTemplates)
+      } finally {
         setLoading(false)
       }
     }
@@ -229,21 +239,41 @@ export default function TemplatesPage() {
   const handleInstallTemplate = async (template: Template) => {
     setInstallLoading(template.id)
     try {
-      // TODO: Implement actual template installation
-      // const response = await fetch('/api/templates/install', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({ templateId: template.id })
-      // })
+      // Check if user is authenticated
+      if (!isAuthenticated || !token) {
+        alert('Please log in to install templates')
+        return
+      }
       
-      // Simulate installation
-      await new Promise(resolve => setTimeout(resolve, 2000))
+      const response = await fetch('/api/templates/install', {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ 
+          templateId: template.id,
+          customName: `${template.name} (Installed)`
+        })
+      })
       
-      // Show success message
-      alert(`Template "${template.name}" installed successfully! Check your workflows page.`)
+      const data = await response.json()
+      
+      if (data.success) {
+        alert(`Template "${template.name}" installed successfully!\n\nWorkflow ID: ${data.data.workflowId}\nInstructions: Check your n8n instance for the new workflow.`)
+        
+        // Update install count locally
+        setTemplates(prev => prev.map(t => 
+          t.id === template.id 
+            ? { ...t, install_count: t.install_count + 1 }
+            : t
+        ))
+      } else {
+        throw new Error(data.error || 'Installation failed')
+      }
     } catch (error) {
       console.error('Failed to install template:', error)
-      alert('Failed to install template. Please try again.')
+      alert(`Failed to install template: ${error instanceof Error ? error.message : 'Unknown error'}`)
     } finally {
       setInstallLoading(null)
     }

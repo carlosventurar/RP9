@@ -3,14 +3,18 @@
 import * as React from "react"
 import { Moon, Sun } from "lucide-react"
 import { useTheme } from "next-themes"
+import { useLocale } from 'next-intl'
+import { cookies } from 'next/headers'
 
 import { Button } from "@/components/ui/button"
 import {
   SidebarTrigger,
 } from "@/components/ui/sidebar"
+import { LocaleSwitcher } from "@/components/locale-switcher"
 
 export function Header() {
   const { setTheme, theme } = useTheme()
+  const locale = useLocale()
 
   return (
     <header className="flex h-16 shrink-0 items-center gap-2 px-4 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -20,6 +24,7 @@ export function Header() {
           <h1 className="text-lg font-semibold">RP9 Portal</h1>
         </div>
         <div className="flex items-center gap-2">
+          <LocaleSwitcher currentLocale={locale} />
           <Button
             variant="outline"
             size="icon"
