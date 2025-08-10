@@ -83,23 +83,23 @@ export default function WorkflowsPage() {
   ]
 
   useEffect(() => {
-    // Simulate API call
     const fetchWorkflows = async () => {
       setLoading(true)
       try {
-        // In production, replace with actual API call
-        // const response = await fetch('/api/workflows')
-        // const data = await response.json()
-        // setWorkflows(data.data)
-        
-        // For now, use mock data
-        setTimeout(() => {
+        const response = await fetch('/api/workflows')
+        if (response.ok) {
+          const data = await response.json()
+          setWorkflows(data.data || [])
+        } else {
+          console.error('Failed to fetch workflows:', response.statusText)
+          // Fallback to mock data if API fails
           setWorkflows(mockWorkflows)
-          setLoading(false)
-        }, 1000)
+        }
       } catch (error) {
         console.error('Failed to fetch workflows:', error)
+        // Fallback to mock data if API fails
         setWorkflows(mockWorkflows)
+      } finally {
         setLoading(false)
       }
     }
@@ -183,9 +183,14 @@ export default function WorkflowsPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Workflows</h1>
-          <p className="text-muted-foreground">
-            Manage and monitor your automation workflows
-          </p>
+          <div className="flex items-center gap-2">
+            <p className="text-muted-foreground">
+              Manage and monitor your automation workflows
+            </p>
+            <Badge variant="secondary" className="text-xs">
+              Crossnet Filter Active
+            </Badge>
+          </div>
         </div>
         <Button>
           <Plus className="h-4 w-4 mr-2" />

@@ -1,4 +1,5 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios'
+import { getTenantData } from '@/lib/auth/supabase-auth'
 
 export interface N8nConfig {
   baseUrl: string
@@ -14,6 +15,7 @@ export interface N8nWorkflow {
   settings?: any
   createdAt?: string
   updatedAt?: string
+  tags?: string[]
 }
 
 export interface N8nExecution {
@@ -163,15 +165,95 @@ export class N8nClient {
   }
 }
 
-export function createN8nClient(tenantId?: string): N8nClient {
-  const baseUrl = process.env.N8N_BASE_URL || 'http://localhost:5678'
-  const apiKey = process.env.N8N_API_KEY || 'demo-api-key'
+export interface TenantConfig {
+  baseUrl: string
+  apiKey: string
+  allowedTags?: string[]
+  nameFilter?: string
+  filterMode?: 'tags' | 'name' | 'both'
+}
 
-  // In a real implementation, you would resolve tenant-specific configs here
-  // For now, we use the default configuration
+// Configuración de tenants con filtros específicos
+const TENANT_CONFIG: Record<string, TenantConfig> = {
+  'demo-tenant': {
+    baseUrl: process.env.N8N_BASE_URL || 'http://localhost:5678',
+    apiKey: process.env.N8N_API_KEY || 'demo-api-key',
+    allowedTags: ['Crossnet'],
+    nameFilter: 'Crossnet',
+    filterMode: 'name' // Usar filtro por nombre por ahora
+  }
+}
+
+export async function getTenantConfig(tenantId: string): Promise<TenantConfig> {
+  try {
+    const tenantData = await getTenantData(tenantId)
+    
+    if (tenantData && tenantData.n8n_base_url && tenantData.n8n_api_key) {
+      const settings = tenantData.settings || {}
+      
+      return {
+        baseUrl: tenantData.n8n_base_url,
+        apiKey: tenantData.n8n_api_key,
+        allowedTags: settings.allowedTags || ['Crossnet'],
+        nameFilter: settings.nameFilter || 'Crossnet',
+        filterMode: settings.filterMode || 'name'
+      }
+    }
+    
+    // Fallback to default configuration
+    return TENANT_CONFIG['demo-tenant'] || {
+      baseUrl: process.env.N8N_BASE_URL || 'http://localhost:5678',
+      apiKey: process.env.N8N_API_KEY || 'demo-api-key',
+      allowedTags: ['Crossnet'],
+      nameFilter: 'Crossnet',
+      filterMode: 'name'
+    }
+  } catch (error) {
+    console.error('Failed to get tenant config:', error)
+    return {
+      baseUrl: process.env.N8N_BASE_URL || 'http://localhost:5678',
+      apiKey: process.env.N8N_API_KEY || 'demo-api-key',
+      allowedTags: ['Crossnet'],
+      nameFilter: 'Crossnet',
+      filterMode: 'name'
+    }
+  }
+}
+
+export async function filterWorkflowsByTenant(workflows: N8nWorkflow[], tenantId: string): Promise<N8nWorkflow[]> {
+  const config = await getTenantConfig(tenantId)
+  
+  return workflows.filter(workflow => {
+    // Filtro por nombre (más confiable por ahora)
+    if (config.filterMode === 'name' || config.filterMode === 'both') {
+      if (config.nameFilter && !workflow.name.toLowerCase().includes(config.nameFilter.toLowerCase())) {
+        return false
+      }
+    }
+    
+    // Filtro por tags (para futuro uso)
+    if (config.filterMode === 'tags' || config.filterMode === 'both') {
+      if (config.allowedTags && workflow.tags) {
+        const hasAllowedTag = workflow.tags.some(tag => 
+          config.allowedTags!.some(allowedTag => 
+            tag.toLowerCase().includes(allowedTag.toLowerCase())
+          )
+        )
+        if (!hasAllowedTag) {
+          return false
+        }
+      }
+    }
+    
+    return true
+  })
+}
+
+export async function createN8nClient(tenantId?: string): Promise<N8nClient> {
+  const config = await getTenantConfig(tenantId || 'demo-tenant')
   
   return new N8nClient({
-    baseUrl,
-    apiKey,
+    baseUrl: config.baseUrl,
+    apiKey: config.apiKey,
   })
 }

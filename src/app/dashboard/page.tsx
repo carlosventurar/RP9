@@ -1,8 +1,107 @@
+'use client'
+
+import { useState, useEffect } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Activity, Workflow, TrendingUp, Clock } from "lucide-react"
+import { Activity, Workflow, TrendingUp, Clock, Loader2 } from "lucide-react"
+
+interface DashboardMetrics {
+  total_executions: number
+  successful_executions: number
+  failed_executions: number
+  success_rate: number
+  avg_duration_seconds: number
+  p95_duration_seconds: number
+  active_workflows: number
+}
+
+interface Execution {
+  id: string
+  workflow_name: string
+  status: 'success' | 'error' | 'running' | 'waiting' | 'canceled'
+  started_at: string
+  stopped_at: string | null
+  duration_ms: number | null
+}
+
+interface DashboardData {
+  metrics: DashboardMetrics
+  recentExecutions: Execution[]
+  topWorkflows: { name: string; count: number }[]
+  period: string
+}
 
 export default function Dashboard() {
+  const [data, setData] = useState<DashboardData | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      setLoading(true)
+      try {
+        const response = await fetch('/api/dashboard')
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`)
+        }
+        const result = await response.json()
+        if (result.success) {
+          setData(result.data)
+        } else {
+          throw new Error(result.error || 'Failed to fetch dashboard data')
+        }
+      } catch (err) {
+        console.error('Failed to fetch dashboard data:', err)
+        setError(err instanceof Error ? err.message : 'Unknown error')
+        // Set default data for development
+        setData({
+          metrics: {
+            total_executions: 0,
+            successful_executions: 0,
+            failed_executions: 0,
+            success_rate: 0,
+            avg_duration_seconds: 0,
+            p95_duration_seconds: 0,
+            active_workflows: 0
+          },
+          recentExecutions: [],
+          topWorkflows: [],
+          period: '24h'
+        })
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchDashboardData()
+  }, [])
+
+  const formatDuration = (ms: number | null) => {
+    if (!ms) return '0s'
+    if (ms < 1000) return `${ms}ms`
+    return `${(ms / 1000).toFixed(1)}s`
+  }
+
+  const formatTimeAgo = (dateString: string) => {
+    const date = new Date(dateString)
+    const now = new Date()
+    const diffMs = now.getTime() - date.getTime()
+    const diffMins = Math.floor(diffMs / 60000)
+    
+    if (diffMins < 1) return 'Just now'
+    if (diffMins < 60) return `${diffMins} min ago`
+    if (diffMins < 1440) return `${Math.floor(diffMins / 60)} hours ago`
+    return `${Math.floor(diffMins / 1440)} days ago`
+  }
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <Loader2 className="h-8 w-8 animate-spin" />
+      </div>
+    )
+  }
+
   return (
     <div className="space-y-6">
       <div>
@@ -22,9 +121,9 @@ export default function Dashboard() {
             <Activity className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">1,234</div>
+            <div className="text-2xl font-bold">{data?.metrics.total_executions.toLocaleString() || '0'}</div>
             <p className="text-xs text-muted-foreground">
-              +20.1% from yesterday
+              Last {data?.period || '24h'}
             </p>
           </CardContent>
         </Card>
@@ -36,9 +135,9 @@ export default function Dashboard() {
             <Workflow className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">23</div>
+            <div className="text-2xl font-bold">{data?.metrics.active_workflows || '0'}</div>
             <p className="text-xs text-muted-foreground">
-              +2 from last week
+              Currently running
             </p>
           </CardContent>
         </Card>
@@ -48,9 +147,9 @@ export default function Dashboard() {
             <TrendingUp className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">98.5%</div>
+            <div className="text-2xl font-bold">{data?.metrics.success_rate ? `${data.metrics.success_rate}%` : '0%'}</div>
             <p className="text-xs text-muted-foreground">
-              +0.3% from last hour
+              {data?.metrics.successful_executions || 0} of {data?.metrics.total_executions || 0} successful
             </p>
           </CardContent>
         </Card>
@@ -60,9 +159,11 @@ export default function Dashboard() {
             <Clock className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">1.2s</div>
+            <div className="text-2xl font-bold">
+              {data?.metrics.avg_duration_seconds ? `${data.metrics.avg_duration_seconds}s` : '0s'}
+            </div>
             <p className="text-xs text-muted-foreground">
-              -0.1s from last hour
+              P95: {data?.metrics.p95_duration_seconds ? `${data.metrics.p95_duration_seconds}s` : '0s'}
             </p>
           </CardContent>
         </Card>
@@ -78,31 +179,33 @@ export default function Dashboard() {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            {[
-              { name: "Lead Generation Flow", status: "success", time: "2 min ago", duration: "1.3s" },
-              { name: "Email Campaign Trigger", status: "success", time: "5 min ago", duration: "2.1s" },
-              { name: "Data Sync Process", status: "running", time: "8 min ago", duration: "45s" },
-              { name: "Customer Notification", status: "success", time: "12 min ago", duration: "0.8s" },
-              { name: "Invoice Processing", status: "failed", time: "15 min ago", duration: "3.2s" },
-            ].map((execution, i) => (
-              <div key={i} className="flex items-center space-x-4">
-                <div className="flex-1 space-y-1">
-                  <p className="text-sm font-medium leading-none">
-                    {execution.name}
-                  </p>
-                  <p className="text-xs text-muted-foreground">
-                    {execution.time} • Duration: {execution.duration}
-                  </p>
+            {data?.recentExecutions && data.recentExecutions.length > 0 ? (
+              data.recentExecutions.map((execution) => (
+                <div key={execution.id} className="flex items-center space-x-4">
+                  <div className="flex-1 space-y-1">
+                    <p className="text-sm font-medium leading-none">
+                      {execution.workflow_name || 'Unknown Workflow'}
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      {formatTimeAgo(execution.started_at)} • Duration: {formatDuration(execution.duration_ms)}
+                    </p>
+                  </div>
+                  <Badge variant={
+                    execution.status === "success" ? "default" :
+                    execution.status === "running" ? "secondary" : 
+                    "destructive"
+                  }>
+                    {execution.status}
+                  </Badge>
                 </div>
-                <Badge variant={
-                  execution.status === "success" ? "default" :
-                  execution.status === "running" ? "secondary" : 
-                  "destructive"
-                }>
-                  {execution.status}
-                </Badge>
+              ))
+            ) : (
+              <div className="text-center py-8 text-muted-foreground">
+                <Activity className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                <p>No recent executions</p>
+                <p className="text-xs">Workflow executions will appear here</p>
               </div>
-            ))}
+            )}
           </CardContent>
         </Card>
         <Card className="col-span-3">

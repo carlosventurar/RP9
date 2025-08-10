@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getAuthUser } from '@/lib/auth'
-import { createN8nClient } from '@/lib/n8n'
+import { getAuthUser, logAuditEvent } from '@/lib/auth/supabase-auth'
+import { createN8nClient, filterWorkflowsByTenant } from '@/lib/n8n'
 
 export async function GET(request: NextRequest) {
   try {
-    const user = getAuthUser(request)
+    const user = await getAuthUser(request)
     
     if (!user) {
       return NextResponse.json(
@@ -16,15 +16,32 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url)
     const active = searchParams.get('active')
 
-    const n8nClient = createN8nClient(user.tenantId)
-    const workflows = await n8nClient.getWorkflows({
+    const n8nClient = await createN8nClient(user.tenantId)
+    const allWorkflows = await n8nClient.getWorkflows({
       active: active ? active === 'true' : undefined
     })
 
+    // Filtrar workflows según configuración del tenant
+    const filteredWorkflows = await filterWorkflowsByTenant(allWorkflows, user.tenantId)
+
+    // Log audit event
+    await logAuditEvent(
+      user.tenantId,
+      user.id,
+      'list',
+      'workflows',
+      undefined,
+      { count: filteredWorkflows.length, active: active },
+      request.ip,
+      request.headers.get('user-agent') || undefined
+    )
+
     return NextResponse.json({
       success: true,
-      data: workflows,
-      tenant: user.tenantId
+      data: filteredWorkflows,
+      tenant: user.tenantId,
+      total: allWorkflows.length,
+      filtered: filteredWorkflows.length
     })
   } catch (error) {
     console.error('Workflows GET error:', error)
@@ -37,7 +54,7 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const user = getAuthUser(request)
+    const user = await getAuthUser(request)
     
     if (!user) {
       return NextResponse.json(
@@ -56,18 +73,33 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const n8nClient = createN8nClient(user.tenantId)
+    const n8nClient = await createN8nClient(user.tenantId)
 
     // Check if workflow exists by name (upsert behavior)
-    const existingWorkflows = await n8nClient.getWorkflows({ limit: 250 } as any)
-    const existingWorkflow = existingWorkflows.find(w => w.name === workflow.name)
+    const allWorkflows = await n8nClient.getWorkflows({ limit: 250 } as any)
+    const filteredWorkflows = await filterWorkflowsByTenant(allWorkflows, user.tenantId)
+    const existingWorkflow = filteredWorkflows.find(w => w.name === workflow.name)
 
     let result
+    let action = 'create'
     if (existingWorkflow) {
       result = await n8nClient.updateWorkflow(existingWorkflow.id!, workflow)
+      action = 'update'
     } else {
       result = await n8nClient.createWorkflow(workflow)
     }
+
+    // Log audit event
+    await logAuditEvent(
+      user.tenantId,
+      user.id,
+      action,
+      'workflow',
+      result.id,
+      { name: workflow.name, nodes_count: workflow.nodes.length },
+      request.ip,
+      request.headers.get('user-agent') || undefined
+    )
 
     return NextResponse.json({
       success: true,

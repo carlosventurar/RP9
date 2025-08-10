@@ -95,23 +95,23 @@ export default function AnalyticsPage() {
   ]
 
   useEffect(() => {
-    // Simulate API call
     const fetchExecutions = async () => {
       setLoading(true)
       try {
-        // In production, replace with actual API call
-        // const response = await fetch('/api/executions')
-        // const data = await response.json()
-        // setExecutions(data.data)
-        
-        // For now, use mock data
-        setTimeout(() => {
+        const response = await fetch('/api/executions')
+        if (response.ok) {
+          const data = await response.json()
+          setExecutions(data.data || [])
+        } else {
+          console.error('Failed to fetch executions:', response.statusText)
+          // Fallback to mock data if API fails
           setExecutions(mockExecutions)
-          setLoading(false)
-        }, 800)
+        }
       } catch (error) {
         console.error('Failed to fetch executions:', error)
+        // Fallback to mock data if API fails
         setExecutions(mockExecutions)
+      } finally {
         setLoading(false)
       }
     }

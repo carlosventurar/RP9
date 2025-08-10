@@ -1,36 +1,245 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# RP9 Portal 🚀
 
-## Getting Started
+Portal white-label moderno y profesional para automatización n8n con Next.js 15, TypeScript y Tailwind CSS.
 
-First, run the development server:
+[![Next.js](https://img.shields.io/badge/Next.js-15.4.6-black?logo=next.js)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue?logo=typescript)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.x-38B2AC?logo=tailwind-css)](https://tailwindcss.com/)
+[![React](https://img.shields.io/badge/React-19.x-61DAFB?logo=react)](https://reactjs.org/)
+
+## ✨ Características
+
+### 🎨 Interfaz Moderna
+- Diseño profesional con tema oscuro/claro
+- Componentes reutilizables con shadcn/ui
+- Gradientes y animaciones fluidas
+- Responsive design para todos los dispositivos
+
+### 🔐 Autenticación & Seguridad
+- Autenticación JWT con cookies HTTP-only
+- Sistema multi-tenant
+- Rate limiting por IP
+- Proxy seguro hacia n8n API
+
+### 📊 Dashboard & Analytics
+- Métricas en tiempo real
+- KPIs de rendimiento
+- Monitoreo de ejecuciones
+- Visualización de datos
+
+### ⚡ Gestión de Workflows
+- Lista, crear y gestionar workflows
+- Activar/desactivar flujos
+- Ejecutar workflows manualmente
+- Historial de ejecuciones
+
+### 🏢 Multi-tenancy
+- Configuración por tenant
+- Límites de uso personalizables
+- Facturación por consumo (UI)
+- Configuración de APIs y webhooks
+
+## 🚀 Inicio Rápido
+
+### Prerrequisitos
+
+- Node.js 18+ y npm
+- Una instancia de n8n funcionando
+- API Key de n8n
+
+### 1. Instalación
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# Clonar el repositorio
+git clone https://github.com/tu-usuario/rp9-portal.git
+cd rp9-portal
+
+# Instalar dependencias
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Configuración
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Copia las variables de entorno:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+cp .env.example .env.local
+```
 
-## Learn More
+Edita `.env.local` con tu configuración:
 
-To learn more about Next.js, take a look at the following resources:
+```env
+# n8n Configuration
+N8N_BASE_URL=https://tu-n8n-instance.com
+N8N_API_KEY=tu_clave_api_n8n
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# JWT Secret (generar una clave fuerte)
+JWT_SECRET=tu-super-secreto-jwt-cambiar-en-produccion
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# App Configuration
+NEXT_PUBLIC_APP_NAME=RP9 Portal
+NEXT_PUBLIC_APP_VERSION=1.0.0
+```
 
-## Deploy on Vercel
+### 3. Desarrollo
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+# Iniciar servidor de desarrollo
+npm run dev
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+# Compilar para producción
+npm run build
+
+# Iniciar en producción
+npm start
+
+# Linting
+npm run lint
+```
+
+Abre [http://localhost:3000](http://localhost:3000) en tu navegador.
+
+## 🔑 Credenciales Demo
+
+Para probar la aplicación usa estas credenciales:
+
+- **Email**: demo@rp9.com
+- **Password**: demo123
+
+## 🏗️ Arquitectura
+
+```
+RP9 Portal
+├── Frontend (Next.js 15)
+│   ├── React Server Components
+│   ├── shadcn/ui + Tailwind CSS
+│   └── Theme Provider (dark/light)
+├── Backend (API Routes)
+│   ├── JWT Authentication
+│   ├── n8n Proxy Client
+│   └── Rate Limiting
+└── n8n Instance
+    └── Workflows & Executions
+```
+
+### Estructura de Directorios
+
+```
+src/
+├── app/                    # Next.js App Router
+│   ├── api/               # API Routes (Backend)
+│   │   ├── auth/          # Autenticación
+│   │   ├── workflows/     # Gestión de workflows
+│   │   └── executions/    # Historial de ejecuciones
+│   ├── dashboard/         # Página principal
+│   ├── workflows/         # Gestión de workflows
+│   ├── analytics/         # Métricas y analytics
+│   ├── settings/          # Configuración
+│   └── billing/           # Facturación
+├── components/            # Componentes React
+│   ├── ui/               # Componentes base (shadcn/ui)
+│   ├── app-sidebar.tsx   # Navegación lateral
+│   ├── header.tsx        # Cabecera
+│   └── theme-provider.tsx # Provider de tema
+└── lib/                  # Utilidades
+    ├── auth.ts           # JWT y autenticación
+    ├── n8n.ts            # Cliente n8n tipado
+    └── utils.ts          # Utilidades generales
+```
+
+## 🔌 API Endpoints
+
+### Autenticación
+- `POST /api/auth/login` - Iniciar sesión
+- `POST /api/auth/logout` - Cerrar sesión  
+- `GET /api/auth/me` - Obtener usuario actual
+
+### Workflows
+- `GET /api/workflows` - Listar workflows
+- `POST /api/workflows` - Crear/actualizar workflow
+- `GET /api/workflows/[id]` - Obtener workflow específico
+- `PATCH /api/workflows/[id]` - Actualizar workflow
+- `DELETE /api/workflows/[id]` - Eliminar workflow
+- `POST /api/workflows/[id]/activate` - Activar workflow
+- `POST /api/workflows/[id]/deactivate` - Desactivar workflow
+- `POST /api/workflows/[id]/run` - Ejecutar workflow
+
+### Ejecuciones
+- `GET /api/executions` - Listar ejecuciones
+
+## 🎨 Personalización
+
+### Tema y Colores
+
+El tema RP9 está configurado en `src/app/globals.css`:
+
+```css
+:root {
+  --primary: oklch(0.5 0.25 264); /* Azul RP9 */
+}
+```
+
+### Componentes
+
+Los componentes están basados en shadcn/ui y se pueden personalizar editando:
+
+- `components.json` - Configuración de shadcn/ui
+- `src/components/ui/` - Componentes base
+- `src/app/globals.css` - Estilos globales
+
+## 📦 Deployment
+
+### Vercel (Recomendado)
+
+1. Fork este repositorio
+2. Conecta con Vercel
+3. Configura las variables de entorno
+4. Deploy automático
+
+### Variables de Entorno (Producción)
+
+```env
+N8N_BASE_URL=https://tu-n8n-produccion.com
+N8N_API_KEY=tu_clave_api_produccion
+JWT_SECRET=tu-secreto-jwt-super-seguro
+NODE_ENV=production
+```
+
+## 📝 Roadmap
+
+### Fase 1 - MVP ✅
+- [x] Setup básico Next.js + TypeScript
+- [x] Autenticación JWT
+- [x] Dashboard con métricas
+- [x] Gestión de workflows
+- [x] Tema profesional
+
+### Fase 2 - Producción (Próxima)
+- [ ] Stripe integration para billing real
+- [ ] Templates de workflows
+- [ ] Alertas y notificaciones
+- [ ] HMAC para webhooks
+- [ ] Tests automatizados
+
+### Fase 3 - Enterprise
+- [ ] SSO (SAML, OAuth)
+- [ ] Auditoría completa
+- [ ] Multi-región
+- [ ] AI Assistant
+
+## 📄 Licencia
+
+Este proyecto está bajo la Licencia MIT.
+
+## ⚡ Tecnologías
+
+- **Frontend**: Next.js 15, React 19, TypeScript
+- **Styling**: Tailwind CSS 4, shadcn/ui  
+- **Auth**: JWT, HTTP-only cookies
+- **Backend**: Next.js API Routes
+- **n8n**: Cliente HTTP con Axios
+- **Deployment**: Vercel, Docker
+
+---
+
+Desarrollado con ❤️ para automatización empresarial moderna.
