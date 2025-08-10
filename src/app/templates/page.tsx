@@ -7,6 +7,8 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { PremiumTemplateCard } from '@/components/premium-template-card'
+import { TemplatePriceBadge } from '@/components/template-price-badge'
 import { 
   Search, 
   Star, 
@@ -41,6 +43,7 @@ interface Template {
 }
 
 const mockTemplates: Template[] = [
+  // FREE TEMPLATES
   {
     id: '1',
     name: 'Email Notification',
@@ -113,6 +116,98 @@ const mockTemplates: Template[] = [
     is_featured: false,
     is_active: true
   },
+  // PREMIUM TEMPLATES
+  {
+    id: '101',
+    name: 'Multi-Channel Inventory Sync Pro',
+    description: 'Advanced inventory synchronization across Shopify, Amazon, eBay, and WooCommerce with conflict resolution and automated alerts',
+    category: 'E-commerce',
+    subcategory: 'Inventory Management',
+    workflow_json: {},
+    icon_url: null,
+    preview_images: [],
+    tags: ['multi-channel', 'inventory', 'sync', 'e-commerce', 'pro'],
+    difficulty: 'advanced',
+    estimated_time: 45,
+    price: 25,
+    install_count: 89,
+    rating: 4.9,
+    is_featured: true,
+    is_active: true
+  },
+  {
+    id: '102',
+    name: 'Advanced Customer Segmentation AI',
+    description: 'ML-powered customer segmentation using RFM analysis, behavioral data, and predictive modeling for targeted campaigns',
+    category: 'E-commerce',
+    subcategory: 'Customer Analytics',
+    workflow_json: {},
+    icon_url: null,
+    preview_images: [],
+    tags: ['ai', 'customer-segmentation', 'rfm', 'analytics', 'ml'],
+    difficulty: 'advanced',
+    estimated_time: 60,
+    price: 35,
+    install_count: 67,
+    rating: 4.8,
+    is_featured: true,
+    is_active: true
+  },
+  {
+    id: '103',
+    name: 'Advanced Lead Scoring AI Pro',
+    description: 'Machine learning-powered lead qualification using 50+ data points, behavioral analysis, and predictive scoring',
+    category: 'CRM & Sales',
+    subcategory: 'Lead Management',
+    workflow_json: {},
+    icon_url: null,
+    preview_images: [],
+    tags: ['ai', 'lead-scoring', 'ml', 'crm', 'enterprise'],
+    difficulty: 'advanced',
+    estimated_time: 75,
+    price: 50,
+    install_count: 43,
+    rating: 4.9,
+    is_featured: true,
+    is_active: true
+  },
+  {
+    id: '104',
+    name: 'Cross-Platform Campaign Manager Pro',
+    description: 'Unified campaign management across Facebook Ads, Google Ads, LinkedIn Ads, and email marketing with ROI tracking',
+    category: 'Marketing',
+    subcategory: 'Campaign Management',
+    workflow_json: {},
+    icon_url: null,
+    preview_images: [],
+    tags: ['cross-platform', 'ads', 'campaign', 'marketing', 'pro'],
+    difficulty: 'advanced',
+    estimated_time: 55,
+    price: 35,
+    install_count: 78,
+    rating: 4.7,
+    is_featured: true,
+    is_active: true
+  },
+  {
+    id: '105',
+    name: 'Multi-Cloud Deployment Pipeline Enterprise',
+    description: 'Enterprise-grade CI/CD pipeline supporting AWS, Azure, and GCP deployments with blue-green deployments and monitoring',
+    category: 'DevOps & IT',
+    subcategory: 'Deployment',
+    workflow_json: {},
+    icon_url: null,
+    preview_images: [],
+    tags: ['multi-cloud', 'cicd', 'deployment', 'enterprise', 'devops'],
+    difficulty: 'advanced',
+    estimated_time: 90,
+    price: 50,
+    install_count: 34,
+    rating: 4.9,
+    is_featured: true,
+    is_active: true
+  },
+  // Additional free templates
   {
     id: '5',
     name: 'Social Media Monitor',
@@ -344,75 +439,15 @@ export default function TemplatesPage() {
             {filteredTemplates
               .filter(template => template.is_featured)
               .map((template) => (
-                <Card key={template.id} className="hover:shadow-md transition-shadow">
-                  <CardHeader className="pb-3">
-                    <div className="flex items-start justify-between">
-                      <div className="space-y-1 flex-1">
-                        <CardTitle className="text-lg leading-tight flex items-center gap-2">
-                          {categoryIcons[template.category as keyof typeof categoryIcons] && 
-                            React.createElement(categoryIcons[template.category as keyof typeof categoryIcons], {
-                              className: "h-4 w-4"
-                            })
-                          }
-                          {template.name}
-                        </CardTitle>
-                        <div className="flex items-center gap-2 flex-wrap">
-                          <Badge 
-                            variant="outline" 
-                            className={difficultyColors[template.difficulty as keyof typeof difficultyColors]}
-                          >
-                            {template.difficulty}
-                          </Badge>
-                          <Badge variant="secondary" className="text-xs">
-                            <Clock className="h-3 w-3 mr-1" />
-                            {template.estimated_time}min
-                          </Badge>
-                          <Badge variant="secondary" className="text-xs">
-                            <Star className="h-3 w-3 mr-1" />
-                            {template.rating}
-                          </Badge>
-                        </div>
-                      </div>
-                    </div>
-                  </CardHeader>
-                  <CardContent className="space-y-3">
-                    <CardDescription className="line-clamp-2">
-                      {template.description}
-                    </CardDescription>
-                    
-                    <div className="flex flex-wrap gap-1">
-                      {template.tags.slice(0, 3).map((tag) => (
-                        <Badge key={tag} variant="outline" className="text-xs">
-                          {tag}
-                        </Badge>
-                      ))}
-                      {template.tags.length > 3 && (
-                        <Badge variant="outline" className="text-xs">
-                          +{template.tags.length - 3}
-                        </Badge>
-                      )}
-                    </div>
-
-                    <div className="flex items-center justify-between pt-2 border-t">
-                      <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                        <Download className="h-3 w-3" />
-                        {template.install_count.toLocaleString()} installs
-                      </div>
-                      <Button 
-                        size="sm"
-                        onClick={() => handleInstallTemplate(template)}
-                        disabled={installLoading === template.id}
-                      >
-                        {installLoading === template.id ? (
-                          <Loader2 className="h-3 w-3 animate-spin mr-1" />
-                        ) : (
-                          <Download className="h-3 w-3 mr-1" />
-                        )}
-                        Install
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
+                <PremiumTemplateCard
+                  key={template.id}
+                  template={template}
+                  onInstall={handleInstallTemplate}
+                  onPurchaseSuccess={(templateId) => {
+                    console.log('Template purchased:', templateId)
+                    // Refresh templates or update state
+                  }}
+                />
               ))}
           </div>
         </div>
@@ -420,62 +455,28 @@ export default function TemplatesPage() {
 
       {/* All Templates */}
       <div className="space-y-4">
-        <h2 className="text-xl font-semibold">All Templates</h2>
+        <div className="flex items-center justify-between">
+          <h2 className="text-xl font-semibold">All Templates</h2>
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <span>{filteredTemplates.length} templates</span>
+            <span>•</span>
+            <span>{filteredTemplates.filter(t => t.price === 0).length} free</span>
+            <span>•</span>
+            <span>{filteredTemplates.filter(t => t.price > 0).length} premium</span>
+          </div>
+        </div>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {filteredTemplates.map((template) => (
-            <Card key={template.id} className="hover:shadow-md transition-shadow">
-              <CardHeader className="pb-3">
-                <div className="flex items-start justify-between">
-                  <div className="space-y-1 flex-1">
-                    <CardTitle className="text-base leading-tight flex items-center gap-2">
-                      {categoryIcons[template.category as keyof typeof categoryIcons] && 
-                        React.createElement(categoryIcons[template.category as keyof typeof categoryIcons], {
-                          className: "h-4 w-4"
-                        })
-                      }
-                      {template.name}
-                    </CardTitle>
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <Badge 
-                        variant="outline" 
-                        className={difficultyColors[template.difficulty as keyof typeof difficultyColors]}
-                      >
-                        {template.difficulty}
-                      </Badge>
-                      <Badge variant="secondary" className="text-xs">
-                        <Clock className="h-3 w-3 mr-1" />
-                        {template.estimated_time}min
-                      </Badge>
-                    </div>
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <CardDescription className="line-clamp-2 text-sm">
-                  {template.description}
-                </CardDescription>
-                
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                    <Download className="h-3 w-3" />
-                    {template.install_count.toLocaleString()}
-                  </div>
-                  <Button 
-                    size="sm"
-                    variant="outline"
-                    onClick={() => handleInstallTemplate(template)}
-                    disabled={installLoading === template.id}
-                  >
-                    {installLoading === template.id ? (
-                      <Loader2 className="h-3 w-3 animate-spin mr-1" />
-                    ) : (
-                      <ArrowRight className="h-3 w-3 mr-1" />
-                    )}
-                    Install
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
+            <PremiumTemplateCard
+              key={template.id}
+              template={template}
+              onInstall={handleInstallTemplate}
+              onPurchaseSuccess={(templateId) => {
+                console.log('Template purchased:', templateId)
+                // Refresh templates or update state
+              }}
+              size="default"
+            />
           ))}
         </div>
       </div>

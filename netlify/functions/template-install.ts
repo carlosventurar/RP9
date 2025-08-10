@@ -95,15 +95,21 @@ export const handler: Handler = async (event: HandlerEvent) => {
 
     // Check if template is paid and user has access
     if (template.price > 0) {
-      const hasAccess = await checkTemplateAccess(tenant.id, templateId)
-      if (!hasAccess) {
+      const accessStatus = await checkTemplateAccess(tenant.id, templateId)
+      if (!accessStatus.hasAccess) {
         return {
           statusCode: 403,
           headers,
           body: JSON.stringify({ 
-            error: 'Template requires purchase',
+            error: accessStatus.reason,
             price: template.price,
-            checkout_url: `/api/templates/${templateId}/purchase`
+            purchase_url: `/api/template-purchase`,
+            template_info: {
+              id: template.id,
+              name: template.name,
+              price: template.price,
+              category: template.category
+            }
           })
         }
       }
@@ -234,32 +240,46 @@ async function installTemplate(
 /**
  * Check if tenant has access to paid template
  */
-async function checkTemplateAccess(tenantId: string, templateId: string): Promise<boolean> {
+async function checkTemplateAccess(tenantId: string, templateId: string) {
   try {
-    // For free templates, always allow access
+    // Get template info including price
     const { data: template } = await supabase
       .from('templates')
-      .select('price')
+      .select('price, is_active')
       .eq('id', templateId)
       .single()
 
-    if (!template || template.price === 0) {
-      return true
+    if (!template || !template.is_active) {
+      return { hasAccess: false, reason: 'Template not found or inactive' }
+    }
+
+    // Free templates are always accessible
+    if (template.price <= 0) {
+      return { hasAccess: true, reason: 'Free template' }
     }
 
     // For paid templates, check if user has purchased it
     const { data: purchase } = await supabase
       .from('template_purchases')
-      .select('id')
+      .select('id, metadata')
       .eq('tenant_id', tenantId)
       .eq('template_id', templateId)
       .single()
 
-    return !!purchase
+    if (!purchase) {
+      return { hasAccess: false, reason: 'Template not purchased' }
+    }
+
+    // Check if purchase was disputed/revoked
+    if (purchase.metadata?.disputed || purchase.metadata?.access_revoked) {
+      return { hasAccess: false, reason: 'Template access revoked' }
+    }
+
+    return { hasAccess: true, reason: 'Template purchased' }
 
   } catch (error) {
     console.error('Error checking template access:', error)
-    return false
+    return { hasAccess: false, reason: 'Access check failed' }
   }
 }
 

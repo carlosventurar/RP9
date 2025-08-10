@@ -4,7 +4,6 @@ import * as React from "react"
 import { Moon, Sun } from "lucide-react"
 import { useTheme } from "next-themes"
 import { useLocale } from 'next-intl'
-import { cookies } from 'next/headers'
 
 import { Button } from "@/components/ui/button"
 import {

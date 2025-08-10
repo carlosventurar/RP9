@@ -3,16 +3,12 @@
  * Creates the templates table and related infrastructure
  */
 
-import { createClient } from '@supabase/supabase-js'
-import { readFileSync } from 'fs'
-import dotenv from 'dotenv'
-import { fileURLToPath } from 'url'
-import { dirname, join } from 'path'
+const { createClient } = require('@supabase/supabase-js')
+const { readFileSync } = require('fs')
+const { join } = require('path')
+require('dotenv').config({ path: '.env.local' })
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = dirname(__filename)
-
-dotenv.config({ path: '.env.local' })
+// __dirname is available in CommonJS
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
