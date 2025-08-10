@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Activity, Workflow, TrendingUp, Clock, Loader2 } from "lucide-react"
+import { useDashboardTranslations } from '@/hooks/use-translations'
 
 interface DashboardMetrics {
   total_executions: number
@@ -35,6 +36,7 @@ export default function Dashboard() {
   const [data, setData] = useState<DashboardData | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const t = useDashboardTranslations()
 
   useEffect(() => {
     const fetchDashboardData = async () => {
@@ -88,10 +90,10 @@ export default function Dashboard() {
     const diffMs = now.getTime() - date.getTime()
     const diffMins = Math.floor(diffMs / 60000)
     
-    if (diffMins < 1) return 'Just now'
-    if (diffMins < 60) return `${diffMins} min ago`
-    if (diffMins < 1440) return `${Math.floor(diffMins / 60)} hours ago`
-    return `${Math.floor(diffMins / 1440)} days ago`
+    if (diffMins < 1) return t('timeJustNow')
+    if (diffMins < 60) return t('timeMinAgo', { minutes: diffMins })
+    if (diffMins < 1440) return t('timeHoursAgo', { hours: Math.floor(diffMins / 60) })
+    return t('timeDaysAgo', { days: Math.floor(diffMins / 1440) })
   }
 
   if (loading) {
@@ -105,9 +107,9 @@ export default function Dashboard() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
+        <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
         <p className="text-muted-foreground">
-          Overview of your automation workflows and system performance.
+          {t('subtitle')}
         </p>
       </div>
 
@@ -116,46 +118,46 @@ export default function Dashboard() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
-              Executions Today
+              {t('executionsToday')}
             </CardTitle>
             <Activity className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{data?.metrics.total_executions.toLocaleString() || '0'}</div>
             <p className="text-xs text-muted-foreground">
-              Last {data?.period || '24h'}
+              {t('lastPeriod', { period: data?.period || '24h' })}
             </p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
-              Active Workflows
+              {t('activeWorkflows')}
             </CardTitle>
             <Workflow className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{data?.metrics.active_workflows || '0'}</div>
             <p className="text-xs text-muted-foreground">
-              Currently running
+              {t('currentlyRunning')}
             </p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Success Rate</CardTitle>
+            <CardTitle className="text-sm font-medium">{t('successRate')}</CardTitle>
             <TrendingUp className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{data?.metrics.success_rate ? `${data.metrics.success_rate}%` : '0%'}</div>
             <p className="text-xs text-muted-foreground">
-              {data?.metrics.successful_executions || 0} of {data?.metrics.total_executions || 0} successful
+              {t('successfulExecutions', { successful: data?.metrics.successful_executions || 0, total: data?.metrics.total_executions || 0 })}
             </p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Avg. Response Time</CardTitle>
+            <CardTitle className="text-sm font-medium">{t('avgResponseTime')}</CardTitle>
             <Clock className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -173,9 +175,9 @@ export default function Dashboard() {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
         <Card className="col-span-4">
           <CardHeader>
-            <CardTitle>Recent Workflow Executions</CardTitle>
+            <CardTitle>{t('recentWorkflowExecutions')}</CardTitle>
             <CardDescription>
-              Latest automation runs and their status
+              {t('latestAutomationRuns')}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -184,10 +186,10 @@ export default function Dashboard() {
                 <div key={execution.id} className="flex items-center space-x-4">
                   <div className="flex-1 space-y-1">
                     <p className="text-sm font-medium leading-none">
-                      {execution.workflow_name || 'Unknown Workflow'}
+                      {execution.workflow_name || t('unknownWorkflow')}
                     </p>
                     <p className="text-xs text-muted-foreground">
-                      {formatTimeAgo(execution.started_at)} • Duration: {formatDuration(execution.duration_ms)}
+                      {formatTimeAgo(execution.started_at)} • {t('duration')}: {formatDuration(execution.duration_ms)}
                     </p>
                   </div>
                   <Badge variant={
@@ -195,24 +197,24 @@ export default function Dashboard() {
                     execution.status === "running" ? "secondary" : 
                     "destructive"
                   }>
-                    {execution.status}
+                    {t(`status.${execution.status}`)}
                   </Badge>
                 </div>
               ))
             ) : (
               <div className="text-center py-8 text-muted-foreground">
                 <Activity className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                <p>No recent executions</p>
-                <p className="text-xs">Workflow executions will appear here</p>
+                <p>{t('noRecentExecutions')}</p>
+                <p className="text-xs">{t('workflowExecutionsWillAppear')}</p>
               </div>
             )}
           </CardContent>
         </Card>
         <Card className="col-span-3">
           <CardHeader>
-            <CardTitle>System Status</CardTitle>
+            <CardTitle>{t('systemStatus')}</CardTitle>
             <CardDescription>
-              Current status of RP9 platform services
+              {t('currentStatusOfServices')}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -225,7 +227,7 @@ export default function Dashboard() {
               <div key={i} className="flex items-center justify-between">
                 <span className="text-sm">{service.service}</span>
                 <Badge variant="default" className="bg-green-500">
-                  {service.status}
+                  {t('operational')}
                 </Badge>
               </div>
             ))}

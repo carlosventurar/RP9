@@ -29,37 +29,41 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { useNavigationTranslations, useAuthTranslations } from '@/hooks/use-translations'
 
-// Menu items.
-const items = [
-  {
-    title: "Dashboard",
-    url: "/dashboard",
-    icon: Home,
-  },
-  {
-    title: "Workflows",
-    url: "/workflows",
-    icon: Workflow,
-  },
-  {
-    title: "Analytics",
-    url: "/analytics", 
-    icon: BarChart3,
-  },
-  {
-    title: "Billing",
-    url: "/billing",
-    icon: CreditCard,
-  },
-  {
-    title: "Settings",
-    url: "/settings",
-    icon: Settings,
-  },
-]
 
 export function AppSidebar() {
+  const navT = useNavigationTranslations()
+  const authT = useAuthTranslations()
+
+  const translatedItems = [
+    {
+      title: navT('dashboard'),
+      url: "/dashboard",
+      icon: Home,
+    },
+    {
+      title: navT('workflows'),
+      url: "/workflows",
+      icon: Workflow,
+    },
+    {
+      title: navT('analytics'),
+      url: "/analytics", 
+      icon: BarChart3,
+    },
+    {
+      title: navT('billing'),
+      url: "/billing",
+      icon: CreditCard,
+    },
+    {
+      title: navT('settings'),
+      url: "/settings",
+      icon: Settings,
+    },
+  ]
+
   return (
     <Sidebar variant="inset">
       <SidebarHeader>
@@ -71,8 +75,8 @@ export function AppSidebar() {
                   <span className="text-sm font-bold">R9</span>
                 </div>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-semibold">RP9 Portal</span>
-                  <span className="truncate text-xs">Automation Hub</span>
+                  <span className="truncate font-semibold">{authT('title')}</span>
+                  <span className="truncate text-xs">{authT('subtitle')}</span>
                 </div>
               </a>
             </SidebarMenuButton>
@@ -81,10 +85,10 @@ export function AppSidebar() {
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Platform</SidebarGroupLabel>
+          <SidebarGroupLabel>{navT('platform')}</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {items.map((item) => (
+              {translatedItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
                     <a href={item.url}>
@@ -109,7 +113,7 @@ export function AppSidebar() {
                 >
                   <User2 />
                   <div className="grid flex-1 text-left text-sm leading-tight">
-                    <span className="truncate font-semibold">Demo User</span>
+                    <span className="truncate font-semibold">{authT('demoUser')}</span>
                     <span className="truncate text-xs">demo@rp9.com</span>
                   </div>
                   <ChevronUp className="ml-auto size-4" />
@@ -123,10 +127,10 @@ export function AppSidebar() {
               >
                 <DropdownMenuItem>
                   <Settings />
-                  Account Settings
+                  {navT('accountSettings')}
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  Sign out
+                  {authT('signOut')}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

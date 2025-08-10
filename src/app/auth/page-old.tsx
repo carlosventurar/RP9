@@ -49,7 +49,7 @@ export default function AuthPage() {
         if (error) throw error
 
         if (data.user) {
-          setMessage(t('loginSuccessful'))
+          setMessage('Login successful! Redirecting...')
           router.replace('/dashboard')
         }
       } else {
@@ -61,12 +61,12 @@ export default function AuthPage() {
         if (error) throw error
 
         if (data.user) {
-          setMessage(t('accountCreated'))
+          setMessage('Account created successfully! Please check your email to verify your account.')
         }
       }
     } catch (error: any) {
       console.error('Auth error:', error)
-      setError(error.message || t('authError'))
+      setError(error.message || 'An error occurred during authentication')
     } finally {
       setLoading(false)
     }
@@ -74,7 +74,7 @@ export default function AuthPage() {
 
   const handleMagicLink = async () => {
     if (!email) {
-      setError(t('enterEmail'))
+      setError('Please enter your email address')
       return
     }
 
@@ -92,10 +92,10 @@ export default function AuthPage() {
 
       if (error) throw error
 
-      setMessage(t('magicLinkSent'))
+      setMessage('Check your email for a magic link to sign in!')
     } catch (error: any) {
       console.error('Magic link error:', error)
-      setError(error.message || t('magicLinkFailed'))
+      setError(error.message || 'Failed to send magic link')
     } finally {
       setLoading(false)
     }
@@ -111,8 +111,8 @@ export default function AuthPage() {
               <span className="text-xl font-bold text-white">R9</span>
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-white">{t('title')}</h1>
-              <p className="text-sm text-slate-400">{t('subtitle')}</p>
+              <h1 className="text-2xl font-bold text-white">RP9 Portal</h1>
+              <p className="text-sm text-slate-400">Automation Hub</p>
             </div>
           </div>
         </div>
@@ -121,10 +121,10 @@ export default function AuthPage() {
         <Card className="backdrop-blur-sm bg-white/10 border-white/20">
           <CardHeader className="text-center">
             <CardTitle className="text-white">
-              {isLogin ? t('welcomeBack') : t('createAccount')}
+              {isLogin ? 'Welcome back' : 'Create account'}
             </CardTitle>
             <CardDescription className="text-slate-300">
-              {isLogin ? t('signInSubtitle') : t('signUpSubtitle')}
+              {isLogin ? 'Sign in to your automation hub' : 'Start automating with RP9 Portal'}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -144,12 +144,12 @@ export default function AuthPage() {
 
             <form onSubmit={handleAuth} className="space-y-4">
               <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-300">{t('email')}</label>
+                <label className="text-sm font-medium text-slate-300">Email</label>
                 <div className="relative">
                   <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 h-4 w-4" />
                   <Input
                     type="email"
-                    placeholder={t('emailPlaceholder')}
+                    placeholder="admin@rp9portal.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     className="pl-10 bg-white/10 border-white/20 text-white placeholder:text-slate-400"
@@ -159,12 +159,12 @@ export default function AuthPage() {
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-300">{t('password')}</label>
+                <label className="text-sm font-medium text-slate-300">Password</label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 h-4 w-4" />
                   <Input
                     type="password"
-                    placeholder={t('passwordPlaceholder')}
+                    placeholder="••••••••"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     className="pl-10 bg-white/10 border-white/20 text-white placeholder:text-slate-400"
@@ -181,7 +181,7 @@ export default function AuthPage() {
                 {loading ? (
                   <Loader2 className="w-4 h-4 animate-spin mr-2" />
                 ) : null}
-                {isLogin ? t('signIn') : t('signUp')}
+                {isLogin ? 'Sign In' : 'Create Account'}
               </Button>
             </form>
 
@@ -190,7 +190,7 @@ export default function AuthPage() {
                 <span className="w-full border-t border-white/20" />
               </div>
               <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-slate-800 px-2 text-slate-400">{t('or')}</span>
+                <span className="bg-slate-800 px-2 text-slate-400">Or</span>
               </div>
             </div>
 
@@ -205,7 +205,7 @@ export default function AuthPage() {
               ) : (
                 <Mail className="w-4 h-4 mr-2" />
               )}
-              {t('sendMagicLink')}
+              Send Magic Link
             </Button>
 
             <div className="text-center">
@@ -214,17 +214,17 @@ export default function AuthPage() {
                 onClick={() => setIsLogin(!isLogin)}
                 className="text-sm text-slate-400 hover:text-white transition-colors"
               >
-                {isLogin ? t('noAccount') : t('hasAccount')}
+                {isLogin ? "Don't have an account? Sign up" : "Already have an account? Sign in"}
               </button>
             </div>
           </CardContent>
         </Card>
 
-        {/* Admin Credentials Card */}
+        {/* Demo Info */}
         <Card className="backdrop-blur-sm bg-white/5 border-white/10">
           <CardContent className="pt-4">
             <div className="text-center space-y-2">
-              <p className="text-xs font-medium text-slate-400">{t('adminCredentials')}</p>
+              <p className="text-xs font-medium text-slate-400">Credenciales Administrador:</p>
               <div className="text-xs text-slate-300 space-y-1">
                 <p>Email: admin@rp9portal.com</p>
                 <p>Password: RP9Admin2024!</p>

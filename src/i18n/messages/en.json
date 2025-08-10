@@ -1,0 +1,175 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success", 
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "view": "View",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "search": "Search",
+    "filter": "Filter",
+    "export": "Export",
+    "import": "Import",
+    "refresh": "Refresh",
+    "close": "Close"
+  },
+  "navigation": {
+    "dashboard": "Dashboard",
+    "workflows": "Workflows", 
+    "templates": "Templates",
+    "analytics": "Analytics",
+    "settings": "Settings",
+    "billing": "Billing",
+    "logout": "Logout"
+  },
+  "auth": {
+    "title": "RP9 Portal",
+    "subtitle": "Automation Hub",
+    "welcomeBack": "Welcome back",
+    "createAccount": "Create account", 
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "signInSubtitle": "Sign in to your automation hub",
+    "signUpSubtitle": "Start automating with RP9 Portal",
+    "email": "Email",
+    "password": "Password",
+    "emailPlaceholder": "admin@rp9portal.com",
+    "passwordPlaceholder": "••••••••",
+    "sendMagicLink": "Send Magic Link",
+    "magicLinkSent": "Check your email for a magic link to sign in!",
+    "or": "Or",
+    "noAccount": "Don't have an account? Sign up",
+    "hasAccount": "Already have an account? Sign in",
+    "adminCredentials": "Admin Credentials:",
+    "loginSuccessful": "Login successful! Redirecting...",
+    "accountCreated": "Account created successfully! Please check your email to verify your account.",
+    "enterEmail": "Please enter your email address",
+    "magicLinkFailed": "Failed to send magic link",
+    "authError": "An error occurred during authentication"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "subtitle": "Overview of your automation workflows and system performance.",
+    "executionsToday": "Executions Today",
+    "activeWorkflows": "Active Workflows", 
+    "successRate": "Success Rate",
+    "avgResponseTime": "Avg. Response Time",
+    "currentlyRunning": "Currently running",
+    "successful": "successful",
+    "recentExecutions": "Recent Workflow Executions",
+    "recentExecutionsDesc": "Latest automation runs and their status",
+    "systemStatus": "System Status",
+    "systemStatusDesc": "Current status of RP9 platform services",
+    "noRecentExecutions": "No recent executions",
+    "executionsWillAppear": "Workflow executions will appear here",
+    "services": {
+      "n8nApi": "n8n API",
+      "webhookService": "Webhook Service", 
+      "database": "Database",
+      "authentication": "Authentication"
+    },
+    "operational": "operational"
+  },
+  "workflows": {
+    "title": "Workflows",
+    "subtitle": "Manage and monitor your automation workflows",
+    "createNew": "Create New Workflow", 
+    "import": "Import Workflow",
+    "noWorkflows": "No workflows found",
+    "workflowsWillAppear": "Your n8n workflows will appear here",
+    "lastExecution": "Last execution",
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive",
+      "success": "Success", 
+      "error": "Error",
+      "running": "Running"
+    }
+  },
+  "templates": {
+    "title": "Templates Marketplace",
+    "subtitle": "Discover and install pre-built workflow templates",
+    "featured": "Featured Templates",
+    "allCategories": "All Categories",
+    "difficulty": {
+      "beginner": "Beginner",
+      "intermediate": "Intermediate", 
+      "advanced": "Advanced"
+    },
+    "categories": {
+      "notifications": "Notifications",
+      "integrations": "Integrations",
+      "data": "Data Processing",
+      "forms": "Forms", 
+      "monitoring": "Monitoring",
+      "crm": "CRM"
+    },
+    "install": "Install",
+    "installed": "Installed",
+    "rating": "Rating",
+    "installs": "Installs",
+    "estimatedTime": "Estimated time",
+    "minutes": "minutes",
+    "free": "Free"
+  },
+  "analytics": {
+    "title": "Analytics",
+    "subtitle": "Deep insights into your automation performance",
+    "executionTrends": "Execution Trends", 
+    "performanceMetrics": "Performance Metrics",
+    "errorAnalysis": "Error Analysis",
+    "usageStatistics": "Usage Statistics"
+  },
+  "settings": {
+    "title": "Settings",
+    "subtitle": "Configure your RP9 Portal preferences",
+    "general": "General",
+    "security": "Security",
+    "integrations": "Integrations",
+    "notifications": "Notifications",
+    "language": "Language",
+    "theme": "Theme",
+    "timezone": "Timezone",
+    "n8nConfiguration": "n8n Configuration",
+    "apiUrl": "API URL", 
+    "apiKey": "API Key",
+    "connectionStatus": "Connection Status",
+    "testConnection": "Test Connection",
+    "connected": "Connected",
+    "disconnected": "Disconnected"
+  },
+  "billing": {
+    "title": "Billing",
+    "subtitle": "Manage your subscription and usage",
+    "currentPlan": "Current Plan",
+    "usage": "Usage",
+    "invoices": "Invoices", 
+    "paymentMethod": "Payment Method"
+  },
+  "plans": {
+    "starter": {
+      "name": "Starter Plan",
+      "description": "Perfect for small teams getting started"
+    },
+    "professional": {
+      "name": "Professional Plan", 
+      "description": "For growing businesses with advanced needs"
+    },
+    "enterprise": {
+      "name": "Enterprise Plan",
+      "description": "For large organizations with custom requirements"
+    }
+  },
+  "errors": {
+    "generic": "Something went wrong",
+    "network": "Network error occurred",
+    "unauthorized": "You are not authorized to perform this action",
+    "notFound": "The requested resource was not found",
+    "serverError": "Internal server error"
+  }
+}

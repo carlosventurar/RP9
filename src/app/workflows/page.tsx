@@ -19,6 +19,7 @@ import {
   Loader2
 } from "lucide-react"
 import { N8nWorkflow } from '@/lib/n8n'
+import { useWorkflowTranslations } from '@/hooks/use-translations'
 
 interface WorkflowWithStats extends N8nWorkflow {
   lastExecution?: string
@@ -33,6 +34,7 @@ export default function WorkflowsPage() {
   const [searchTerm, setSearchTerm] = useState('')
   const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'inactive'>('all')
   const [actionLoading, setActionLoading] = useState<string | null>(null)
+  const t = useWorkflowTranslations()
 
   // Mock data for development
   const mockWorkflows: WorkflowWithStats[] = [
@@ -182,19 +184,19 @@ export default function WorkflowsPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Workflows</h1>
+          <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
           <div className="flex items-center gap-2">
             <p className="text-muted-foreground">
-              Manage and monitor your automation workflows
+              {t('subtitle')}
             </p>
             <Badge variant="secondary" className="text-xs">
-              Crossnet Filter Active
+              {t('crossnetFilterActive')}
             </Badge>
           </div>
         </div>
         <Button>
           <Plus className="h-4 w-4 mr-2" />
-          New Workflow
+          {t('newWorkflow')}
         </Button>
       </div>
 
@@ -203,7 +205,7 @@ export default function WorkflowsPage() {
         <div className="relative flex-1 max-w-sm">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
           <Input
-            placeholder="Search workflows..."
+            placeholder={t('searchWorkflows')}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="pl-10"
@@ -211,12 +213,12 @@ export default function WorkflowsPage() {
         </div>
         <Select value={statusFilter} onValueChange={(value: any) => setStatusFilter(value)}>
           <SelectTrigger className="w-[140px]">
-            <SelectValue placeholder="Status" />
+            <SelectValue placeholder={t('status')} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All</SelectItem>
-            <SelectItem value="active">Active</SelectItem>
-            <SelectItem value="inactive">Inactive</SelectItem>
+            <SelectItem value="all">{t('all')}</SelectItem>
+            <SelectItem value="active">{t('active')}</SelectItem>
+            <SelectItem value="inactive">{t('inactive')}</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -231,11 +233,11 @@ export default function WorkflowsPage() {
                   <CardTitle className="text-lg leading-tight">{workflow.name}</CardTitle>
                   <div className="flex items-center gap-2">
                     <Badge variant={workflow.active ? "default" : "secondary"}>
-                      {workflow.active ? "Active" : "Inactive"}
+                      {workflow.active ? t('active') : t('inactive')}
                     </Badge>
                     {workflow.successRate && (
                       <Badge variant="outline" className="text-xs">
-                        {workflow.successRate}% success
+                        {workflow.successRate}% {t('success')}
                       </Badge>
                     )}
                   </div>
@@ -259,14 +261,14 @@ export default function WorkflowsPage() {
             <CardContent className="space-y-3">
               <div className="grid grid-cols-2 gap-4 text-sm">
                 <div className="space-y-1">
-                  <div className="text-muted-foreground">Last run</div>
+                  <div className="text-muted-foreground">{t('lastRun')}</div>
                   <div className="flex items-center gap-1">
                     <Clock className="h-3 w-3" />
-                    {workflow.lastExecution || 'Never'}
+                    {workflow.lastExecution || t('never')}
                   </div>
                 </div>
                 <div className="space-y-1">
-                  <div className="text-muted-foreground">Executions</div>
+                  <div className="text-muted-foreground">{t('executions')}</div>
                   <div className="flex items-center gap-1">
                     <CheckCircle className="h-3 w-3" />
                     {workflow.executionCount || 0}
@@ -287,7 +289,7 @@ export default function WorkflowsPage() {
                   ) : (
                     <Play className="h-3 w-3 mr-1" />
                   )}
-                  Run
+                  {t('run')}
                 </Button>
                 <Button variant="ghost" size="sm">
                   <Settings className="h-3 w-3" />
@@ -302,13 +304,13 @@ export default function WorkflowsPage() {
         <div className="text-center py-12">
           <div className="text-muted-foreground mb-4">
             {searchTerm || statusFilter !== 'all' ? 
-              'No workflows match your filters' : 
-              'No workflows found'
+              t('noWorkflowsMatchFilters') : 
+              t('noWorkflowsFound')
             }
           </div>
           <Button>
             <Plus className="h-4 w-4 mr-2" />
-            Create your first workflow
+            {t('createFirstWorkflow')}
           </Button>
         </div>
       )}
