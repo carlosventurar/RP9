@@ -12,9 +12,7 @@ const nextConfig = {
     // Disable TypeScript errors during builds for production deploy
     ignoreBuildErrors: true,
   },
-  experimental: {
-    serverComponentsExternalPackages: ['sharp'],
-  },
+  serverExternalPackages: ['sharp'],
   // Configure for serverless deployment
   images: {
     unoptimized: true,
