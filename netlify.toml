@@ -19,6 +19,10 @@
   directory = "netlify/functions"
   node_bundler = "esbuild"
 
+# Scheduled Functions
+[functions.usage-collector]
+  schedule = "*/10 * * * *"  # Every 10 minutes
+
 # Security headers
 [[headers]]
   for = "/*"
