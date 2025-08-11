@@ -3,9 +3,10 @@
 import { useState, useEffect } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Activity, Workflow, TrendingUp, Clock, Loader2 } from "lucide-react"
+import { Activity, Workflow, TrendingUp, Clock, Loader2, Phone } from "lucide-react"
 import { useDashboardTranslations } from '@/hooks/use-translations'
 import { createClient } from '@/lib/supabase/client'
+import CCKPIs from '@/components/kpi/CCKPIs'
 
 interface DashboardMetrics {
   total_executions: number
@@ -185,6 +186,9 @@ export default function Dashboard() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Contact Center KPIs */}
+      <CCKPIs />
 
       {/* Recent Activity */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
