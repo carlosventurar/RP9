@@ -10,6 +10,7 @@ import {
   User2,
   Search,
   Heart,
+  Plus,
 } from "lucide-react"
 
 import {
@@ -58,6 +59,11 @@ export function AppSidebar() {
       title: navT('workflows'),
       url: "/workflows",
       icon: Workflow,
+    },
+    {
+      title: "Flow Builder",
+      url: "/flows/new",
+      icon: Plus,
     },
     {
       title: navT('analytics'),
