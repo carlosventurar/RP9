@@ -4,12 +4,9 @@ import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
 import { Heart, Loader2 } from 'lucide-react'
-import { useAuth } from '@/lib/hooks/useAuth'
-
 interface FavoriteButtonProps {
-  itemId: string
-  itemType: 'template' | 'collection'
-  itemName?: string
+  templateId: string
+  templateName?: string
   initialIsFavorited?: boolean
   variant?: 'default' | 'outline' | 'ghost'
   size?: 'sm' | 'default' | 'lg' | 'icon'
@@ -19,9 +16,8 @@ interface FavoriteButtonProps {
 }
 
 export function FavoriteButton({
-  itemId,
-  itemType,
-  itemName,
+  templateId,
+  templateName,
   initialIsFavorited = false,
   variant = 'ghost',
   size = 'icon',
@@ -29,7 +25,6 @@ export function FavoriteButton({
   className = '',
   onFavoriteChange
 }: FavoriteButtonProps) {
-  const { token, isAuthenticated } = useAuth()
   
   const [isFavorited, setIsFavorited] = useState(initialIsFavorited)
   const [isLoading, setIsLoading] = useState(false)
@@ -40,45 +35,33 @@ export function FavoriteButton({
     setMounted(true)
   }, [])
 
-  // Check if item is favorited when component mounts (if authenticated)
+  // Check if template is favorited when component mounts
   useEffect(() => {
-    if (isAuthenticated && token && mounted) {
+    if (mounted && templateId) {
       checkFavoriteStatus()
     }
-  }, [isAuthenticated, token, mounted, itemId])
+  }, [mounted, templateId])
 
   const checkFavoriteStatus = async () => {
     try {
-      const response = await fetch(`/api/favorites?type=${itemType}s&limit=1000`, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      })
+      const response = await fetch('/api/favorites')
 
       if (response.ok) {
         const data = await response.json()
         if (data.success) {
-          const favorites = itemType === 'template' 
-            ? data.data.favorites.templates 
-            : data.data.favorites.collections
-          
-          const isFav = favorites.some((fav: any) => fav.id === itemId)
+          const isFav = data.data.favorites.some((fav: any) => fav.id === templateId)
           setIsFavorited(isFav)
         }
       }
     } catch (error) {
-      console.error('Error checking favorite status:', error)
+      // User might not be authenticated, ignore error
+      console.log('Could not check favorite status:', error)
     }
   }
 
   const handleToggleFavorite = async (e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
-
-    if (!isAuthenticated) {
-      toast.error('Please sign in to save favorites')
-      return
-    }
 
     setIsLoading(true)
 
@@ -89,11 +72,9 @@ export function FavoriteButton({
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
           },
           body: JSON.stringify({
-            item_id: itemId,
-            item_type: itemType
+            template_id: templateId
           })
         })
 
@@ -102,10 +83,9 @@ export function FavoriteButton({
         if (response.ok && data.success) {
           setIsFavorited(false)
           onFavoriteChange?.(false)
-          
-          toast.success(`${itemName || itemType.charAt(0).toUpperCase() + itemType.slice(1)} removed from favorites`)
+          toast.success(`${templateName || 'Template'} removido de favoritos`)
         } else {
-          throw new Error(data.error || 'Failed to remove favorite')
+          throw new Error(data.error || 'Error al remover favorito')
         }
       } else {
         // Add to favorites
@@ -113,11 +93,9 @@ export function FavoriteButton({
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
           },
           body: JSON.stringify({
-            item_id: itemId,
-            item_type: itemType
+            template_id: templateId
           })
         })
 
@@ -126,19 +104,21 @@ export function FavoriteButton({
         if (response.ok && data.success) {
           setIsFavorited(true)
           onFavoriteChange?.(true)
-          
-          toast.success(`${itemName || itemType.charAt(0).toUpperCase() + itemType.slice(1)} added to favorites`)
-        } else if (response.status === 400 && data.error.includes('already favorited')) {
-          // Item already favorited, update UI state
+          toast.success(`${templateName || 'Template'} agregado a favoritos`)
+        } else if (response.status === 409) {
+          // Already favorited, update UI state
           setIsFavorited(true)
           onFavoriteChange?.(true)
+          toast.info('Ya está en favoritos')
+        } else if (response.status === 401) {
+          toast.error('Por favor inicia sesión para guardar favoritos')
         } else {
-          throw new Error(data.error || 'Failed to add favorite')
+          throw new Error(data.error || 'Error al agregar favorito')
         }
       }
     } catch (error) {
       console.error('Error toggling favorite:', error)
-      toast.error(error instanceof Error ? error.message : 'Failed to update favorites')
+      toast.error(error instanceof Error ? error.message : 'Error al actualizar favoritos')
     } finally {
       setIsLoading(false)
     }
@@ -172,10 +152,10 @@ export function FavoriteButton({
       disabled={isLoading}
       title={
         isLoading 
-          ? 'Updating...' 
+          ? 'Actualizando...' 
           : isFavorited 
-          ? `Remove ${itemName || itemType} from favorites` 
-          : `Add ${itemName || itemType} to favorites`
+          ? `Remover ${templateName || 'template'} de favoritos` 
+          : `Agregar ${templateName || 'template'} a favoritos`
       }
     >
       {isLoading ? (
@@ -190,12 +170,12 @@ export function FavoriteButton({
       
       {showText && !isLoading && (
         <span className="ml-2">
-          {isFavorited ? 'Favorited' : 'Favorite'}
+          {isFavorited ? 'En Favoritos' : 'Favorito'}
         </span>
       )}
       
       {showText && isLoading && (
-        <span className="ml-2">Updating...</span>
+        <span className="ml-2">Actualizando...</span>
       )}
     </Button>
   )

@@ -1,103 +1,46 @@
 import { NextRequest, NextResponse } from 'next/server'
-
-// Mock reviews data for local development
-const mockReviews = [
-  {
-    id: 'review-1',
-    user_id: 'user-1',
-    rating: 5,
-    comment: 'Excellent template! Saved me hours of work setting up email notifications. The workflow is clean and easy to customize.',
-    helpful_count: 8,
-    created_at: '2025-08-10T10:30:00Z',
-    updated_at: '2025-08-10T10:30:00Z',
-    user_name: 'Sarah Chen',
-    user_email: 'sarah.chen@example.com',
-    user_has_helped: false
-  },
-  {
-    id: 'review-2', 
-    user_id: 'user-2',
-    rating: 4,
-    comment: 'Great starting point for inventory sync. Had to make a few adjustments for our specific use case, but the core logic is solid.',
-    helpful_count: 5,
-    created_at: '2025-08-09T15:45:00Z',
-    updated_at: '2025-08-09T15:45:00Z',
-    user_name: 'Mike Rodriguez',
-    user_email: 'mike.r@company.com',
-    user_has_helped: true
-  },
-  {
-    id: 'review-3',
-    user_id: 'user-3', 
-    rating: 5,
-    comment: 'Perfect for our lead scoring needs. The AI integration works flawlessly and the documentation is comprehensive.',
-    helpful_count: 12,
-    created_at: '2025-08-08T09:15:00Z',
-    updated_at: '2025-08-08T09:15:00Z',
-    user_name: 'Jennifer Park',
-    user_email: 'j.park@startup.io',
-    user_has_helped: false
-  },
-  {
-    id: 'review-4',
-    user_id: 'user-4',
-    rating: 3,
-    comment: 'Good template but requires some technical knowledge to set up properly. Would benefit from more detailed setup instructions.',
-    helpful_count: 3,
-    created_at: '2025-08-07T14:20:00Z',
-    updated_at: '2025-08-07T14:20:00Z',
-    user_name: 'Alex Thompson',
-    user_email: 'alex.t@email.com',
-    user_has_helped: false
-  }
-]
-
-// Map reviews to templates
-const templateReviews: Record<string, string[]> = {
-  '1': ['review-1'], // Email Notification
-  '101': ['review-2'], // Multi-Channel Inventory
-  '102': [], // Customer Segmentation (no reviews yet)
-  '103': ['review-3'], // Lead Scoring AI
-  '104': [], // Campaign Manager (no reviews yet) 
-  '105': ['review-4'] // Multi-Cloud Deployment
-}
+import { createClient } from '@/lib/supabase/server'
+import { cookies } from 'next/headers'
 
 export async function GET(request: NextRequest) {
   try {
+    const supabase = await createClient(await cookies())
     const { searchParams } = new URL(request.url)
-    const templateId = searchParams.get('templateId')
-    const limit = searchParams.get('limit')
+    const templateId = searchParams.get('templateId') || searchParams.get('template_id')
+    const limit = parseInt(searchParams.get('limit') || '10')
+    const offset = parseInt(searchParams.get('offset') || '0')
 
-    if (!templateId) {
+    let query = supabase
+      .from('template_reviews')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .range(offset, offset + limit - 1)
+
+    if (templateId) {
+      query = query.eq('template_id', templateId)
+    }
+
+    const { data: reviews, error } = await query
+
+    if (error) {
+      console.error('Error fetching reviews:', error)
       return NextResponse.json({
         success: false,
-        error: 'Template ID is required'
-      }, { status: 400 })
+        error: 'Failed to fetch reviews'
+      }, { status: 500 })
     }
 
-    // Get reviews for this template
-    const reviewIds = templateReviews[templateId] || []
-    let reviews = mockReviews.filter(review => reviewIds.includes(review.id))
-
-    // Sort by most recent first
-    reviews = reviews.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
-
-    // Apply limit if specified
-    if (limit) {
-      const limitNum = parseInt(limit)
-      if (!isNaN(limitNum) && limitNum > 0) {
-        reviews = reviews.slice(0, limitNum)
-      }
-    }
+    // Calculate average rating
+    const averageRating = reviews && reviews.length > 0 
+      ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
+      : 0
 
     return NextResponse.json({
       success: true,
-      data: reviews,
+      data: reviews || [],
       meta: {
-        total: reviews.length,
-        average_rating: reviews.length > 0 
-          ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
-          : 0
+        total: reviews?.length || 0,
+        average_rating: Number(averageRating.toFixed(2))
       }
     })
 
@@ -112,9 +55,11 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    // Check authentication (mock for now)
-    const authHeader = request.headers.get('authorization')
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    const supabase = await createClient(await cookies())
+    
+    // Get current user
+    const { data: { user }, error: authError } = await supabase.auth.getUser()
+    if (authError || !user) {
       return NextResponse.json({
         success: false,
         error: 'Authentication required'
@@ -122,10 +67,11 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { templateId, rating, comment } = body
+    const { templateId, template_id, rating, comment } = body
+    const finalTemplateId = templateId || template_id
 
     // Validation
-    if (!templateId) {
+    if (!finalTemplateId) {
       return NextResponse.json({
         success: false,
         error: 'Template ID is required'
@@ -139,28 +85,40 @@ export async function POST(request: NextRequest) {
       }, { status: 400 })
     }
 
-    // Create new review (mock)
-    const newReview = {
-      id: `review-${Date.now()}`,
-      user_id: 'current-user',
-      rating,
-      comment: comment || null,
-      helpful_count: 0,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-      user_name: 'Current User',
-      user_email: 'current.user@example.com',
-      user_has_helped: false
+    // Check if user already reviewed this template
+    const { data: existingReview } = await supabase
+      .from('template_reviews')
+      .select('id')
+      .eq('template_id', finalTemplateId)
+      .eq('user_id', user.id)
+      .single()
+
+    if (existingReview) {
+      return NextResponse.json({
+        success: false,
+        error: 'You have already reviewed this template'
+      }, { status: 409 })
     }
 
-    // Add to mock data (in production, this would save to database)
-    mockReviews.unshift(newReview)
-    
-    // Add to template mapping
-    if (!templateReviews[templateId]) {
-      templateReviews[templateId] = []
+    // Insert the review
+    const { data: newReview, error } = await supabase
+      .from('template_reviews')
+      .insert({
+        template_id: finalTemplateId,
+        user_id: user.id,
+        rating,
+        comment: comment || null
+      })
+      .select()
+      .single()
+
+    if (error) {
+      console.error('Error creating review:', error)
+      return NextResponse.json({
+        success: false,
+        error: 'Failed to create review'
+      }, { status: 500 })
     }
-    templateReviews[templateId].unshift(newReview.id)
 
     return NextResponse.json({
       success: true,
@@ -175,6 +133,122 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: false,
       error: 'Failed to create review'
+    }, { status: 500 })
+  }
+}
+
+export async function PUT(request: NextRequest) {
+  try {
+    const supabase = await createClient(await cookies())
+    
+    // Get current user
+    const { data: { user }, error: authError } = await supabase.auth.getUser()
+    if (authError || !user) {
+      return NextResponse.json({
+        success: false,
+        error: 'Authentication required'
+      }, { status: 401 })
+    }
+
+    const body = await request.json()
+    const { id, rating, comment } = body
+
+    // Validation
+    if (!id || !rating || rating < 1 || rating > 5) {
+      return NextResponse.json({
+        success: false,
+        error: 'Invalid input data'
+      }, { status: 400 })
+    }
+
+    // Update the review (RLS will ensure user can only update their own)
+    const { data, error } = await supabase
+      .from('template_reviews')
+      .update({
+        rating,
+        comment: comment || null,
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', id)
+      .eq('user_id', user.id)
+      .select()
+      .single()
+
+    if (error) {
+      console.error('Error updating review:', error)
+      return NextResponse.json({
+        success: false,
+        error: 'Failed to update review'
+      }, { status: 500 })
+    }
+
+    if (!data) {
+      return NextResponse.json({
+        success: false,
+        error: 'Review not found or not authorized'
+      }, { status: 404 })
+    }
+
+    return NextResponse.json({
+      success: true,
+      data: { review: data }
+    })
+  } catch (error) {
+    console.error('Template reviews PUT API error:', error)
+    return NextResponse.json({
+      success: false,
+      error: 'Internal server error'
+    }, { status: 500 })
+  }
+}
+
+export async function DELETE(request: NextRequest) {
+  try {
+    const supabase = await createClient(await cookies())
+    
+    // Get current user
+    const { data: { user }, error: authError } = await supabase.auth.getUser()
+    if (authError || !user) {
+      return NextResponse.json({
+        success: false,
+        error: 'Authentication required'
+      }, { status: 401 })
+    }
+
+    const { searchParams } = new URL(request.url)
+    const id = searchParams.get('id')
+
+    if (!id) {
+      return NextResponse.json({
+        success: false,
+        error: 'Review ID is required'
+      }, { status: 400 })
+    }
+
+    // Delete the review (RLS will ensure user can only delete their own)
+    const { error } = await supabase
+      .from('template_reviews')
+      .delete()
+      .eq('id', id)
+      .eq('user_id', user.id)
+
+    if (error) {
+      console.error('Error deleting review:', error)
+      return NextResponse.json({
+        success: false,
+        error: 'Failed to delete review'
+      }, { status: 500 })
+    }
+
+    return NextResponse.json({
+      success: true,
+      data: { message: 'Review deleted successfully' }
+    })
+  } catch (error) {
+    console.error('Template reviews DELETE API error:', error)
+    return NextResponse.json({
+      success: false,
+      error: 'Internal server error'
     }, { status: 500 })
   }
 }

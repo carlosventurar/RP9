@@ -12,7 +12,7 @@ import {
   Loader2,
   TrendingUp
 } from 'lucide-react'
-import { useAuth } from '@/lib/hooks/useAuth'
+import { toast } from 'sonner'
 
 interface Review {
   id: string
@@ -40,7 +40,6 @@ export function ReviewsList({
   showTitle = true,
   limit 
 }: ReviewsListProps) {
-  const { token, isAuthenticated } = useAuth()
   const [reviews, setReviews] = useState<Review[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -72,10 +71,6 @@ export function ReviewsList({
   }, [templateId])
 
   const handleHelpful = async (reviewId: string, isHelpful: boolean) => {
-    if (!isAuthenticated || !token) {
-      return
-    }
-
     setHelpfulLoading(reviewId)
 
     try {
@@ -83,7 +78,6 @@ export function ReviewsList({
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({
           reviewId,
@@ -104,12 +98,14 @@ export function ReviewsList({
               }
             : review
         ))
+        toast.success(isHelpful ? 'Marcado como útil' : 'Voto removido')
       } else {
-        throw new Error(data.error || 'Failed to update helpfulness')
+        throw new Error(data.error || 'Error al actualizar utilidad')
       }
 
     } catch (error) {
       console.error('Error updating helpfulness:', error)
+      toast.error(error instanceof Error ? error.message : 'Error al actualizar utilidad')
     } finally {
       setHelpfulLoading(null)
     }
@@ -277,8 +273,8 @@ export function ReviewsList({
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={() => handleHelpful(review.id, true)}
-                  disabled={!isAuthenticated || helpfulLoading === review.id}
+                  onClick={() => handleHelpful(review.id, !review.user_has_helped)}
+                  disabled={helpfulLoading === review.id}
                   className={`text-xs h-auto py-1 px-2 ${
                     review.user_has_helped ? 'text-blue-600' : 'text-muted-foreground'
                   }`}

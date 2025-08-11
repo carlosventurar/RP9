@@ -17,7 +17,7 @@ import {
   AlertCircle,
   MessageSquare
 } from 'lucide-react'
-import { useAuth } from '@/lib/hooks/useAuth'
+import { toast } from 'sonner'
 
 interface Template {
   id: string
@@ -39,7 +39,6 @@ export function ReviewModal({
   onClose, 
   onReviewSubmitted 
 }: ReviewModalProps) {
-  const { token, isAuthenticated } = useAuth()
   const [rating, setRating] = useState(0)
   const [hoverRating, setHoverRating] = useState(0)
   const [comment, setComment] = useState('')
@@ -50,13 +49,8 @@ export function ReviewModal({
   if (!template) return null
 
   const handleSubmit = async () => {
-    if (!isAuthenticated || !token) {
-      setError('Please log in to submit a review')
-      return
-    }
-
     if (rating === 0) {
-      setError('Please select a rating')
+      setError('Por favor selecciona una calificación')
       return
     }
 
@@ -68,7 +62,6 @@ export function ReviewModal({
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({
           templateId: template.id,
@@ -81,6 +74,7 @@ export function ReviewModal({
 
       if (data.success) {
         setSubmitStatus('success')
+        toast.success('¡Reseña enviada exitosamente!')
         if (onReviewSubmitted) {
           onReviewSubmitted(template.id, rating)
         }
@@ -90,13 +84,15 @@ export function ReviewModal({
           handleClose()
         }, 2000)
       } else {
-        throw new Error(data.error || 'Failed to submit review')
+        throw new Error(data.error || 'Error al enviar reseña')
       }
 
     } catch (error) {
       console.error('Review submission error:', error)
-      setError(error instanceof Error ? error.message : 'Failed to submit review')
+      const errorMessage = error instanceof Error ? error.message : 'Error al enviar reseña'
+      setError(errorMessage)
       setSubmitStatus('error')
+      toast.error(errorMessage)
     } finally {
       setIsSubmitting(false)
     }

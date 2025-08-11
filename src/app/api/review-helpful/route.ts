@@ -1,50 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
-
-// Mock data for helpful votes
-const mockHelpfulVotes: Record<string, { userId: string; isHelpful: boolean }[]> = {
-  'review-1': [
-    { userId: 'user-a', isHelpful: true },
-    { userId: 'user-b', isHelpful: true },
-    { userId: 'user-c', isHelpful: true },
-    { userId: 'user-d', isHelpful: true },
-    { userId: 'user-e', isHelpful: true },
-    { userId: 'user-f', isHelpful: true },
-    { userId: 'user-g', isHelpful: true },
-    { userId: 'user-h', isHelpful: true }
-  ],
-  'review-2': [
-    { userId: 'user-x', isHelpful: true },
-    { userId: 'user-y', isHelpful: true },
-    { userId: 'user-z', isHelpful: true },
-    { userId: 'current-user', isHelpful: true },
-    { userId: 'user-w', isHelpful: true }
-  ],
-  'review-3': [
-    { userId: 'user-1', isHelpful: true },
-    { userId: 'user-2', isHelpful: true },
-    { userId: 'user-3', isHelpful: true },
-    { userId: 'user-4', isHelpful: true },
-    { userId: 'user-5', isHelpful: true },
-    { userId: 'user-6', isHelpful: true },
-    { userId: 'user-7', isHelpful: true },
-    { userId: 'user-8', isHelpful: true },
-    { userId: 'user-9', isHelpful: true },
-    { userId: 'user-10', isHelpful: true },
-    { userId: 'user-11', isHelpful: true },
-    { userId: 'user-12', isHelpful: true }
-  ],
-  'review-4': [
-    { userId: 'user-m', isHelpful: true },
-    { userId: 'user-n', isHelpful: true },
-    { userId: 'user-o', isHelpful: true }
-  ]
-}
+import { createClient } from '@/lib/supabase/server'
+import { cookies } from 'next/headers'
 
 export async function POST(request: NextRequest) {
   try {
-    // Check authentication (mock for now)
-    const authHeader = request.headers.get('authorization')
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    const supabase = await createClient(await cookies())
+    
+    // Get current user
+    const { data: { user }, error: authError } = await supabase.auth.getUser()
+    if (authError || !user) {
       return NextResponse.json({
         success: false,
         error: 'Authentication required'
@@ -52,52 +16,80 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { reviewId, isHelpful } = body
+    const { reviewId, review_id, isHelpful, is_helpful } = body
+    const finalReviewId = reviewId || review_id
+    const finalIsHelpful = isHelpful !== undefined ? isHelpful : is_helpful
 
     // Validation
-    if (!reviewId) {
+    if (!finalReviewId) {
       return NextResponse.json({
         success: false,
         error: 'Review ID is required'
       }, { status: 400 })
     }
 
-    if (typeof isHelpful !== 'boolean') {
+    if (typeof finalIsHelpful !== 'boolean') {
       return NextResponse.json({
         success: false,
         error: 'isHelpful must be a boolean'
       }, { status: 400 })
     }
 
-    const currentUserId = 'current-user' // In production, extract from JWT token
+    // Check if user already voted on this review
+    const { data: existingVote } = await supabase
+      .from('review_helpful_votes')
+      .select('*')
+      .eq('review_id', finalReviewId)
+      .eq('user_id', user.id)
+      .single()
 
-    // Initialize votes array if doesn't exist
-    if (!mockHelpfulVotes[reviewId]) {
-      mockHelpfulVotes[reviewId] = []
-    }
-
-    const votes = mockHelpfulVotes[reviewId]
-    const existingVoteIndex = votes.findIndex(vote => vote.userId === currentUserId)
-
-    if (existingVoteIndex >= 0) {
+    if (existingVote) {
       // Update existing vote
-      votes[existingVoteIndex].isHelpful = isHelpful
+      const { error: updateError } = await supabase
+        .from('review_helpful_votes')
+        .update({ is_helpful: finalIsHelpful })
+        .eq('id', existingVote.id)
+
+      if (updateError) {
+        console.error('Error updating helpful vote:', updateError)
+        return NextResponse.json({
+          success: false,
+          error: 'Failed to update vote'
+        }, { status: 500 })
+      }
     } else {
-      // Add new vote
-      votes.push({ userId: currentUserId, isHelpful })
+      // Insert new vote
+      const { error: insertError } = await supabase
+        .from('review_helpful_votes')
+        .insert({
+          review_id: finalReviewId,
+          user_id: user.id,
+          is_helpful: finalIsHelpful
+        })
+
+      if (insertError) {
+        console.error('Error creating helpful vote:', insertError)
+        return NextResponse.json({
+          success: false,
+          error: 'Failed to create vote'
+        }, { status: 500 })
+      }
     }
 
-    // Calculate helpful count (only count true votes)
-    const helpfulCount = votes.filter(vote => vote.isHelpful).length
-    const userVoted = votes.some(vote => vote.userId === currentUserId)
+    // Get updated helpful count
+    const { count: helpfulCount } = await supabase
+      .from('review_helpful_votes')
+      .select('*', { count: 'exact', head: true })
+      .eq('review_id', finalReviewId)
+      .eq('is_helpful', true)
 
     return NextResponse.json({
       success: true,
       data: {
-        review_id: reviewId,
-        helpful_count: helpfulCount,
-        user_voted: userVoted,
-        message: isHelpful ? 'Marked as helpful' : 'Removed helpful vote'
+        review_id: finalReviewId,
+        helpful_count: helpfulCount || 0,
+        user_voted: true,
+        message: finalIsHelpful ? 'Marked as helpful' : 'Removed helpful vote'
       }
     })
 
@@ -112,8 +104,9 @@ export async function POST(request: NextRequest) {
 
 export async function GET(request: NextRequest) {
   try {
+    const supabase = await createClient(await cookies())
     const { searchParams } = new URL(request.url)
-    const reviewId = searchParams.get('reviewId')
+    const reviewId = searchParams.get('reviewId') || searchParams.get('review_id')
 
     if (!reviewId) {
       return NextResponse.json({
@@ -122,23 +115,33 @@ export async function GET(request: NextRequest) {
       }, { status: 400 })
     }
 
-    const votes = mockHelpfulVotes[reviewId] || []
-    const helpfulCount = votes.filter(vote => vote.isHelpful).length
-    
-    // Check if current user has voted (requires auth)
-    const authHeader = request.headers.get('authorization')
+    // Get helpful count
+    const { count: helpfulCount } = await supabase
+      .from('review_helpful_votes')
+      .select('*', { count: 'exact', head: true })
+      .eq('review_id', reviewId)
+      .eq('is_helpful', true)
+
+    // Check if current user has voted (if authenticated)
     let userVoted = false
+    const { data: { user } } = await supabase.auth.getUser()
     
-    if (authHeader && authHeader.startsWith('Bearer ')) {
-      const currentUserId = 'current-user' // Extract from JWT in production
-      userVoted = votes.some(vote => vote.userId === currentUserId)
+    if (user) {
+      const { data: userVote } = await supabase
+        .from('review_helpful_votes')
+        .select('is_helpful')
+        .eq('review_id', reviewId)
+        .eq('user_id', user.id)
+        .single()
+
+      userVoted = !!userVote?.is_helpful
     }
 
     return NextResponse.json({
       success: true,
       data: {
         review_id: reviewId,
-        helpful_count: helpfulCount,
+        helpful_count: helpfulCount || 0,
         user_voted: userVoted
       }
     })
