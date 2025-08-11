@@ -235,3 +235,151 @@ CREATE TRIGGER trigger_reconciliation_rules_updated_at
 CREATE TRIGGER trigger_reconciliation_matches_updated_at
   BEFORE UPDATE ON reconciliation_matches
   FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- Escalation rules and logs for Contact Center automation
+CREATE TABLE IF NOT EXISTS escalation_rules (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+  name TEXT NOT NULL,
+  trigger_type TEXT NOT NULL CHECK (trigger_type IN ('keywords', 'duration', 'status', 'sla')),
+  trigger_conditions JSONB NOT NULL DEFAULT '{}',
+  action JSONB NOT NULL DEFAULT '{}',
+  active BOOLEAN DEFAULT true,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS escalation_logs (
+  id BIGSERIAL PRIMARY KEY,
+  tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+  event_cc_id BIGINT REFERENCES events_cc(id) ON DELETE CASCADE,
+  rule_id UUID REFERENCES escalation_rules(id) ON DELETE SET NULL,
+  rule_name TEXT,
+  status TEXT NOT NULL CHECK (status IN ('success', 'error')),
+  result JSONB DEFAULT '{}',
+  error_message TEXT,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- RLS for escalation tables
+ALTER TABLE escalation_rules ENABLE ROW LEVEL SECURITY;
+ALTER TABLE escalation_logs ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Users can manage their tenant's escalation rules" ON escalation_rules
+  FOR ALL USING (tenant_id IN (SELECT id FROM tenants WHERE owner_user_id = auth.uid()));
+
+CREATE POLICY "Users can view their tenant's escalation logs" ON escalation_logs
+  FOR SELECT USING (tenant_id IN (SELECT id FROM tenants WHERE owner_user_id = auth.uid()));
+
+CREATE POLICY "Service role can manage escalation_rules" ON escalation_rules
+  FOR ALL TO service_role USING (true);
+
+CREATE POLICY "Service role can manage escalation_logs" ON escalation_logs
+  FOR ALL TO service_role USING (true);
+
+-- Triggers for escalation tables
+CREATE TRIGGER trigger_escalation_rules_updated_at
+  BEFORE UPDATE ON escalation_rules
+  FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- Reconciliation runs and related tables
+CREATE TABLE IF NOT EXISTS reconciliation_runs (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+  source TEXT NOT NULL CHECK (source IN ('belvo', 'csv', 'manual')),
+  total_transactions INTEGER NOT NULL DEFAULT 0,
+  matched_transactions INTEGER NOT NULL DEFAULT 0,
+  unmatched_transactions INTEGER NOT NULL DEFAULT 0,
+  total_amount DECIMAL(15,2) NOT NULL DEFAULT 0,
+  matched_amount DECIMAL(15,2) NOT NULL DEFAULT 0,
+  confidence_threshold DECIMAL(3,2) NOT NULL DEFAULT 0.8,
+  auto_approved BOOLEAN NOT NULL DEFAULT false,
+  status TEXT NOT NULL DEFAULT 'completed' CHECK (status IN ('running', 'completed', 'failed')),
+  source_metadata JSONB DEFAULT '{}',
+  created_by UUID REFERENCES auth.users(id) ON DELETE SET NULL,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  completed_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS reconciliation_exceptions (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+  reconciliation_run_id UUID REFERENCES reconciliation_runs(id) ON DELETE CASCADE,
+  transaction_data JSONB NOT NULL,
+  exception_reason TEXT NOT NULL,
+  suggestions TEXT[] DEFAULT ARRAY[]::TEXT[],
+  status TEXT NOT NULL DEFAULT 'needs_review' CHECK (status IN ('needs_review', 'resolved', 'ignored')),
+  resolution_notes TEXT,
+  resolved_by UUID REFERENCES auth.users(id) ON DELETE SET NULL,
+  resolved_at TIMESTAMPTZ,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Audit and security logging tables
+CREATE TABLE IF NOT EXISTS audit_logs (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+  user_id UUID REFERENCES auth.users(id) ON DELETE SET NULL,
+  action TEXT NOT NULL,
+  resource_type TEXT NOT NULL,
+  resource_id TEXT,
+  metadata JSONB DEFAULT '{}',
+  ip_address TEXT,
+  user_agent TEXT,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS security_events (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+  user_id UUID REFERENCES auth.users(id) ON DELETE SET NULL,
+  event_type TEXT NOT NULL,
+  severity TEXT NOT NULL CHECK (severity IN ('low', 'medium', 'high', 'critical')),
+  metadata JSONB DEFAULT '{}',
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Enable RLS for new tables
+ALTER TABLE reconciliation_runs ENABLE ROW LEVEL SECURITY;
+ALTER TABLE reconciliation_exceptions ENABLE ROW LEVEL SECURITY;
+ALTER TABLE audit_logs ENABLE ROW LEVEL SECURITY;
+ALTER TABLE security_events ENABLE ROW LEVEL SECURITY;
+
+-- RLS policies for reconciliation tables
+CREATE POLICY "Users can view their tenant's reconciliation runs" ON reconciliation_runs
+  FOR SELECT USING (tenant_id IN (SELECT id FROM tenants WHERE owner_user_id = auth.uid()));
+
+CREATE POLICY "Users can view their tenant's reconciliation exceptions" ON reconciliation_exceptions
+  FOR ALL USING (tenant_id IN (SELECT id FROM tenants WHERE owner_user_id = auth.uid()));
+
+CREATE POLICY "Users can view their tenant's audit logs" ON audit_logs
+  FOR SELECT USING (tenant_id IN (SELECT id FROM tenants WHERE owner_user_id = auth.uid()));
+
+CREATE POLICY "Users can view their tenant's security events" ON security_events
+  FOR SELECT USING (tenant_id IN (SELECT id FROM tenants WHERE owner_user_id = auth.uid()));
+
+-- Service role policies for new tables
+CREATE POLICY "Service role can manage reconciliation_runs" ON reconciliation_runs
+  FOR ALL TO service_role USING (true);
+
+CREATE POLICY "Service role can manage reconciliation_exceptions" ON reconciliation_exceptions
+  FOR ALL TO service_role USING (true);
+
+CREATE POLICY "Service role can manage audit_logs" ON audit_logs
+  FOR ALL TO service_role USING (true);
+
+CREATE POLICY "Service role can manage security_events" ON security_events
+  FOR ALL TO service_role USING (true);
+
+-- Add priority column to reconciliation_rules if it doesn't exist
+ALTER TABLE reconciliation_rules ADD COLUMN IF NOT EXISTS priority INTEGER DEFAULT 0;
+ALTER TABLE reconciliation_rules ADD COLUMN IF NOT EXISTS active BOOLEAN DEFAULT true;
+ALTER TABLE reconciliation_rules ADD COLUMN IF NOT EXISTS target_account TEXT;
+ALTER TABLE reconciliation_rules ADD COLUMN IF NOT EXISTS suggested_description TEXT;
+
+-- Create indexes for performance
+CREATE INDEX IF NOT EXISTS idx_reconciliation_runs_tenant_time ON reconciliation_runs (tenant_id, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_reconciliation_exceptions_tenant_status ON reconciliation_exceptions (tenant_id, status);
+CREATE INDEX IF NOT EXISTS idx_audit_logs_tenant_time ON audit_logs (tenant_id, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_security_events_tenant_severity ON security_events (tenant_id, severity, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_reconciliation_rules_tenant_priority ON reconciliation_rules (tenant_id, priority DESC, active);

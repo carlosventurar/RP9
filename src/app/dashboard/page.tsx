@@ -7,6 +7,7 @@ import { Activity, Workflow, TrendingUp, Clock, Loader2, Phone } from "lucide-re
 import { useDashboardTranslations } from '@/hooks/use-translations'
 import { createClient } from '@/lib/supabase/client'
 import CCKPIs from '@/components/kpi/CCKPIs'
+import FinKPIs from '@/components/kpi/FinKPIs'
 
 interface DashboardMetrics {
   total_executions: number
@@ -189,6 +190,9 @@ export default function Dashboard() {
 
       {/* Contact Center KPIs */}
       <CCKPIs />
+
+      {/* Finance KPIs */}
+      <FinKPIs />
 
       {/* Recent Activity */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
