@@ -8,6 +8,8 @@ import {
   CreditCard,
   BarChart3,
   User2,
+  Search,
+  Heart,
 } from "lucide-react"
 
 import {
@@ -41,6 +43,16 @@ export function AppSidebar() {
       title: navT('dashboard'),
       url: "/dashboard",
       icon: Home,
+    },
+    {
+      title: "Search Templates",
+      url: "/search",
+      icon: Search,
+    },
+    {
+      title: "Favorites",
+      url: "/favorites",
+      icon: Heart,
     },
     {
       title: navT('workflows'),

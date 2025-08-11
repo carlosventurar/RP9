@@ -11,10 +11,12 @@ import {
   ArrowRight,
   Loader2,
   ShoppingCart,
-  CheckCircle2
+  CheckCircle2,
+  MessageSquare
 } from 'lucide-react'
 import { TemplatePriceBadge, getTemplateTierInfo } from './template-price-badge'
 import { PurchaseModal } from './purchase-modal'
+import { ReviewModal } from './review-modal'
 import { useAuth } from '@/lib/hooks/useAuth'
 
 interface Template {
@@ -54,6 +56,7 @@ export function PremiumTemplateCard({
   const { isAuthenticated } = useAuth()
   const [installLoading, setInstallLoading] = useState(false)
   const [purchaseModalOpen, setPurchaseModalOpen] = useState(false)
+  const [reviewModalOpen, setReviewModalOpen] = useState(false)
   const [hasPurchased, setHasPurchased] = useState(false) // This should come from API
   
   const tierInfo = getTemplateTierInfo(template.price)
@@ -101,6 +104,14 @@ export function PremiumTemplateCard({
     setHasPurchased(true)
     setPurchaseModalOpen(false)
     if (onPurchaseSuccess) {
+      onPurchaseSuccess(templateId)
+    }
+  }
+
+  const handleReviewSubmitted = (templateId: string, rating: number) => {
+    setReviewModalOpen(false)
+    // Update local template rating if needed
+    if (onPurchaseSuccess) { // Reuse callback for now
       onPurchaseSuccess(templateId)
     }
   }
@@ -177,6 +188,13 @@ export function PremiumTemplateCard({
             onPurchaseSuccess={handlePurchaseSuccess}
           />
         )}
+
+        <ReviewModal
+          template={template}
+          isOpen={reviewModalOpen}
+          onClose={() => setReviewModalOpen(false)}
+          onReviewSubmitted={handleReviewSubmitted}
+        />
       </>
     )
   }
@@ -264,9 +282,24 @@ export function PremiumTemplateCard({
           )}
 
           <div className="flex items-center justify-between pt-2 border-t">
-            <div className="flex items-center gap-1 text-sm text-muted-foreground">
-              <Download className="h-3 w-3" />
-              {template.install_count?.toLocaleString() || 0} installs
+            <div className="flex items-center gap-3 text-sm text-muted-foreground">
+              <div className="flex items-center gap-1">
+                <Download className="h-3 w-3" />
+                {template.install_count?.toLocaleString() || 0}
+              </div>
+              {template.rating && (
+                <div className="flex items-center gap-1">
+                  <Star className="h-3 w-3 text-yellow-400 fill-current" />
+                  {template.rating}
+                </div>
+              )}
+              <button
+                onClick={() => setReviewModalOpen(true)}
+                className="flex items-center gap-1 hover:text-foreground transition-colors"
+              >
+                <MessageSquare className="h-3 w-3" />
+                Review
+              </button>
             </div>
             
             <Button 
@@ -309,6 +342,13 @@ export function PremiumTemplateCard({
           onPurchaseSuccess={handlePurchaseSuccess}
         />
       )}
+
+      <ReviewModal
+        template={template}
+        isOpen={reviewModalOpen}
+        onClose={() => setReviewModalOpen(false)}
+        onReviewSubmitted={handleReviewSubmitted}
+      />
     </>
   )
 }

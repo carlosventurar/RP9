@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { PremiumTemplateCard } from '@/components/premium-template-card'
 import { TemplatePriceBadge } from '@/components/template-price-badge'
+import { ReviewsList } from '@/components/reviews-list'
 import { 
   Search, 
   Star, 

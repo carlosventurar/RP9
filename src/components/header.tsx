@@ -1,9 +1,10 @@
 "use client"
 
 import * as React from "react"
-import { Moon, Sun } from "lucide-react"
+import { Moon, Sun, Search } from "lucide-react"
 import { useTheme } from "next-themes"
 import { useLocale } from 'next-intl'
+import { useRouter } from 'next/navigation'
 
 import { Button } from "@/components/ui/button"
 import {
@@ -14,6 +15,7 @@ import { LocaleSwitcher } from "@/components/locale-switcher"
 export function Header() {
   const { setTheme, theme } = useTheme()
   const locale = useLocale()
+  const router = useRouter()
 
   return (
     <header className="flex h-16 shrink-0 items-center gap-2 px-4 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -23,6 +25,15 @@ export function Header() {
           <h1 className="text-lg font-semibold">RP9 Portal</h1>
         </div>
         <div className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => router.push('/search')}
+            className="gap-2"
+          >
+            <Search className="h-4 w-4" />
+            <span className="hidden sm:inline">Search Templates</span>
+          </Button>
           <LocaleSwitcher currentLocale={locale} />
           <Button
             variant="outline"
