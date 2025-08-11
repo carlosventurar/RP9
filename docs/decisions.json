@@ -1,0 +1,90 @@
+{
+  "title": "RP9 Phase 0 - Architectural Decisions Record",
+  "version": "1.0.0",
+  "date": "2025-08-11",
+  "decisions": {
+    "architecture": {
+      "bff_approach": {
+        "decision": "Netlify Functions vs Express Standalone",
+        "chosen": "Netlify Functions",
+        "rationale": "Better serverless scalability, simpler deployment, aligns with current stack",
+        "alternatives": ["Express standalone server", "Next.js API routes only"],
+        "impact": "Lower operational complexity, better cost efficiency"
+      },
+      "database": {
+        "decision": "Supabase with RLS",
+        "chosen": "Supabase PostgreSQL",
+        "rationale": "Provides auth, RLS, real-time, perfect for SaaS multi-tenancy",
+        "alternatives": ["Direct PostgreSQL", "MongoDB", "PlanetScale"],
+        "impact": "Built-in auth and multi-tenancy support"
+      },
+      "frontend": {
+        "decision": "Next.js 15 with App Router",
+        "chosen": "Next.js 15 App Router",
+        "rationale": "Latest React patterns, server components, optimal performance",
+        "alternatives": ["Next.js Pages Router", "Vite + React", "Remix"],
+        "impact": "Future-proof architecture, better SEO, performance"
+      }
+    },
+    "security": {
+      "rate_limiting": {
+        "decision": "In-memory rate limiting in Netlify Functions",
+        "chosen": "300 req/min per IP",
+        "rationale": "Prevents abuse, protects n8n instance, simple implementation",
+        "alternatives": ["Redis-based", "No rate limiting", "n8n native limits"],
+        "impact": "Basic protection without additional infrastructure"
+      },
+      "webhook_security": {
+        "decision": "HMAC SHA256 verification",
+        "chosen": "HMAC with configurable secret",
+        "rationale": "Industry standard for webhook security, prevents replay attacks",
+        "alternatives": ["Basic auth", "IP whitelisting", "No verification"],
+        "impact": "Secure webhook handling"
+      }
+    },
+    "integrations": {
+      "n8n_hosting": {
+        "decision": "Railway for n8n deployment",
+        "chosen": "Railway",
+        "rationale": "Simple deployment, good performance, cost-effective for MVP",
+        "alternatives": ["Self-hosted VPS", "Docker Compose", "n8n Cloud"],
+        "impact": "Quick setup, predictable costs"
+      },
+      "workflow_builder": {
+        "decision": "React Flow for mini-builder",
+        "chosen": "React Flow library",
+        "rationale": "Visual workflow creation, n8n JSON export, proven library",
+        "alternatives": ["Custom canvas implementation", "No visual builder"],
+        "impact": "Better UX for workflow creation"
+      }
+    },
+    "product_decisions": {
+      "packaging": "A con C upsell Enterprise",
+      "onboarding": "A",
+      "plans": "B (fijos con escalones)",
+      "checkout": "B", 
+      "metrics_shown": "C",
+      "template_catalog": "C",
+      "gtm_motion": "B (B2B serio) + A self-serve",
+      "guarantee": "C",
+      "human_assistance": "C",
+      "addons": "A+B+C (3–5 visibles)",
+      "brand": "A (B2B serio)",
+      "billing_engine": "B ahora, explorar C luego",
+      "mixed_billing": "C (flex SMB, predecible Enterprise)",
+      "discounts": "A+B",
+      "limits_enforcement": "A+C", 
+      "ui_billing": "B ahora, C después",
+      "value_anchor": "C",
+      "public_pricing": "C (mínimos), B guía",
+      "dunning": "B",
+      "enterprise_clauses": "B (precio fijo por término)"
+    }
+  },
+  "implementation_notes": {
+    "phase_0_complete": true,
+    "architecture_validated": true,
+    "production_ready": true,
+    "next_phase": "Phase 1 - Pricing & Billing implementation"
+  }
+}
