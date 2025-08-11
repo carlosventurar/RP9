@@ -278,12 +278,17 @@ async function checkUsageLimits(tenant: any) {
 
     const executionsThisMonth = monthlyUsage?.length || 0
     const executionLimit = limits.executions_per_month
-    const usagePercent = (executionsThisMonth / executionLimit) * 100
+    const usagePercent = executionLimit === -1 ? 0 : (executionsThisMonth / executionLimit) * 100
 
-    console.log(`Tenant ${tenant.id}: ${executionsThisMonth}/${executionLimit} executions (${usagePercent.toFixed(1)}%)`)
+    console.log(`Tenant ${tenant.id}: ${executionsThisMonth}/${executionLimit === -1 ? '∞' : executionLimit} executions (${usagePercent.toFixed(1)}%)`)
+
+    // Handle overage billing for non-enterprise plans
+    if (executionLimit !== -1 && executionsThisMonth > executionLimit && tenant.plan !== 'enterprise') {
+      await handleOverageBilling(tenant, executionsThisMonth, executionLimit)
+    }
 
     // Send alerts at 80% and 100%
-    if (usagePercent >= 80) {
+    if (executionLimit !== -1 && usagePercent >= 80) {
       await sendUsageAlert(tenant, executionsThisMonth, executionLimit, usagePercent)
     }
 
@@ -320,6 +325,37 @@ async function sendUsageAlert(tenant: any, currentUsage: number, limit: number, 
         percentage: percentage
       }
     })
+}
+
+async function handleOverageBilling(tenant: any, currentUsage: number, limit: number) {
+  const overageExecutions = currentUsage - limit
+  const overageRate = 0.002 // $0.002 per execution
+  const overageCharge = overageExecutions * overageRate
+
+  console.log(`💰 OVERAGE BILLING for tenant ${tenant.name}: ${overageExecutions} executions × $${overageRate} = $${overageCharge.toFixed(2)}`)
+
+  // Save overage charge record
+  await supabase
+    .from('audit_logs')
+    .insert({
+      tenant_id: tenant.id,
+      user_id: null,
+      action: 'overage_charge',
+      resource: 'billing',
+      resource_id: tenant.id,
+      details: {
+        current_usage: currentUsage,
+        limit: limit,
+        overage_executions: overageExecutions,
+        rate_per_execution: overageRate,
+        total_charge: overageCharge
+      }
+    })
+
+  // Report overage usage to Stripe for billing
+  if (stripe) {
+    await reportOverageToStripe(tenant.id, overageExecutions, overageCharge)
+  }
 }
 
 async function reportUsageToStripe(tenantId: string) {
@@ -379,5 +415,48 @@ async function reportUsageToStripe(tenantId: string) {
 
   } catch (error) {
     console.error('Error reporting usage to Stripe:', error)
+  }
+}
+
+async function reportOverageToStripe(tenantId: string, overageExecutions: number, chargeAmount: number) {
+  if (!stripe) {
+    console.log('Stripe not configured, skipping overage reporting')
+    return
+  }
+
+  try {
+    // Get tenant's subscription
+    const { data: subscription } = await supabase
+      .from('subscriptions')
+      .select('stripe_customer_id')
+      .eq('tenant_id', tenantId)
+      .single()
+
+    if (!subscription?.stripe_customer_id) {
+      console.log(`No Stripe customer found for tenant ${tenantId}`)
+      return
+    }
+
+    // Create invoice item for overage
+    // In production, you would:
+    console.log(`Would create Stripe invoice item: $${chargeAmount.toFixed(2)} for ${overageExecutions} overage executions`)
+    
+    // Uncomment when Stripe is properly configured:
+    /*
+    await stripe.invoiceItems.create({
+      customer: subscription.stripe_customer_id,
+      amount: Math.round(chargeAmount * 100), // Convert to cents
+      currency: 'usd',
+      description: `Overage: ${overageExecutions} executions at $0.002 each`,
+      metadata: {
+        tenant_id: tenantId,
+        overage_executions: overageExecutions.toString(),
+        rate: '0.002'
+      }
+    })
+    */
+
+  } catch (error) {
+    console.error('Error reporting overage to Stripe:', error)
   }
 }
