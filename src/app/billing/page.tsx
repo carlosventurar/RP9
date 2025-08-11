@@ -78,14 +78,19 @@ export default function BillingPage() {
 
       setTenant(tenantData)
 
-      // Get subscription data
-      const { data: subscriptionData } = await supabase
-        .from('subscriptions')
-        .select('id, status, current_period_end, stripe_customer_id')
-        .eq('tenant_id', tenantData.id)
-        .single()
+      // Get subscription data (optional - may not exist)
+      try {
+        const { data: subscriptionData } = await supabase
+          .from('subscriptions')
+          .select('id, status, current_period_end, stripe_customer_id')
+          .eq('tenant_id', tenantData.id)
+          .single()
 
-      setSubscription(subscriptionData)
+        setSubscription(subscriptionData)
+      } catch (subscriptionError) {
+        console.log('No subscription found, using default state')
+        setSubscription(null)
+      }
 
       // Get usage data from dashboard API
       try {
@@ -161,10 +166,10 @@ export default function BillingPage() {
     )
   }
 
-  const currentPlan = PLAN_CONFIG[tenant.plan]
+  const currentPlan = PLAN_CONFIG[tenant.plan] || PLAN_CONFIG.starter
   const planLimits = {
-    executions: currentPlan.executions,
-    workflows: currentPlan.workflows
+    executions: currentPlan?.executions || 1000,
+    workflows: currentPlan?.workflows || 10
   }
 
   return (
@@ -191,8 +196,8 @@ export default function BillingPage() {
           <CardContent className="space-y-4">
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-2xl font-bold">{currentPlan.name}</div>
-                <div className="text-muted-foreground">${currentPlan.price}/mes</div>
+                <div className="text-2xl font-bold">{currentPlan?.name || 'Starter'}</div>
+                <div className="text-muted-foreground">${currentPlan?.price || 0}/mes</div>
               </div>
               <Badge variant="default" className={subscription?.status === 'active' ? 'bg-green-500' : 'bg-orange-500'}>
                 {subscription?.status === 'active' ? (
@@ -279,7 +284,7 @@ export default function BillingPage() {
             <div className="space-y-2">
               <div className="flex justify-between text-sm">
                 <span>Almacenamiento</span>
-                <span>{usage.storage_mb}MB / {currentPlan.storage}</span>
+                <span>{usage.storage_mb}MB / {currentPlan?.storage || '500MB'}</span>
               </div>
               <div className="w-full bg-secondary rounded-full h-2">
                 <div className="bg-primary h-2 rounded-full" style={{ width: '24%' }}></div>
@@ -327,13 +332,13 @@ export default function BillingPage() {
                     ) : (
                       <Button 
                         className="w-full"
-                        variant={plan.price > currentPlan.price ? 'default' : 'outline'}
+                        variant={plan.price > (currentPlan?.price || 0) ? 'default' : 'outline'}
                         onClick={() => handleUpgrade(planKey)}
                         disabled={upgrading !== null}
                       >
                         {upgrading === planKey ? (
                           <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Procesando...</>
-                        ) : plan.price > currentPlan.price ? (
+                        ) : plan.price > (currentPlan?.price || 0) ? (
                           <><Zap className="h-4 w-4 mr-2" />Actualizar</>
                         ) : (
                           'Cambiar Plan'
@@ -362,7 +367,7 @@ export default function BillingPage() {
               <div className="flex items-center justify-between p-4 border rounded-lg">
                 <div className="flex items-center gap-4">
                   <div className="space-y-1">
-                    <div className="font-medium">Suscripción {currentPlan.name}</div>
+                    <div className="font-medium">Suscripción {currentPlan?.name || 'Starter'}</div>
                     <div className="text-sm text-muted-foreground">
                       {subscription.current_period_end && 
                         `Válido hasta ${new Date(subscription.current_period_end).toLocaleDateString('es-ES')}`
@@ -373,7 +378,7 @@ export default function BillingPage() {
                 
                 <div className="flex items-center gap-4">
                   <div className="text-right">
-                    <div className="font-medium">${currentPlan.price}.00</div>
+                    <div className="font-medium">${currentPlan?.price || 0}.00</div>
                     <Badge variant={subscription.status === 'active' ? 'default' : 'outline'}>
                       {subscription.status === 'active' ? (
                         <><CheckCircle className="h-3 w-3 mr-1" />Pagado</>
