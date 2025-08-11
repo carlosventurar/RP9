@@ -11,48 +11,56 @@ export const getStripe = () => {
   return stripePromise
 }
 
-// Plan configurations
+// Plan configurations (Phase 1 pricing)
 export const PLAN_CONFIG = {
   starter: {
     key: 'starter',
-    name: 'Inicial',
-    price: 19,
+    name: 'Starter',
+    price: 0,
     executions: 1000,
     workflows: 10,
     storage: '500MB',
     features: [
-      '1,000 ejecuciones/mes',
-      '10 workflows',
-      '500MB storage',
-      'Soporte por email'
+      'Basic workflows',
+      'Standard support', 
+      '30-day history',
+      'Email notifications',
+      'Basic templates'
     ]
   },
   pro: {
     key: 'pro', 
-    name: 'Profesional',
-    price: 49,
+    name: 'Pro',
+    price: 29,
     executions: 10000,
-    workflows: 50,
-    storage: '1GB',
+    workflows: 100,
+    storage: '2GB',
     features: [
-      '10,000 ejecuciones/mes',
-      '50 workflows', 
-      '1GB storage',
-      'Soporte prioritario'
+      'Advanced workflows',
+      'Priority support',
+      '90-day history', 
+      'Custom integrations',
+      'Premium templates',
+      'Usage analytics',
+      'API access'
     ]
   },
   enterprise: {
     key: 'enterprise',
-    name: 'Empresarial', 
-    price: 199,
+    name: 'Enterprise', 
+    price: 99,
     executions: -1, // unlimited
     workflows: -1, // unlimited
     storage: '10GB',
     features: [
-      'Ejecuciones ilimitadas',
-      'Workflows ilimitados',
-      '10GB storage',
-      'Soporte 24/7'
+      'Unlimited workflows',
+      '24/7 dedicated support',
+      '1-year history',
+      'SSO authentication',
+      'Custom integrations',
+      'White-label options',
+      'SLA guarantees',
+      'Advanced security'
     ]
   }
 } as const
@@ -60,7 +68,7 @@ export const PLAN_CONFIG = {
 export type PlanKey = keyof typeof PLAN_CONFIG
 
 export async function createCheckoutSession(planKey: PlanKey, token: string) {
-  const response = await fetch('/api/billing-checkout', {
+  const response = await fetch('/.netlify/functions/billing-checkout', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

@@ -49,7 +49,10 @@ export default function BillingPage() {
   async function loadBillingData() {
     try {
       const { data: { session } } = await supabase.auth.getSession()
-      if (!session) return
+      if (!session) {
+        console.log('No session found')
+        return
+      }
 
       // Get tenant data
       const { data: tenantData, error: tenantError } = await supabase
@@ -60,6 +63,16 @@ export default function BillingPage() {
 
       if (tenantError) {
         console.error('Error loading tenant:', tenantError)
+        // Create a default tenant if none exists
+        if (tenantError.code === 'PGRST116') {
+          console.log('No tenant found, using default data')
+          setTenant({
+            id: 'default',
+            name: 'My Organization',
+            plan: 'starter'
+          })
+          return
+        }
         return
       }
 
@@ -75,18 +88,35 @@ export default function BillingPage() {
       setSubscription(subscriptionData)
 
       // Get usage data from dashboard API
-      const response = await fetch('/api/dashboard', {
-        headers: {
-          'Authorization': `Bearer ${session.access_token}`
+      try {
+        const response = await fetch('/.netlify/functions/dashboard', {
+          headers: {
+            'Authorization': `Bearer ${session.access_token}`
+          }
+        })
+        
+        if (response.ok) {
+          const dashboardData = await response.json()
+          setUsage({
+            executions: dashboardData.data?.metrics?.total_executions || 0,
+            workflows: dashboardData.data?.metrics?.active_workflows || 0,
+            storage_mb: 245 // Mock data for now
+          })
+        } else {
+          // Fallback to mock data if dashboard API fails
+          setUsage({
+            executions: 0,
+            workflows: 0,
+            storage_mb: 245
+          })
         }
-      })
-      
-      if (response.ok) {
-        const dashboardData = await response.json()
+      } catch (dashboardError) {
+        console.error('Dashboard API error:', dashboardError)
+        // Fallback to mock data
         setUsage({
-          executions: dashboardData.data?.metrics?.total_executions || 0,
-          workflows: dashboardData.data?.metrics?.active_workflows || 0,
-          storage_mb: 245 // Mock data for now
+          executions: 0,
+          workflows: 0,
+          storage_mb: 245
         })
       }
 
