@@ -177,7 +177,7 @@ export default function AIHistoryPage() {
   }
 
   const formatDate = (dateString: string) => {
-    return format(new Date(dateString), \"d 'de' MMMM, yyyy 'a las' HH:mm\", { locale: es })
+    return format(new Date(dateString), "d 'de' MMMM, yyyy 'a las' HH:mm", { locale: es })
   }
 
   const getRelativeTime = (dateString: string) => {
