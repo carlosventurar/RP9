@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RP9 Phase 5 - Documentation</title>
+    <title>RP9 Phase 6 - Documentation</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -55,7 +55,7 @@
             <div class="flex justify-between items-center h-16">
                 <div class="flex items-center space-x-4">
                     <div class="text-2xl font-bold highlight">RP9</div>
-                    <div class="text-gray-600">Phase 5 Documentation</div>
+                    <div class="text-gray-600">Phase 6 Documentation</div>
                 </div>
                 <div class="flex items-center space-x-6">
                     <a href="#overview" class="nav-link">Resumen</a>
@@ -72,11 +72,11 @@
     <section class="bg-gradient-to-r from-rp9-blue to-purple-600 text-white py-20">
         <div class="max-w-7xl mx-auto px-4 text-center">
             <h1 class="text-5xl font-bold mb-6">
-                🎉 Phase 5: Onboarding & Time-to-Value
+                🔒 Phase 6: Observabilidad & Seguridad
             </h1>
             <p class="text-xl mb-8 max-w-3xl mx-auto">
-                Sistema completo de onboarding progresivo con gamificación, health scoring, 
-                y notificaciones automatizadas para maximizar el TTV de usuarios nuevos.
+                Sistema completo de observabilidad en tiempo real con métricas de n8n, 
+                seguridad HMAC, rate limiting, RLS y hardening completo para producción.
             </p>
             <div class="flex justify-center space-x-4">
                 <a href="#features" class="bg-white text-rp9-blue px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition">
@@ -96,12 +96,12 @@
             
             <div class="grid md:grid-cols-2 gap-12 items-center">
                 <div>
-                    <h3 class="text-2xl font-semibold mb-6">¿Qué es Phase 5?</h3>
+                    <h3 class="text-2xl font-semibold mb-6">¿Qué es Phase 6?</h3>
                     <p class="text-gray-700 mb-6">
-                        Phase 5 implementa un sistema completo de onboarding progresivo diseñado para 
-                        maximizar el Time-to-Value (TTV) de usuarios nuevos en RP9. Esta fase introduce 
-                        gamificación, seguimiento de progreso, health scoring, y notificaciones 
-                        automatizadas para guiar a los usuarios desde el registro hasta la activación completa.
+                        Phase 6 implementa un sistema completo de observabilidad y seguridad diseñado para 
+                        proporcionar visibilidad total de workflows n8n y hardening de seguridad nivel producción. 
+                        Esta fase incluye métricas en tiempo real, webhooks seguros con HMAC, rate limiting, 
+                        Row Level Security, rotación automática de claves y suite completa de pruebas de intrusión.
                     </p>
                     
                     <div class="space-y-4">
@@ -109,57 +109,57 @@
                             <div class="w-6 h-6 bg-rp9-green rounded-full flex items-center justify-center">
                                 <span class="text-white text-sm">✓</span>
                             </div>
-                            <span>Reducción significativa de TTV</span>
+                            <span>Observabilidad completa de n8n</span>
                         </div>
                         <div class="flex items-center space-x-3">
                             <div class="w-6 h-6 bg-rp9-green rounded-full flex items-center justify-center">
                                 <span class="text-white text-sm">✓</span>
                             </div>
-                            <span>Mayor engagement de usuarios</span>
+                            <span>Seguridad HMAC & Rate Limiting</span>
                         </div>
                         <div class="flex items-center space-x-3">
                             <div class="w-6 h-6 bg-rp9-green rounded-full flex items-center justify-center">
                                 <span class="text-white text-sm">✓</span>
                             </div>
-                            <span>Automatización completa</span>
+                            <span>Row Level Security (RLS)</span>
                         </div>
                         <div class="flex items-center space-x-3">
                             <div class="w-6 h-6 bg-rp9-green rounded-full flex items-center justify-center">
                                 <span class="text-white text-sm">✓</span>
                             </div>
-                            <span>Insights de producto</span>
+                            <span>Rotación automática de claves</span>
                         </div>
                     </div>
                 </div>
                 
                 <div class="bg-white rounded-lg shadow-lg p-8">
-                    <h4 class="text-xl font-semibold mb-4">Métricas Clave</h4>
+                    <h4 class="text-xl font-semibold mb-4">Métricas de Seguridad</h4>
                     <div class="space-y-6">
                         <div>
                             <div class="flex justify-between mb-2">
-                                <span class="text-sm font-medium">Time-to-Value Target</span>
-                                <span class="text-sm text-gray-500">< 7 días</span>
+                                <span class="text-sm font-medium">Tiempo de Detección</span>
+                                <span class="text-sm text-gray-500">< 5 minutos</span>
                             </div>
                             <div class="w-full bg-gray-200 rounded-full h-2">
-                                <div class="bg-rp9-green h-2 rounded-full w-4/5"></div>
+                                <div class="bg-rp9-green h-2 rounded-full w-5/6"></div>
                             </div>
                         </div>
                         <div>
                             <div class="flex justify-between mb-2">
-                                <span class="text-sm font-medium">Activation Rate Target</span>
-                                <span class="text-sm text-gray-500">> 60%</span>
+                                <span class="text-sm font-medium">Cobertura de Seguridad</span>
+                                <span class="text-sm text-gray-500">> 95%</span>
                             </div>
                             <div class="w-full bg-gray-200 rounded-full h-2">
-                                <div class="bg-rp9-blue h-2 rounded-full w-3/5"></div>
+                                <div class="bg-rp9-blue h-2 rounded-full w-full"></div>
                             </div>
                         </div>
                         <div>
                             <div class="flex justify-between mb-2">
-                                <span class="text-sm font-medium">Task Completion Rate</span>
-                                <span class="text-sm text-gray-500">> 80%</span>
+                                <span class="text-sm font-medium">Disponibilidad Sistema</span>
+                                <span class="text-sm text-gray-500">99.9% uptime</span>
                             </div>
                             <div class="w-full bg-gray-200 rounded-full h-2">
-                                <div class="bg-purple-500 h-2 rounded-full w-4/5"></div>
+                                <div class="bg-purple-500 h-2 rounded-full w-full"></div>
                             </div>
                         </div>
                     </div>
@@ -174,81 +174,81 @@
             <h2 class="text-4xl font-bold text-center mb-12">Características Principales</h2>
             
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Wizard -->
+                <!-- Metrics Dashboard -->
                 <div class="feature-card rounded-lg p-6 text-center">
-                    <div class="text-4xl mb-4">🧙‍♂️</div>
-                    <h3 class="text-xl font-semibold mb-3">Wizard Progresivo</h3>
-                    <p class="text-gray-700 mb-4">4 pasos guiados para configuración inicial</p>
+                    <div class="text-4xl mb-4">📊</div>
+                    <h3 class="text-xl font-semibold mb-3">Dashboard de Métricas</h3>
+                    <p class="text-gray-700 mb-4">Observabilidad completa de n8n workflows</p>
                     <ul class="text-sm text-gray-600 space-y-1">
-                        <li>• Selección de vertical</li>
-                        <li>• Instalación automática de templates</li>
-                        <li>• Conexión de integraciones</li>
-                        <li>• Setup de workflows</li>
+                        <li>• Métricas en tiempo real</li>
+                        <li>• Tendencias por hora/día</li>
+                        <li>• Top fallos por nodo</li>
+                        <li>• KPIs de performance</li>
                     </ul>
                 </div>
 
-                <!-- Health Score -->
+                <!-- HMAC Security -->
                 <div class="feature-card rounded-lg p-6 text-center">
-                    <div class="text-4xl mb-4">💪</div>
-                    <h3 class="text-xl font-semibold mb-3">Health Score</h3>
-                    <p class="text-gray-700 mb-4">Cálculo automático de salud de cuenta</p>
+                    <div class="text-4xl mb-4">🔐</div>
+                    <h3 class="text-xl font-semibold mb-3">Seguridad HMAC</h3>
+                    <p class="text-gray-700 mb-4">Webhooks seguros con verificación SHA-256</p>
                     <ul class="text-sm text-gray-600 space-y-1">
-                        <li>• 50% Resultados de negocio</li>
-                        <li>• 30% Integraciones</li>
-                        <li>• 20% Uso</li>
-                        <li>• Umbral activación: 70pts</li>
+                        <li>• Verificación de signatures</li>
+                        <li>• Protección timing attacks</li>
+                        <li>• Logging de intentos inválidos</li>
+                        <li>• Standards RFC 2104</li>
                     </ul>
                 </div>
 
-                <!-- Gamification -->
+                <!-- Rate Limiting -->
                 <div class="feature-card rounded-lg p-6 text-center">
-                    <div class="text-4xl mb-4">🎮</div>
-                    <h3 class="text-xl font-semibold mb-3">Gamificación</h3>
-                    <p class="text-gray-700 mb-4">Sistema de niveles y logros</p>
+                    <div class="text-4xl mb-4">⚡</div>
+                    <h3 class="text-xl font-semibold mb-3">Rate Limiting</h3>
+                    <p class="text-gray-700 mb-4">Control de acceso por IP y API key</p>
                     <ul class="text-sm text-gray-600 space-y-1">
-                        <li>• 5 niveles (Explorador → Maestro)</li>
-                        <li>• 7+ logros desbloqueables</li>
-                        <li>• Progreso visual</li>
-                        <li>• Reconocimientos</li>
+                        <li>• 100 req/h sin API key</li>
+                        <li>• 1000 req/h con API key</li>
+                        <li>• Headers informativos</li>
+                        <li>• Storage configurable</li>
                     </ul>
                 </div>
 
-                <!-- Task List -->
+                <!-- Row Level Security -->
                 <div class="feature-card rounded-lg p-6 text-center">
-                    <div class="text-4xl mb-4">✅</div>
-                    <h3 class="text-xl font-semibold mb-3">Lista de Tareas</h3>
-                    <p class="text-gray-700 mb-4">Tareas contextuales por vertical</p>
+                    <div class="text-4xl mb-4">🛡️</div>
+                    <h3 class="text-xl font-semibold mb-3">Row Level Security</h3>
+                    <p class="text-gray-700 mb-4">Aislamiento total por tenant</p>
                     <ul class="text-sm text-gray-600 space-y-1">
-                        <li>• Seguimiento automático</li>
-                        <li>• Indicadores críticos</li>
-                        <li>• Acciones específicas</li>
-                        <li>• Progreso en tiempo real</li>
+                        <li>• Políticas por tabla</li>
+                        <li>• Aislamiento automático</li>
+                        <li>• Compliance GDPR/SOC2</li>
+                        <li>• Auditoría completa</li>
                     </ul>
                 </div>
 
-                <!-- Notifications -->
+                <!-- Key Rotation -->
                 <div class="feature-card rounded-lg p-6 text-center">
-                    <div class="text-4xl mb-4">🔔</div>
-                    <h3 class="text-xl font-semibold mb-3">Notificaciones</h3>
-                    <p class="text-gray-700 mb-4">Sistema de notificaciones inteligente</p>
+                    <div class="text-4xl mb-4">🔄</div>
+                    <h3 class="text-xl font-semibold mb-3">Rotación de Claves</h3>
+                    <p class="text-gray-700 mb-4">Gestión automática de credenciales</p>
                     <ul class="text-sm text-gray-600 space-y-1">
-                        <li>• In-app en tiempo real</li>
-                        <li>• Digest personalizado</li>
-                        <li>• Email y WhatsApp</li>
-                        <li>• Priorización inteligente</li>
+                        <li>• Rotación cada 30 días</li>
+                        <li>• Cron jobs automáticos</li>
+                        <li>• Manual on-demand</li>
+                        <li>• Zero-downtime</li>
                     </ul>
                 </div>
 
-                <!-- Templates -->
+                <!-- Security Testing -->
                 <div class="feature-card rounded-lg p-6 text-center">
-                    <div class="text-4xl mb-4">📋</div>
-                    <h3 class="text-xl font-semibold mb-3">Templates</h3>
-                    <p class="text-gray-700 mb-4">Catálogo contextual de templates</p>
+                    <div class="text-4xl mb-4">🧪</div>
+                    <h3 class="text-xl font-semibold mb-3">Pruebas de Seguridad</h3>
+                    <p class="text-gray-700 mb-4">Suite automatizada de tests</p>
                     <ul class="text-sm text-gray-600 space-y-1">
-                        <li>• Por país y vertical</li>
-                        <li>• Instalación 1-click</li>
-                        <li>• Mock vs Real</li>
-                        <li>• Ejecución inmediata</li>
+                        <li>• Tests de intrusión</li>
+                        <li>• Validación OWASP Top 10</li>
+                        <li>• CI/CD integration</li>
+                        <li>• Reportes detallados</li>
                     </ul>
                 </div>
             </div>
