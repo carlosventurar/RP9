@@ -100,31 +100,47 @@ export default function BillingPage() {
         setSubscription(null)
       }
 
-      // Get usage data from dashboard API
+      // Get usage data from new billing-usage API
       try {
-        const response = await fetch('/.netlify/functions/dashboard', {
+        const response = await fetch(`/.netlify/functions/billing-usage?tenantId=${tenantData.id}`, {
           headers: {
             'Authorization': `Bearer ${session.access_token}`
           }
         })
         
         if (response.ok) {
-          const dashboardData = await response.json()
+          const billingData = await response.json()
           setUsage({
-            executions: dashboardData.data?.metrics?.total_executions || 0,
-            workflows: dashboardData.data?.metrics?.active_workflows || 0,
+            executions: billingData.summary?.totalExecutions || 0,
+            workflows: billingData.data?.length || 0, // Count of days with activity
             storage_mb: 245 // Mock data for now
           })
+          setUsageHistory(billingData.data || [])
         } else {
-          // Fallback to mock data if dashboard API fails
-          setUsage({
-            executions: 0,
-            workflows: 0,
-            storage_mb: 245
+          // Fallback to dashboard API or mock data
+          const dashboardResponse = await fetch('/.netlify/functions/dashboard', {
+            headers: {
+              'Authorization': `Bearer ${session.access_token}`
+            }
           })
+          
+          if (dashboardResponse.ok) {
+            const dashboardData = await dashboardResponse.json()
+            setUsage({
+              executions: dashboardData.data?.metrics?.total_executions || 0,
+              workflows: dashboardData.data?.metrics?.active_workflows || 0,
+              storage_mb: 245
+            })
+          } else {
+            setUsage({
+              executions: 0,
+              workflows: 0,
+              storage_mb: 245
+            })
+          }
         }
-      } catch (dashboardError) {
-        console.error('Dashboard API error:', dashboardError)
+      } catch (error) {
+        console.error('Billing usage API error:', error)
         // Fallback to mock data
         setUsage({
           executions: 0,

@@ -1,0 +1,11 @@
+[functions]
+  directory = "apps/functions"
+  node_bundler = "esbuild"
+
+[[scheduled.functions]]
+  name = "usage-collector"
+  schedule = "*/10 * * * *"
+
+[[scheduled.functions]]
+  name = "dunning-run"
+  schedule = "0 9 * * *"

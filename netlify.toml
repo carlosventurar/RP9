@@ -17,9 +17,15 @@
   directory = "netlify/functions"
   node_bundler = "esbuild"
 
-# Scheduled Functions
+# Scheduled Functions - Fase 8: Billing & Finanzas
 [functions.usage-collector]
   schedule = "*/10 * * * *"  # Every 10 minutes
+
+[functions.billing-enforcement]
+  schedule = "0 * * * *"  # Every hour
+
+[functions.billing-dunning]
+  schedule = "0 */4 * * *"  # Every 4 hours
 
 # Fase 4: Security & SRE Functions
 [functions.backup-run]
