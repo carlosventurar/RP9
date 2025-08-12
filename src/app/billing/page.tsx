@@ -10,10 +10,16 @@ import {
   CheckCircle,
   Clock,
   Zap,
-  Loader2
+  Loader2,
+  Activity,
+  TrendingUp
 } from "lucide-react"
 import { createClient } from '@/lib/supabase/client'
 import { PLAN_CONFIG, createCheckoutSession, PlanKey } from '@/lib/stripe'
+import { PlanCard } from '@/components/billing/PlanCard'
+import { UsageChart } from '@/components/billing/UsageChart'
+import { OverageBanner, UsageStatus } from '@/components/billing/OverageBanner'
+import { AddonsModal } from '@/components/billing/AddonsModal'
 
 interface TenantData {
   id: string
@@ -38,8 +44,10 @@ export default function BillingPage() {
   const [tenant, setTenant] = useState<TenantData | null>(null)
   const [subscription, setSubscription] = useState<SubscriptionData | null>(null)
   const [usage, setUsage] = useState<UsageData>({ executions: 0, workflows: 0, storage_mb: 0 })
+  const [usageHistory, setUsageHistory] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [upgrading, setUpgrading] = useState<PlanKey | null>(null)
+  const [addonsModalOpen, setAddonsModalOpen] = useState(false)
   const supabase = createClient()
 
   useEffect(() => {
@@ -150,6 +158,29 @@ export default function BillingPage() {
     }
   }
 
+  async function handleBuyAddons() {
+    setAddonsModalOpen(true)
+  }
+
+  async function handlePurchaseAddon(packId: string) {
+    try {
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session) throw new Error('No session')
+
+      // In production, this would create a Stripe checkout for addon packs
+      console.log('Would purchase addon pack:', packId)
+      
+      // Mock purchase success
+      alert(`Paquete ${packId} comprado exitosamente!`)
+      
+      // Reload billing data to show updated usage
+      await loadBillingData()
+    } catch (error) {
+      console.error('Error purchasing addon pack:', error)
+      throw error
+    }
+  }
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -180,6 +211,15 @@ export default function BillingPage() {
           Administra tu suscripción y visualiza detalles de uso
         </p>
       </div>
+
+      {/* Usage Alert Banner */}
+      <OverageBanner
+        currentUsage={usage.executions}
+        limit={planLimits.executions}
+        plan={tenant.plan}
+        onUpgrade={() => setAddonsModalOpen(true)}
+        onBuyAddons={handleBuyAddons}
+      />
 
       <div className="grid gap-6 md:grid-cols-3">
         {/* Current Plan */}
@@ -401,6 +441,13 @@ export default function BillingPage() {
           )}
         </CardContent>
       </Card>
+
+      {/* Addons Modal */}
+      <AddonsModal
+        open={addonsModalOpen}
+        onClose={() => setAddonsModalOpen(false)}
+        onPurchase={handlePurchaseAddon}
+      />
     </div>
   )
 }
