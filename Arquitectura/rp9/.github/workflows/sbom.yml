@@ -1,0 +1,18 @@
+
+name: sbom
+on:
+  push: { branches: [ main ] }
+  workflow_dispatch:
+jobs:
+  cyclonedx:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Generate CycloneDX SBOM
+        uses: CycloneDX/gh-node-module-generate-sbom@v2
+        with:
+          output: sbom.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sbom
+          path: sbom.json

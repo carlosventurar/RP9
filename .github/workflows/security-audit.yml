@@ -1,0 +1,79 @@
+name: "Security Audit"
+
+on:
+  pull_request:
+  push:
+    branches: [ main, develop ]
+  schedule:
+    - cron: '0 2 * * *'  # Daily at 2 AM
+
+jobs:
+  npm-audit:
+    name: NPM Security Audit
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+      
+      - name: Run npm audit
+        run: npm audit --audit-level=high
+      
+      - name: Check for security issues
+        run: |
+          AUDIT_RESULT=$(npm audit --json --audit-level=high)
+          HIGH_VULNS=$(echo $AUDIT_RESULT | jq '.vulnerabilities | to_entries | map(select(.value.severity == "high")) | length')
+          CRITICAL_VULNS=$(echo $AUDIT_RESULT | jq '.vulnerabilities | to_entries | map(select(.value.severity == "critical")) | length')
+          
+          echo "High vulnerabilities: $HIGH_VULNS"
+          echo "Critical vulnerabilities: $CRITICAL_VULNS"
+          
+          if [ "$CRITICAL_VULNS" -gt 0 ]; then
+            echo "::error::Critical vulnerabilities found!"
+            exit 1
+          fi
+          
+          if [ "$HIGH_VULNS" -gt 5 ]; then
+            echo "::warning::Too many high-severity vulnerabilities found!"
+          fi
+
+  license-check:
+    name: License Compliance Check
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install license checker
+        run: npm install -g license-checker
+      
+      - name: Check licenses
+        run: |
+          license-checker --onlyAllow 'MIT;Apache-2.0;BSD-2-Clause;BSD-3-Clause;ISC;0BSD;CC0-1.0' --excludePackages 'fsevents@2.3.3' --production
+      
+      - name: Generate license report
+        run: |
+          license-checker --csv --out licenses-report.csv
+      
+      - name: Upload license report
+        uses: actions/upload-artifact@v4
+        with:
+          name: license-report-${{ github.sha }}
+          path: licenses-report.csv
+          retention-days: 30

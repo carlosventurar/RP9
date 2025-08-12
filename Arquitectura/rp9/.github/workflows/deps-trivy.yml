@@ -1,0 +1,15 @@
+
+name: deps-trivy
+on:
+  pull_request:
+  push: { branches: [ main ] }
+jobs:
+  trivy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Trivy
+        uses: aquasecurity/setup-trivy@v0.2.2
+      - name: Scan Node dependencies
+        run: |
+          trivy fs --scanners vuln,secret --exit-code 1 --severity HIGH,CRITICAL .

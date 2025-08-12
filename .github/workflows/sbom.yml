@@ -1,0 +1,53 @@
+name: "Software Bill of Materials (SBOM)"
+
+on:
+  push:
+    branches: [ main ]
+  release:
+    types: [ published ]
+  workflow_dispatch:
+
+jobs:
+  generate-sbom:
+    name: Generate SBOM
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+      
+      - name: Generate CycloneDX SBOM
+        uses: CycloneDX/gh-node-module-generatebom@v1
+        with:
+          path: './'
+          output: 'rp9-sbom.json'
+      
+      - name: Generate SPDX SBOM
+        run: |
+          npx @cyclonedx/bom@latest --output rp9-sbom.spdx.json --spec-version 2.3 --type library
+      
+      - name: Upload SBOM artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: rp9-sbom-${{ github.sha }}
+          path: |
+            rp9-sbom.json
+            rp9-sbom.spdx.json
+          retention-days: 90
+      
+      - name: Validate SBOM
+        run: |
+          echo "SBOM generated successfully"
+          echo "CycloneDX SBOM size: $(wc -c < rp9-sbom.json) bytes"
+          echo "Components found: $(jq '.components | length' rp9-sbom.json)"
