@@ -28,7 +28,11 @@ export function Header() {
           <Button
             variant="outline"
             size="sm"
-            onClick={() => router.push('/search')}
+            onClick={() => {
+              // Preserve locale prefix in the path
+              const locale = (typeof window !== 'undefined' ? document.cookie.match(/rp9-locale=([^;]+)/)?.[1] : undefined) || 'es'
+              router.push(`/${locale}/search`)
+            }}
             className="gap-2"
           >
             <Search className="h-4 w-4" />
