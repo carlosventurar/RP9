@@ -349,7 +349,7 @@ export async function GET(request: NextRequest) {
       supportLevel
     }
     
-    let results: any[] = []
+    const results: any[] = []
     
     // Search in templates
     if (type === 'all' || type === 'templates') {

@@ -131,7 +131,7 @@ export async function GET(
     const sort = searchParams.get('sort') || 'newest' // newest, oldest, helpful, rating_high, rating_low
 
     // Filter reviews for this collection
-    let reviews = mockCollectionReviews.filter(r => r.collection_id === collectionId)
+    const reviews = mockCollectionReviews.filter(r => r.collection_id === collectionId)
 
     // Apply sorting
     switch (sort) {

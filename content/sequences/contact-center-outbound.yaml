@@ -1,0 +1,219 @@
+# Contact Center Outbound Sequence
+# 5 touchpoints over 14 days - LinkedIn + Email multi-touch
+
+name: "Contact Center Operations - Automation ROI"
+vertical: "contact-center"
+buyer_persona: "Head of Operations, VP Customer Service"
+duration_days: 14
+touchpoints: 5
+languages:
+  - "es-MX"
+  - "es-CO" 
+  - "es-CL"
+  - "es-PE"
+  - "es-AR"
+  - "es-DO"
+
+# Sequence Overview
+sequence:
+  - day: 1
+    channel: "linkedin"
+    type: "connection_request"
+    
+  - day: 3
+    channel: "email"
+    type: "intro_email"
+    
+  - day: 7
+    channel: "linkedin"
+    type: "message"
+    condition: "if_connected"
+    
+  - day: 10
+    channel: "email"
+    type: "value_email"
+    
+  - day: 14
+    channel: "email"
+    type: "breakup_email"
+
+# Templates by Language
+templates:
+  es-MX:
+    linkedin_connection_request:
+      subject: ""
+      body: |
+        Hola {{firstName}},
+        
+        He visto tu perfil y me impresiona tu experiencia liderando operaciones en {{companyName}}. 
+        
+        Trabajo con líderes como tú ayudándoles a automatizar procesos en contact centers para reducir tiempo de respuesta en un 60%. 
+        
+        Me encantaría conectar contigo.
+        
+        Saludos,
+        {{senderName}}
+      
+    intro_email:
+      subject: "{{firstName}}, ¿40 horas/mes libres para tu equipo?"
+      body: |
+        Hola {{firstName}},
+        
+        Sé que manejar un contact center con múltiples canales (email, chat, tickets) puede ser abrumador. Los equipos pierden horas clasificando, asignando y haciendo seguimiento manual.
+        
+        **Nuestros clientes en contact centers han logrado:**
+        • Reducir tiempo de respuesta promedio 60%
+        • Liberar 40+ horas/mes por agente
+        • Mejorar CSAT de 3.2 a 4.6 estrellas
+        
+        **Ejemplo rápido:** MediCare Plus automatizó su gestión de tickets y ahora maneja 300% más volumen con el mismo equipo.
+        
+        ¿Te interesa ver cómo funciona? Puedo mostrarte una demo personalizada en 15 minutos.
+        
+        **¿Tienes 15 minutos esta semana?**
+        
+        [Agenda aquí - Calendly link]
+        
+        Saludos,
+        {{senderName}}
+        {{senderTitle}}
+        RP9 Portal
+        
+        PD: Si no es relevante, házmelo saber y no te contactaré más.
+
+    linkedin_message:
+      subject: ""
+      body: |
+        Gracias por conectar, {{firstName}}!
+        
+        Vi que {{companyName}} maneja un volumen considerable de atención al cliente. 
+        
+        **Pregunta rápida:** ¿Cuánto tiempo dedica tu equipo semanalmente a tareas repetitivas como clasificar tickets o enviar respuestas estándar?
+        
+        Te pregunto porque acabamos de ayudar a un contact center similar al tuyo a automatizar esos procesos y liberaron 35 horas/semana para enfocarse en casos complejos.
+        
+        Su CSAT subió de 3.4 a 4.7 en solo 2 meses.
+        
+        ¿Te interesa saber cómo lo hicieron?
+        
+        {{senderName}}
+
+    value_email:
+      subject: "Case Study: Contact Center 200% más eficiente"
+      body: |
+        Hola {{firstName}},
+        
+        Te comparto un caso que puede resonar contigo:
+        
+        **Cliente:** Contact center de servicios financieros (150 agentes)
+        **Problema:** 8 horas/día perdidas en tareas manuales, SLA incumplido
+        **Solución:** Automatizamos clasificación, asignación y seguimiento
+        
+        **Resultados en 60 días:**
+        ✅ Tiempo de primera respuesta: 4 horas → 45 minutos
+        ✅ Resolución promedio: 2 días → 6 horas  
+        ✅ CSAT: 3.1 → 4.6 estrellas
+        ✅ 40 horas/mes liberadas por agente
+        
+        **ROI:** $290,000 anuales en ahorro operativo
+        
+        [Ver caso completo aquí - link]
+        
+        **¿Qué opinas?** ¿Te enfrentas a desafíos similares en {{companyName}}?
+        
+        Si te interesa ver cómo podríamos replicar estos resultados en tu contact center, podemos agendar 15 minutos para revisar tu situación específica.
+        
+        [Agenda aquí - Calendly link]
+        
+        Saludos,
+        {{senderName}}
+        
+        PS: También tengo una calculadora de ROI específica para contact centers. Si prefieres evaluar el impacto potencial primero, puedes usarla aquí: [ROI Calculator link]
+
+    breakup_email:
+      subject: "¿Momento equivocado para {{companyName}}?"
+      body: |
+        Hola {{firstName}},
+        
+        He intentado contactarte varias veces sobre automatización para contact centers, pero entiendo que puede no ser prioridad en este momento.
+        
+        **Antes de cerrar el loop, una pregunta:**
+        
+        Si pudieras ahorrar $200,000+ anuales automatizando solo 3 procesos en tu contact center (clasificación de tickets, asignación inteligente, y seguimiento automático), ¿sería algo que te interese explorar?
+        
+        Si la respuesta es SÍ → [Agenda 15 minutos aquí]
+        Si la respuesta es NO → Solo responde "no gracias" y no te contactaré más
+        Si es MAL TIMING → Dime cuándo sería mejor momento
+        
+        **Dato interesante:** El 73% de contact centers que automatizaron procesos básicos vieron ROI positivo en el primer trimestre.
+        
+        ¿Qué opinas?
+        
+        Saludos,
+        {{senderName}}
+        
+        PD: Si conoces a alguien más en tu organización que maneje operaciones de contact center, me encantaría conectar con esa persona también.
+
+  # Templates for other countries would follow similar pattern
+  # but with local expressions and cultural adaptations
+
+# Personalization Variables
+personalization:
+  required:
+    - firstName
+    - companyName
+    - senderName
+    - senderTitle
+  
+  optional:
+    - currentChallenges
+    - teamSize
+    - volumeMetrics
+    - industrySpecific
+
+# Success Metrics
+metrics:
+  open_rate_target: 45
+  response_rate_target: 12
+  meeting_booking_rate: 4
+  sql_conversion_rate: 25
+
+# A/B Test Variations
+ab_tests:
+  subject_lines:
+    - control: "{{firstName}}, ¿40 horas/mes libres para tu equipo?"
+    - variation_a: "{{companyName}}: Automatización que ahorra $200k/año"
+    - variation_b: "{{firstName}}, ¿cansado de tickets mal asignados?"
+  
+  call_to_actions:
+    - control: "¿Tienes 15 minutos esta semana?"
+    - variation_a: "¿Te interesa una demo de 10 minutos?"
+    - variation_b: "¿Podemos conversar 15 minutos sobre tu situación?"
+
+# Follow-up Rules
+follow_up_rules:
+  - trigger: "email_opened_no_response"
+    wait_days: 3
+    action: "send_linkedin_message"
+  
+  - trigger: "linkedin_connected_no_response"
+    wait_days: 2  
+    action: "send_value_email"
+  
+  - trigger: "out_of_office_reply"
+    wait_days: 7
+    action: "restart_sequence"
+
+# Exclusion Criteria  
+exclusions:
+  - competitor_companies
+  - recently_engaged_prospects
+  - current_customers
+  - do_not_contact_list
+
+# Compliance Notes
+compliance:
+  gdpr_compliant: true
+  can_spam_compliant: true
+  unsubscribe_required: true
+  data_retention_days: 365

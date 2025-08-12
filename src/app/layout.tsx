@@ -5,9 +5,9 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { Header } from "@/components/header";
-import { NextIntlClientProvider } from 'next-intl';
-import { getMessages } from 'next-intl/server';
+import { I18nProvider } from "@/lib/i18n/context";
 import { cookies } from 'next/headers';
+import { i18nConfig } from "@/lib/i18n/config";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,17 +31,14 @@ export default async function RootLayout({
 }>) {
   // Get locale from cookies
   const cookieStore = await cookies()
-  const locale = cookieStore.get('locale')?.value || 'en'
-  
-  // Get messages for the current locale
-  const messages = await getMessages()
+  const locale = cookieStore.get('rp9-locale')?.value || i18nConfig.defaultLocale
   
   return (
-    <html lang={locale} suppressHydrationWarning>
+    <html lang={locale.split('-')[0]} suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <NextIntlClientProvider messages={messages}>
+        <I18nProvider initialLocale={locale}>
           <ThemeProvider
             attribute="class"
             defaultTheme="dark"
@@ -58,7 +55,7 @@ export default async function RootLayout({
               </main>
             </SidebarProvider>
           </ThemeProvider>
-        </NextIntlClientProvider>
+        </I18nProvider>
       </body>
     </html>
   );

@@ -1,0 +1,280 @@
+# Finance & Accounting Outbound Sequence  
+# 5 touchpoints over 14 days - LinkedIn + Email multi-touch
+
+name: "Finance & Accounting - Compliance Automation"
+vertical: "finance"
+buyer_persona: "CFO, Finance Director, Accounting Manager"
+duration_days: 14
+touchpoints: 5
+languages:
+  - "es-MX"
+  - "es-CO"
+  - "es-CL" 
+  - "es-PE"
+  - "es-AR"
+  - "es-DO"
+
+# Sequence Overview
+sequence:
+  - day: 1
+    channel: "linkedin"
+    type: "connection_request"
+    
+  - day: 3
+    channel: "email"
+    type: "intro_email"
+    
+  - day: 7
+    channel: "linkedin"
+    type: "message"
+    condition: "if_connected"
+    
+  - day: 10
+    channel: "email"
+    type: "value_email"
+    
+  - day: 14
+    channel: "email"
+    type: "breakup_email"
+
+# Templates by Language
+templates:
+  es-MX:
+    linkedin_connection_request:
+      subject: ""
+      body: |
+        Hola {{firstName}},
+        
+        Vi tu experiencia liderando finanzas en {{companyName}} y me llamó la atención tu perfil.
+        
+        Ayudo a CFOs y Directores Financieros a automatizar procesos de compliance y reporting, típicamente ahorrando 60-80 horas/mes en tareas manuales.
+        
+        Me gustaría conectar contigo.
+        
+        Saludos,
+        {{senderName}}
+      
+    intro_email:
+      subject: "{{firstName}}, ¿80 horas/mes libres para tu equipo contable?"
+      body: |
+        Hola {{firstName}},
+        
+        Sé que manejar compliance, reporting y reconciliaciones consume mucho tiempo de tu equipo. Los errores manuales en procesos financieros pueden ser costosos.
+        
+        **Nuestros clientes en finanzas han logrado:**
+        • Reducir tiempo de cierre mensual de 10 días a 3 días
+        • Eliminar 95% de errores en reconciliaciones
+        • Liberar 80+ horas/mes para análisis estratégico
+        • Automatizar reportes regulatorios
+        
+        **Ejemplo:** PayFlow Solutions automatizó su proceso de compliance y redujo el tiempo de onboarding de clientes de 7 días a 2 horas, cumpliendo con todas las regulaciones.
+        
+        ¿Te interesa ver cómo funciona? Puedo mostrarte una demo enfocada en procesos financieros en 15 minutos.
+        
+        **¿Tienes 15 minutos esta semana?**
+        
+        [Agenda aquí - Calendly link]
+        
+        Saludos,
+        {{senderName}}
+        {{senderTitle}}
+        RP9 Portal
+        
+        PD: Si no es relevante, házmelo saber y respetaré tu preferencia.
+
+    linkedin_message:
+      subject: ""
+      body: |
+        Gracias por conectar, {{firstName}}!
+        
+        Veo que {{companyName}} maneja operaciones financieras complejas.
+        
+        **Pregunta directa:** ¿Cuántas horas dedica tu equipo mensualmente a reconciliaciones manuales y preparación de reportes regulatorios?
+        
+        Te pregunto porque acabamos de ayudar a una empresa similar a reducir su tiempo de cierre de 12 días a 4 días, liberando 70 horas/mes para análisis de valor agregado.
+        
+        Su CFO me dijo: "Finalmente podemos enfocarnos en estrategia en lugar de solo procesar números."
+        
+        ¿Te interesa saber cómo lo lograron?
+        
+        {{senderName}}
+
+    value_email:
+      subject: "Case Study: Fintech reduce compliance 90%"
+      body: |
+        Hola {{firstName}},
+        
+        Quiero compartirte un caso que puede ser relevante:
+        
+        **Cliente:** Fintech regulado (80 empleados)
+        **Problema:** 200 horas/mes en compliance manual, riesgo regulatorio
+        **Solución:** Automatización de verificaciones, reportes y auditorías
+        
+        **Resultados en 90 días:**
+        ✅ Tiempo de compliance: 200h → 20h mensuales
+        ✅ Errores de reportes: Reducidos 98%
+        ✅ Tiempo de auditoría: 3 semanas → 5 días
+        ✅ ROI: $320,000 anuales
+        ✅ Onboarding clientes: 7 días → 2 horas
+        
+        **Beneficio adicional:** Capacidad de escalar de 100 a 1,000 clientes mensuales sin aumentar el equipo de compliance.
+        
+        [Ver caso completo aquí - link]
+        
+        **Pregunta para ti:** ¿Qué impacto tendría en {{companyName}} reducir el tiempo de procesos financieros rutinarios en un 80%?
+        
+        Si te interesa explorar cómo replicar estos resultados, podemos revisar tu situación específica en 15 minutos.
+        
+        [Agenda aquí - Calendly link]
+        
+        Saludos,
+        {{senderName}}
+        
+        PS: También tengo una calculadora de ROI específica para procesos financieros. Puedes usarla aquí para ver el impacto potencial: [ROI Calculator link]
+
+    breakup_email:
+      subject: "¿Último intento, {{firstName}}?"
+      body: |
+        Hola {{firstName}},
+        
+        He intentado contactarte sobre automatización de procesos financieros, pero entiendo que puede no ser prioridad ahora.
+        
+        **Una última pregunta antes de cerrar:**
+        
+        Si pudieras reducir el tiempo de cierre mensual de 10 días a 3 días Y eliminar 95% de errores manuales en reconciliaciones, ¿sería algo que justifique 15 minutos de conversación?
+        
+        **Las opciones son simples:**
+        - SÍ, ME INTERESA → [Agenda 15 minutos aquí]
+        - NO GRACIAS → Solo responde "no" y no te contactaré más
+        - MAL TIMING → Dime cuándo sería mejor momento
+        
+        **Dato:** El 82% de departamentos financieros que automatizaron procesos básicos redujeron errores de compliance significativamente y liberaron tiempo para análisis estratégico.
+        
+        ¿Cuál es tu situación?
+        
+        Saludos,
+        {{senderName}}
+        
+        PD: Si hay alguien más en tu equipo financiero que podría beneficiarse de esta conversación, estaré encantado de conectar con esa persona.
+
+  # Additional language variations would follow similar pattern
+  es-CO:
+    linkedin_connection_request:
+      subject: ""
+      body: |
+        Hola {{firstName}},
+        
+        He revisado tu trayectoria liderando el área financiera en {{companyName}} y me parece muy impresionante.
+        
+        Trabajo con CFOs y líderes financieros ayudándoles a automatizar procesos de compliance y reporting, generalmente liberando 60-80 horas mensuales.
+        
+        Me encantaría poder conectar.
+        
+        Un saludo,
+        {{senderName}}
+
+# Personalization Variables
+personalization:
+  required:
+    - firstName
+    - companyName
+    - senderName
+    - senderTitle
+  
+  optional:
+    - currentProcesses
+    - complianceRequirements
+    - reportingFrequency
+    - teamSize
+    - industryRegulations
+
+# Success Metrics
+metrics:
+  open_rate_target: 42
+  response_rate_target: 15
+  meeting_booking_rate: 6
+  sql_conversion_rate: 30
+
+# A/B Test Variations
+ab_tests:
+  subject_lines:
+    - control: "{{firstName}}, ¿80 horas/mes libres para tu equipo contable?"
+    - variation_a: "{{companyName}}: Automatización que elimina errores de compliance"
+    - variation_b: "{{firstName}}, ¿de 10 días a 3 días de cierre?"
+  
+  pain_points:
+    - control: "reconciliaciones manuales y reportes regulatorios"
+    - variation_a: "compliance manual y riesgo regulatorio"
+    - variation_b: "cierre mensual largo y errores contables"
+
+# Industry-Specific Customizations
+industry_customizations:
+  banking:
+    compliance_focus: "CNBV, Banxico reporting"
+    pain_points: "AML compliance, regulatory reporting"
+    
+  fintech:
+    compliance_focus: "CONDUSEF, PLD regulations"  
+    pain_points: "KYC automation, transaction monitoring"
+    
+  insurance:
+    compliance_focus: "CNSF reporting"
+    pain_points: "Claims processing, actuarial reporting"
+    
+  general:
+    compliance_focus: "SAT, IMSS reporting"
+    pain_points: "Monthly closing, tax compliance"
+
+# Follow-up Rules
+follow_up_rules:
+  - trigger: "email_opened_no_response"
+    wait_days: 3
+    action: "send_linkedin_message"
+  
+  - trigger: "high_intent_email_click"
+    wait_days: 1
+    action: "send_immediate_follow_up"
+  
+  - trigger: "calculator_usage"
+    wait_days: 0
+    action: "send_roi_follow_up"
+
+# Regional Adaptations
+regional_adaptations:
+  mexico:
+    regulations: ["SAT", "IMSS", "INFONAVIT"]
+    currency: "MXN"
+    business_hours: "9:00-18:00 CST"
+    
+  colombia:
+    regulations: ["DIAN", "Supersociedades"]
+    currency: "COP" 
+    business_hours: "8:00-17:00 COT"
+    
+  chile:
+    regulations: ["SII", "CMF"]
+    currency: "CLP"
+    business_hours: "9:00-18:00 CLT"
+    
+  peru:
+    regulations: ["SUNAT", "SBS"]
+    currency: "PEN"
+    business_hours: "9:00-18:00 PET"
+    
+  argentina:
+    regulations: ["AFIP", "BCRA"]
+    currency: "ARS"
+    business_hours: "9:00-18:00 ART"
+    
+  dominican_republic:
+    regulations: ["DGII", "SIB"]
+    currency: "DOP"
+    business_hours: "8:00-17:00 AST"
+
+# Compliance Notes
+compliance:
+  gdpr_compliant: true
+  can_spam_compliant: true
+  local_privacy_laws: true
+  unsubscribe_required: true
+  data_retention_days: 365

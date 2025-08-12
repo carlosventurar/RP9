@@ -3,18 +3,18 @@
 import * as React from "react"
 import { Moon, Sun, Search } from "lucide-react"
 import { useTheme } from "next-themes"
-import { useLocale } from 'next-intl'
 import { useRouter } from 'next/navigation'
+import { useTranslation } from '@/lib/i18n/context'
 
 import { Button } from "@/components/ui/button"
 import {
   SidebarTrigger,
 } from "@/components/ui/sidebar"
-import { LocaleSwitcher } from "@/components/locale-switcher"
+import { LocaleSelector } from "@/components/ui/locale-selector"
 
 export function Header() {
   const { setTheme, theme } = useTheme()
-  const locale = useLocale()
+  const { t } = useTranslation()
   const router = useRouter()
 
   return (
@@ -32,9 +32,9 @@ export function Header() {
             className="gap-2"
           >
             <Search className="h-4 w-4" />
-            <span className="hidden sm:inline">Search Templates</span>
+            <span className="hidden sm:inline">{t('nav.search', { fallback: 'Search Templates' })}</span>
           </Button>
-          <LocaleSwitcher currentLocale={locale} />
+          <LocaleSelector variant="minimal" />
           <Button
             variant="outline"
             size="icon"

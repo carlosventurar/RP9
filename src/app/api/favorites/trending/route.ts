@@ -127,7 +127,7 @@ export async function GET(request: NextRequest) {
       '30d': 30
     }[timeframe] || 7
 
-    let trending = {
+    const trending = {
       templates: [],
       collections: []
     }
@@ -156,7 +156,7 @@ export async function GET(request: NextRequest) {
 
     // Get trending collections
     if (type === 'collections' || type === 'both') {
-      let collections = [...mockTrendingCollections]
+      const collections = [...mockTrendingCollections]
 
       // Sort by growth percentage and recent favorites
       collections.sort((a, b) => {
