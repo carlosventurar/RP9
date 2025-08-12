@@ -5,15 +5,13 @@
 [build.environment]
   NODE_VERSION = "20"
 
-[[redirects]]
-  from = "/api/*"
-  to = "/.netlify/functions/:splat"
-  status = 200
 
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
+[plugins]
+  package = "@netlify/plugin-nextjs"
+
+
+
+
 
 [functions]
   directory = "netlify/functions"
@@ -27,7 +25,7 @@
 [functions.backup-run]
   schedule = "0 2 * * *"  # Daily at 2:00 AM UTC
 
-[functions.restore-sandbox] 
+[functions.restore-sandbox]
   schedule = "0 6 1 * *"  # Monthly on 1st day at 6:00 AM UTC
 
 # Enhanced Security headers - Fase 4
