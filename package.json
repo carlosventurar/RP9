@@ -14,7 +14,9 @@
     "test:coverage": "jest --coverage",
     "export": "next export",
     "populate-templates": "node scripts/populate-templates.js",
-    "migrate-templates": "node scripts/run-migration.js"
+    "migrate-templates": "node scripts/run-migration.js",
+    "docs": "node docs/server.js",
+    "docs:dev": "node docs/server.js"
   },
   "dependencies": {
     "@netlify/functions": "^4.2.1",
