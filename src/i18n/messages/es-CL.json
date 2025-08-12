@@ -1,0 +1,198 @@
+{
+  "common": {
+    "loading": "Cargando...",
+    "error": "Error",
+    "success": "Éxito",
+    "save": "Guardar",
+    "cancel": "Cancelar", 
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "view": "Ver",
+    "back": "Atrás",
+    "next": "Siguiente",
+    "previous": "Anterior",
+    "search": "Buscar",
+    "filter": "Filtrar",
+    "export": "Exportar",
+    "import": "Importar",
+    "refresh": "Actualizar",
+    "close": "Cerrar"
+  },
+  "navigation": {
+    "platform": "Plataforma",
+    "dashboard": "Panel Principal",
+    "workflows": "Flujos de Trabajo",
+    "templates": "Plantillas",
+    "analytics": "Analíticas", 
+    "settings": "Configuración",
+    "billing": "Facturación",
+    "logout": "Cerrar Sesión",
+    "accountSettings": "Configuración de Cuenta"
+  },
+  "auth": {
+    "title": "Portal RP9",
+    "subtitle": "Centro de Automatización",
+    "welcomeBack": "Bienvenido de vuelta",
+    "createAccount": "Crear cuenta",
+    "signIn": "Iniciar Sesión",
+    "signUp": "Registrarse", 
+    "signInSubtitle": "Inicia sesión en tu centro de automatización",
+    "signUpSubtitle": "Comienza a automatizar con el Portal RP9",
+    "email": "Correo Electrónico",
+    "password": "Contraseña",
+    "emailPlaceholder": "admin@rp9portal.com",
+    "passwordPlaceholder": "••••••••",
+    "sendMagicLink": "Enviar Enlace Mágico",
+    "magicLinkSent": "¡Revisa tu correo para un enlace mágico de inicio de sesión!",
+    "or": "O",
+    "noAccount": "¿No tienes cuenta? Regístrate",
+    "hasAccount": "¿Ya tienes cuenta? Inicia sesión",
+    "adminCredentials": "Credenciales Administrador:",
+    "loginSuccessful": "¡Inicio de sesión exitoso! Redirigiendo...",
+    "accountCreated": "¡Cuenta creada exitosamente! Por favor revisa tu correo para verificar tu cuenta.",
+    "enterEmail": "Por favor ingresa tu dirección de correo electrónico",
+    "magicLinkFailed": "Error al enviar enlace mágico", 
+    "authError": "Ocurrió un error durante la autenticación",
+    "demoUser": "Usuario Demo",
+    "signOut": "Cerrar Sesión"
+  },
+  "dashboard": {
+    "title": "Panel Principal",
+    "subtitle": "Resumen de tus flujos de trabajo de automatización y rendimiento del sistema.",
+    "executionsToday": "Ejecuciones Hoy",
+    "activeWorkflows": "Flujos Activos",
+    "successRate": "Tasa de Éxito",
+    "avgResponseTime": "Tiempo de Respuesta Promedio",
+    "currentlyRunning": "En ejecución actualmente",
+    "successful": "exitosos",
+    "recentExecutions": "Ejecuciones Recientes de Flujos",
+    "recentExecutionsDesc": "Últimas ejecuciones de automatización y su estado",
+    "systemStatus": "Estado del Sistema",
+    "systemStatusDesc": "Estado actual de los servicios de la plataforma RP9",
+    "noRecentExecutions": "No hay ejecuciones recientes", 
+    "executionsWillAppear": "Las ejecuciones de flujos aparecerán aquí",
+    "lastPeriod": "Últimas {period}",
+    "successfulExecutions": "{successful} de {total} exitosas",
+    "recentWorkflowExecutions": "Ejecuciones Recientes de Flujos",
+    "latestAutomationRuns": "Últimas ejecuciones de automatización y su estado",
+    "workflowExecutionsWillAppear": "Las ejecuciones de flujos aparecerán aquí",
+    "currentStatusOfServices": "Estado actual de los servicios de la plataforma RP9",
+    "unknownWorkflow": "Flujo Desconocido",
+    "duration": "Duración",
+    "timeJustNow": "Ahora mismo",
+    "timeMinAgo": "hace {minutes} min",
+    "timeHoursAgo": "hace {hours} horas",
+    "timeDaysAgo": "hace {days} días",
+    "status": {
+      "success": "éxito",
+      "error": "error",
+      "running": "ejecutando", 
+      "waiting": "esperando",
+      "canceled": "cancelado"
+    },
+    "services": {
+      "n8nApi": "API n8n",
+      "webhookService": "Servicio Webhook",
+      "database": "Base de Datos", 
+      "authentication": "Autenticación"
+    },
+    "operational": "operativo"
+  },
+  "workflows": {
+    "title": "Flujos de Trabajo",
+    "subtitle": "Gestiona y monitorea tus flujos de trabajo de automatización",
+    "createNew": "Crear Nuevo Flujo",
+    "import": "Importar Flujo",
+    "noWorkflows": "No se encontraron flujos de trabajo",
+    "workflowsWillAppear": "Tus flujos de n8n aparecerán aquí",
+    "lastExecution": "Última ejecución",
+    "status": {
+      "active": "Activo",
+      "inactive": "Inactivo",
+      "success": "Exitoso",
+      "error": "Error",
+      "running": "Ejecutando"
+    }
+  },
+  "templates": {
+    "title": "Mercado de Plantillas",
+    "subtitle": "Descubre e instala plantillas de flujos prediseñadas",
+    "featured": "Plantillas Destacadas", 
+    "allCategories": "Todas las Categorías",
+    "difficulty": {
+      "beginner": "Principiante",
+      "intermediate": "Intermedio",
+      "advanced": "Avanzado"
+    },
+    "categories": {
+      "notifications": "Notificaciones",
+      "integrations": "Integraciones", 
+      "data": "Procesamiento de Datos",
+      "forms": "Formularios",
+      "monitoring": "Monitoreo",
+      "crm": "CRM"
+    },
+    "install": "Instalar",
+    "installed": "Instalado",
+    "rating": "Calificación",
+    "installs": "Instalaciones",
+    "estimatedTime": "Tiempo estimado",
+    "minutes": "minutos",
+    "free": "Gratis"
+  },
+  "analytics": {
+    "title": "Analíticas",
+    "subtitle": "Conocimientos profundos sobre el rendimiento de tu automatización",
+    "executionTrends": "Tendencias de Ejecución",
+    "performanceMetrics": "Métricas de Rendimiento", 
+    "errorAnalysis": "Análisis de Errores",
+    "usageStatistics": "Estadísticas de Uso"
+  },
+  "settings": {
+    "title": "Configuración",
+    "subtitle": "Configura las preferencias de tu Portal RP9",
+    "general": "General",
+    "security": "Seguridad",
+    "integrations": "Integraciones",
+    "notifications": "Notificaciones",
+    "language": "Idioma",
+    "theme": "Tema",
+    "timezone": "Zona Horaria",
+    "n8nConfiguration": "Configuración n8n",
+    "apiUrl": "URL de API",
+    "apiKey": "Clave de API",
+    "connectionStatus": "Estado de Conexión",
+    "testConnection": "Probar Conexión", 
+    "connected": "Conectado",
+    "disconnected": "Desconectado"
+  },
+  "billing": {
+    "title": "Facturación",
+    "subtitle": "Gestiona tu suscripción y uso",
+    "currentPlan": "Plan Actual",
+    "usage": "Uso",
+    "invoices": "Facturas",
+    "paymentMethod": "Método de Pago"
+  },
+  "plans": {
+    "starter": {
+      "name": "Plan Inicial", 
+      "description": "Perfecto para equipos pequeños que están comenzando"
+    },
+    "professional": {
+      "name": "Plan Profesional",
+      "description": "Para empresas en crecimiento con necesidades avanzadas"
+    },
+    "enterprise": {
+      "name": "Plan Empresarial",
+      "description": "Para organizaciones grandes con requisitos personalizados"
+    }
+  },
+  "errors": {
+    "generic": "Algo salió mal",
+    "network": "Ocurrió un error de red",
+    "unauthorized": "No estás autorizado para realizar esta acción",
+    "notFound": "El recurso solicitado no fue encontrado",
+    "serverError": "Error interno del servidor"
+  }
+}
