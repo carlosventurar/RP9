@@ -14,7 +14,7 @@ import { LocaleSelector } from "@/components/ui/locale-selector"
 
 export function Header() {
   const { setTheme, theme } = useTheme()
-  const t = useTranslations('nav')
+  const tCommon = useTranslations('common')
   const router = useRouter()
 
   return (
@@ -32,7 +32,7 @@ export function Header() {
             className="gap-2"
           >
             <Search className="h-4 w-4" />
-            <span className="hidden sm:inline">{t('search')}</span>
+            <span className="hidden sm:inline">{tCommon('search')}</span>
           </Button>
           <LocaleSelector variant="minimal" />
           <Button

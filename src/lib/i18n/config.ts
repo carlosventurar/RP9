@@ -313,7 +313,11 @@ export const marketingConfigs = {
 
 // Utility functions
 export function getCountryConfig(locale: string) {
-  return countryConfigs[locale as keyof typeof countryConfigs]
+  // Some locales like 'es' (generic) may not have a country config; fallback to default country (es-MX)
+  const cfg = countryConfigs[locale as keyof typeof countryConfigs]
+  if (cfg) return cfg
+  // Fallback to a sensible default for Spanish
+  return countryConfigs['es-MX']
 }
 
 export function getFormatConfig(locale: string) {
