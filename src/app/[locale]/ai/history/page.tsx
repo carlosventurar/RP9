@@ -198,11 +198,11 @@ export default function AIHistoryPage() {
 
   if (isLoading) {
     return (
-      <div className=\"min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-50 p-4\">
-        <div className=\"max-w-6xl mx-auto py-8\">
-          <div className=\"text-center space-y-4\">
-            <Brain className=\"h-12 w-12 mx-auto text-purple-600 animate-pulse\" />
-            <h2 className=\"text-2xl font-bold\">Cargando historial...</h2>
+      <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-50 p-4">
+        <div className="max-w-6xl mx-auto py-8">
+          <div className="text-center space-y-4">
+            <Brain className="h-12 w-12 mx-auto text-purple-600 animate-pulse" />
+            <h2 className="text-2xl font-bold">Cargando historial...</h2>
           </div>
         </div>
       </div>
@@ -210,73 +210,73 @@ export default function AIHistoryPage() {
   }
 
   return (
-    <div className=\"min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-50 p-4 space-y-6\">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-50 p-4 space-y-6">
       {/* Header */}
-      <div className=\"text-center py-8\">
-        <div className=\"inline-flex items-center gap-3 mb-4\">
-          <div className=\"p-3 bg-gradient-to-r from-purple-500 to-blue-600 rounded-xl shadow-lg\">
-            <Clock className=\"h-8 w-8 text-white\" />
+      <div className="text-center py-8">
+        <div className="inline-flex items-center gap-3 mb-4">
+          <div className="p-3 bg-gradient-to-r from-purple-500 to-blue-600 rounded-xl shadow-lg">
+            <Clock className="h-8 w-8 text-white" />
           </div>
           <div>
-            <h1 className=\"text-3xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent\">
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
               Historial de IA
             </h1>
-            <p className=\"text-gray-600\">
+            <p className="text-gray-600">
               Revisa tus conversaciones anteriores con el AI Assistant
             </p>
           </div>
         </div>
       </div>
 
-      <div className=\"max-w-6xl mx-auto space-y-6\">
+      <div className="max-w-6xl mx-auto space-y-6">
         {/* Filtros y búsqueda */}
         <Card>
           <CardHeader>
-            <CardTitle className=\"text-lg flex items-center gap-2\">
-              <Filter className=\"h-5 w-5\" />
+            <CardTitle className="text-lg flex items-center gap-2">
+              <Filter className="h-5 w-5" />
               Filtros y Búsqueda
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className=\"grid grid-cols-1 md:grid-cols-4 gap-4\">
-              <div className=\"relative\">
-                <Search className=\"absolute left-3 top-3 h-4 w-4 text-muted-foreground\" />
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div className="relative">
+                <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                 <Input
-                  placeholder=\"Buscar conversaciones...\"
+                  placeholder="Buscar conversaciones..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className=\"pl-9\"
+                  className="pl-9"
                 />
               </div>
 
               <Select value={typeFilter} onValueChange={setTypeFilter}>
                 <SelectTrigger>
-                  <SelectValue placeholder=\"Tipo de conversación\" />
+                  <SelectValue placeholder="Tipo de conversación" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value=\"all\">Todos los tipos</SelectItem>
-                  <SelectItem value=\"generate\">Generación</SelectItem>
-                  <SelectItem value=\"debug\">Debug</SelectItem>
-                  <SelectItem value=\"optimize\">Optimización</SelectItem>
-                  <SelectItem value=\"chat\">Chat</SelectItem>
+                  <SelectItem value="all">Todos los tipos</SelectItem>
+                  <SelectItem value="generate">Generación</SelectItem>
+                  <SelectItem value="debug">Debug</SelectItem>
+                  <SelectItem value="optimize">Optimización</SelectItem>
+                  <SelectItem value="chat">Chat</SelectItem>
                 </SelectContent>
               </Select>
 
               <Select value={sortBy} onValueChange={setSortBy}>
                 <SelectTrigger>
-                  <SelectValue placeholder=\"Ordenar por\" />
+                  <SelectValue placeholder="Ordenar por" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value=\"updated_desc\">Última actualización (desc)</SelectItem>
-                  <SelectItem value=\"updated_asc\">Última actualización (asc)</SelectItem>
-                  <SelectItem value=\"created_desc\">Fecha creación (desc)</SelectItem>
-                  <SelectItem value=\"created_asc\">Fecha creación (asc)</SelectItem>
-                  <SelectItem value=\"messages_desc\">Más mensajes</SelectItem>
-                  <SelectItem value=\"messages_asc\">Menos mensajes</SelectItem>
+                  <SelectItem value="updated_desc">Última actualización (desc)</SelectItem>
+                  <SelectItem value="updated_asc">Última actualización (asc)</SelectItem>
+                  <SelectItem value="created_desc">Fecha creación (desc)</SelectItem>
+                  <SelectItem value="created_asc">Fecha creación (asc)</SelectItem>
+                  <SelectItem value="messages_desc">Más mensajes</SelectItem>
+                  <SelectItem value="messages_asc">Menos mensajes</SelectItem>
                 </SelectContent>
               </Select>
 
-              <div className=\"text-sm text-muted-foreground flex items-center gap-2\">
+              <div className="text-sm text-muted-foreground flex items-center gap-2">
                 <span>{filteredConversations.length} conversaciones</span>
               </div>
             </div>
@@ -286,24 +286,24 @@ export default function AIHistoryPage() {
         {/* Lista de conversaciones */}
         {filteredConversations.length === 0 ? (
           <Card>
-            <CardContent className=\"py-12\">
-              <div className=\"text-center space-y-4\">
-                <Brain className=\"h-16 w-16 mx-auto text-gray-300\" />
+            <CardContent className="py-12">
+              <div className="text-center space-y-4">
+                <Brain className="h-16 w-16 mx-auto text-gray-300" />
                 <div>
-                  <h3 className=\"font-semibold text-lg mb-2\">
+                  <h3 className="font-semibold text-lg mb-2">
                     {conversations.length === 0 
                       ? 'No tienes conversaciones aún' 
                       : 'No se encontraron conversaciones'
                     }
                   </h3>
-                  <p className=\"text-muted-foreground mb-4\">
+                  <p className="text-muted-foreground mb-4">
                     {conversations.length === 0
                       ? 'Comienza tu primera conversación con el AI Assistant'
                       : 'Prueba con diferentes términos de búsqueda o filtros'
                     }
                   </p>
                   <Button onClick={() => window.location.href = '/ai'}>
-                    <Brain className=\"h-4 w-4 mr-2\" />
+                    <Brain className="h-4 w-4 mr-2" />
                     Ir a AI Assistant
                   </Button>
                 </div>
@@ -311,24 +311,24 @@ export default function AIHistoryPage() {
             </CardContent>
           </Card>
         ) : (
-          <div className=\"space-y-4\">
+          <div className="space-y-4">
             {filteredConversations.map((conversation) => {
               const config = conversationTypeConfig[conversation.type]
               const IconComponent = config.icon
 
               return (
-                <Card key={conversation.id} className=\"hover:shadow-md transition-shadow\">
-                  <CardContent className=\"p-6\">
-                    <div className=\"flex items-start gap-4\">
+                <Card key={conversation.id} className="hover:shadow-md transition-shadow">
+                  <CardContent className="p-6">
+                    <div className="flex items-start gap-4">
                       <div className={`p-3 rounded-lg ${config.color} flex-shrink-0`}>
-                        <IconComponent className=\"h-6 w-6 text-white\" />
+                        <IconComponent className="h-6 w-6 text-white" />
                       </div>
 
-                      <div className=\"flex-1 min-w-0\">
-                        <div className=\"flex items-start justify-between gap-4\">
-                          <div className=\"flex-1\">
-                            <div className=\"flex items-center gap-3 mb-2\">
-                              <h3 className=\"font-semibold text-lg truncate\">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-start justify-between gap-4">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-3 mb-2">
+                              <h3 className="font-semibold text-lg truncate">
                                 {conversation.title}
                               </h3>
                               <Badge className={config.badgeColor}>
@@ -336,46 +336,46 @@ export default function AIHistoryPage() {
                               </Badge>
                             </div>
                             
-                            <p className=\"text-muted-foreground text-sm mb-3 line-clamp-2\">
+                            <p className="text-muted-foreground text-sm mb-3 line-clamp-2">
                               {conversation.preview}
                             </p>
 
-                            <div className=\"flex items-center gap-4 text-sm text-muted-foreground\">
-                              <div className=\"flex items-center gap-1\">
-                                <MessageSquare className=\"h-4 w-4\" />
+                            <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                              <div className="flex items-center gap-1">
+                                <MessageSquare className="h-4 w-4" />
                                 {conversation.messagesCount} mensajes
                               </div>
                               
-                              <div className=\"flex items-center gap-1\">
-                                <Clock className=\"h-4 w-4\" />
+                              <div className="flex items-center gap-1">
+                                <Clock className="h-4 w-4" />
                                 {getRelativeTime(conversation.updatedAt)}
                               </div>
 
                               {conversation.metadata.rating && (
-                                <div className=\"flex items-center gap-1\">
-                                  <Star className=\"h-4 w-4\" />
+                                <div className="flex items-center gap-1">
+                                  <Star className="h-4 w-4" />
                                   {conversation.metadata.rating}/100
                                 </div>
                               )}
                             </div>
                           </div>
 
-                          <div className=\"flex items-center gap-2 flex-shrink-0\">
+                          <div className="flex items-center gap-2 flex-shrink-0">
                             <Button
-                              size=\"sm\"
-                              variant=\"outline\"
+                              size="sm"
+                              variant="outline"
                               onClick={() => viewConversation(conversation.id)}
                             >
-                              <Eye className=\"h-4 w-4\" />
+                              <Eye className="h-4 w-4" />
                             </Button>
                             
                             <Button
-                              size=\"sm\"
-                              variant=\"outline\"
+                              size="sm"
+                              variant="outline"
                               onClick={() => deleteConversation(conversation.id)}
-                              className=\"text-red-600 hover:text-red-700\"
+                              className="text-red-600 hover:text-red-700"
                             >
-                              <Trash2 className=\"h-4 w-4\" />
+                              <Trash2 className="h-4 w-4" />
                             </Button>
                           </div>
                         </div>
@@ -385,8 +385,8 @@ export default function AIHistoryPage() {
                           conversation.metadata.errorsAnalyzed || 
                           conversation.metadata.optimizationsSuggested) && (
                           <>
-                            <Separator className=\"my-3\" />
-                            <div className=\"flex items-center gap-4 text-xs text-muted-foreground\">
+                            <Separator className="my-3" />
+                            <div className="flex items-center gap-4 text-xs text-muted-foreground">
                               {conversation.metadata.workflowsGenerated && (
                                 <span>{conversation.metadata.workflowsGenerated} workflows generados</span>
                               )}
