@@ -17,10 +17,12 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  // Disable static generation for auth pages to prevent prerender errors
+  // Disable static generation for pages to prevent prerender errors
   experimental: {
     missingSuspenseWithCSRBailout: false,
   },
+  // Use app directory 
+  appDir: true,
 }
 
 module.exports = withNextIntl(nextConfig)
