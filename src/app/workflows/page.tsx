@@ -34,7 +34,32 @@ export default function WorkflowsPage() {
   const [searchTerm, setSearchTerm] = useState('')
   const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'inactive'>('all')
   const [actionLoading, setActionLoading] = useState<string | null>(null)
-  const t = useWorkflowTranslations()
+  
+  // Use translations with error handling
+  let t: any = {}
+  try {
+    t = useWorkflowTranslations()
+  } catch (error) {
+    // Fallback translations if hook fails
+    t = {
+      title: 'Workflows',
+      subtitle: 'Manage and monitor your automation workflows',
+      newWorkflow: 'New Workflow',
+      searchWorkflows: 'Search workflows...',
+      lastRun: 'Last Run',
+      executions: 'Executions',
+      run: 'Run',
+      never: 'Never',
+      all: 'All',
+      active: 'Active',
+      inactive: 'Inactive',
+      success: 'Success',
+      crossnetFilterActive: 'Crossnet Filter Active',
+      noWorkflowsMatchFilters: 'No workflows match your filters',
+      noWorkflowsFound: 'No workflows found',
+      createFirstWorkflow: 'Create First Workflow'
+    }
+  }
 
   // Mock data for development
   const mockWorkflows: WorkflowWithStats[] = [
