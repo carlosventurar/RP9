@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Loader2, Mail, Lock, AlertCircle } from 'lucide-react'
-import { useAuthTranslations } from '@/hooks/use-translations'
+import { useTranslations, useLocale } from 'next-intl'
 
 export default function AuthPage() {
   const [isLogin, setIsLogin] = useState(true)
@@ -19,19 +19,20 @@ export default function AuthPage() {
   const [error, setError] = useState('')
   
   const router = useRouter()
+  const locale = useLocale()
   const supabase = createClient()
-  const t = useAuthTranslations()
+  const t = useTranslations('auth')
 
   useEffect(() => {
     // Check if user is already logged in
     const checkUser = async () => {
       const { data: { user } } = await supabase.auth.getUser()
       if (user) {
-        router.replace('/dashboard')
+        router.replace(`/${locale}/dashboard`)
       }
     }
     checkUser()
-  }, [router, supabase])
+  }, [router, locale, supabase])
 
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -49,8 +50,8 @@ export default function AuthPage() {
         if (error) throw error
 
         if (data.user) {
-          setMessage('Login successful! Redirecting...')
-          router.replace('/dashboard')
+          setMessage(t('loginSuccessful'))
+          router.replace(`/${locale}/dashboard`)
         }
       } else {
         const { data, error } = await supabase.auth.signUp({
@@ -61,12 +62,12 @@ export default function AuthPage() {
         if (error) throw error
 
         if (data.user) {
-          setMessage('Account created successfully! Please check your email to verify your account.')
+          setMessage(t('accountCreated'))
         }
       }
     } catch (error: any) {
       console.error('Auth error:', error)
-      setError(error.message || 'An error occurred during authentication')
+      setError(error.message || t('authError'))
     } finally {
       setLoading(false)
     }
@@ -74,7 +75,7 @@ export default function AuthPage() {
 
   const handleMagicLink = async () => {
     if (!email) {
-      setError('Please enter your email address')
+      setError(t('enterEmail'))
       return
     }
 
@@ -86,16 +87,16 @@ export default function AuthPage() {
       const { error } = await supabase.auth.signInWithOtp({
         email,
         options: {
-          emailRedirectTo: `${window.location.origin}/dashboard`
+          emailRedirectTo: `${window.location.origin}/${locale}/dashboard`
         }
       })
 
       if (error) throw error
 
-      setMessage('Check your email for a magic link to sign in!')
+      setMessage(t('magicLinkSent'))
     } catch (error: any) {
       console.error('Magic link error:', error)
-      setError(error.message || 'Failed to send magic link')
+      setError(error.message || t('magicLinkFailed'))
     } finally {
       setLoading(false)
     }
@@ -111,8 +112,8 @@ export default function AuthPage() {
               <span className="text-xl font-bold text-white">R9</span>
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-white">RP9 Portal</h1>
-              <p className="text-sm text-slate-400">Automation Hub</p>
+              <h1 className="text-2xl font-bold text-white">{t('title')}</h1>
+              <p className="text-sm text-slate-400">{t('subtitle')}</p>
             </div>
           </div>
         </div>
@@ -121,10 +122,10 @@ export default function AuthPage() {
         <Card className="backdrop-blur-sm bg-white/10 border-white/20">
           <CardHeader className="text-center">
             <CardTitle className="text-white">
-              {isLogin ? 'Welcome back' : 'Create account'}
+              {isLogin ? t('welcomeBack') : t('createAccount')}
             </CardTitle>
             <CardDescription className="text-slate-300">
-              {isLogin ? 'Sign in to your automation hub' : 'Start automating with RP9 Portal'}
+              {isLogin ? t('signInSubtitle') : t('signUpSubtitle')}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -144,12 +145,12 @@ export default function AuthPage() {
 
             <form onSubmit={handleAuth} className="space-y-4">
               <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-300">Email</label>
+                <label className="text-sm font-medium text-slate-300">{t('email')}</label>
                 <div className="relative">
                   <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 h-4 w-4" />
                   <Input
                     type="email"
-                    placeholder="admin@rp9portal.com"
+                    placeholder={t('emailPlaceholder')}
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     className="pl-10 bg-white/10 border-white/20 text-white placeholder:text-slate-400"
@@ -159,12 +160,12 @@ export default function AuthPage() {
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-300">Password</label>
+                <label className="text-sm font-medium text-slate-300">{t('password')}</label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 h-4 w-4" />
                   <Input
                     type="password"
-                    placeholder="••••••••"
+                    placeholder={t('passwordPlaceholder')}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     className="pl-10 bg-white/10 border-white/20 text-white placeholder:text-slate-400"
@@ -181,7 +182,7 @@ export default function AuthPage() {
                 {loading ? (
                   <Loader2 className="w-4 h-4 animate-spin mr-2" />
                 ) : null}
-                {isLogin ? 'Sign In' : 'Create Account'}
+                {isLogin ? t('signIn') : t('signUp')}
               </Button>
             </form>
 
@@ -190,7 +191,7 @@ export default function AuthPage() {
                 <span className="w-full border-t border-white/20" />
               </div>
               <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-slate-800 px-2 text-slate-400">Or</span>
+                <span className="bg-slate-800 px-2 text-slate-400">{t('or')}</span>
               </div>
             </div>
 
@@ -205,7 +206,7 @@ export default function AuthPage() {
               ) : (
                 <Mail className="w-4 h-4 mr-2" />
               )}
-              Send Magic Link
+              {t('sendMagicLink')}
             </Button>
 
             <div className="text-center">
@@ -214,17 +215,17 @@ export default function AuthPage() {
                 onClick={() => setIsLogin(!isLogin)}
                 className="text-sm text-slate-400 hover:text-white transition-colors"
               >
-                {isLogin ? "Don't have an account? Sign up" : "Already have an account? Sign in"}
+                {isLogin ? t('noAccount') : t('hasAccount')}
               </button>
             </div>
           </CardContent>
         </Card>
 
-        {/* Demo Info */}
+        {/* Admin Credentials Card */}
         <Card className="backdrop-blur-sm bg-white/5 border-white/10">
           <CardContent className="pt-4">
             <div className="text-center space-y-2">
-              <p className="text-xs font-medium text-slate-400">Credenciales Administrador:</p>
+              <p className="text-xs font-medium text-slate-400">{t('adminCredentials')}</p>
               <div className="text-xs text-slate-300 space-y-1">
                 <p>Email: admin@rp9portal.com</p>
                 <p>Password: RP9Admin2024!</p>

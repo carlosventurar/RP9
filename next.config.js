@@ -13,9 +13,13 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   serverExternalPackages: ['sharp'],
-  // Configure for serverless deployment
+  // Configure for serverless deployment  
   images: {
     unoptimized: true,
+  },
+  // Disable static generation for auth pages to prevent prerender errors
+  experimental: {
+    missingSuspenseWithCSRBailout: false,
   },
 }
 
