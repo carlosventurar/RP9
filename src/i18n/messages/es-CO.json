@@ -1,7 +1,7 @@
-{
+﻿{
   "home": {
     "hero": {
-      "title": "Automatización Empresarial Sin Código",
+      "title": "AutomatizaciÃ³n Empresarial Sin CÃ³digo",
       "subtitle": "Transforma procesos manuales en workflows automatizados"
     }
   },
@@ -11,13 +11,13 @@
   "common": {
     "loading": "Cargando...",
     "error": "Error",
-    "success": "Éxito",
+    "success": "Ã‰xito",
     "save": "Guardar",
     "cancel": "Cancelar", 
     "delete": "Eliminar",
     "edit": "Editar",
     "view": "Ver",
-    "back": "Atrás",
+    "back": "AtrÃ¡s",
     "next": "Siguiente",
     "previous": "Anterior",
     "search": "Buscar",
@@ -32,68 +32,68 @@
     "dashboard": "Panel Principal",
     "workflows": "Flujos de Trabajo",
     "templates": "Plantillas",
-    "analytics": "Analíticas", 
-    "settings": "Configuración",
-    "billing": "Facturación",
-    "logout": "Cerrar Sesión",
-    "accountSettings": "Configuración de Cuenta"
+    "analytics": "AnalÃ­ticas", 
+    "settings": "ConfiguraciÃ³n",
+    "billing": "FacturaciÃ³n",
+    "logout": "Cerrar SesiÃ³n",
+    "accountSettings": "ConfiguraciÃ³n de Cuenta"
   },
   "auth": {
     "title": "Portal RP9",
-    "subtitle": "Centro de Automatización",
+    "subtitle": "Centro de AutomatizaciÃ³n",
     "welcomeBack": "Bienvenido de vuelta",
     "createAccount": "Crear cuenta",
-    "signIn": "Iniciar Sesión",
+    "signIn": "Iniciar SesiÃ³n",
     "signUp": "Registrarse", 
-    "signInSubtitle": "Inicia sesión en tu centro de automatización",
+    "signInSubtitle": "Inicia sesiÃ³n en tu centro de automatizaciÃ³n",
     "signUpSubtitle": "Comienza a automatizar con el Portal RP9",
-    "email": "Correo Electrónico",
-    "password": "Contraseña",
+    "email": "Correo ElectrÃ³nico",
+    "password": "ContraseÃ±a",
     "emailPlaceholder": "admin@rp9portal.com",
-    "passwordPlaceholder": "••••••••",
-    "sendMagicLink": "Enviar Enlace Mágico",
-    "magicLinkSent": "¡Revisa tu correo para un enlace mágico de inicio de sesión!",
+    "passwordPlaceholder": "â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢",
+    "sendMagicLink": "Enviar Enlace MÃ¡gico",
+    "magicLinkSent": "Â¡Revisa tu correo para un enlace mÃ¡gico de inicio de sesiÃ³n!",
     "or": "O",
-    "noAccount": "¿No tienes cuenta? Regístrate",
-    "hasAccount": "¿Ya tienes cuenta? Inicia sesión",
+    "noAccount": "Â¿No tienes cuenta? RegÃ­strate",
+    "hasAccount": "Â¿Ya tienes cuenta? Inicia sesiÃ³n",
     "adminCredentials": "Credenciales Administrador:",
-    "loginSuccessful": "¡Inicio de sesión exitoso! Redirigiendo...",
-    "accountCreated": "¡Cuenta creada exitosamente! Por favor revisa tu correo para verificar tu cuenta.",
-    "enterEmail": "Por favor ingresa tu dirección de correo electrónico",
-    "magicLinkFailed": "Error al enviar enlace mágico", 
-    "authError": "Ocurrió un error durante la autenticación",
+    "loginSuccessful": "Â¡Inicio de sesiÃ³n exitoso! Redirigiendo...",
+    "accountCreated": "Â¡Cuenta creada exitosamente! Por favor revisa tu correo para verificar tu cuenta.",
+    "enterEmail": "Por favor ingresa tu direcciÃ³n de correo electrÃ³nico",
+    "magicLinkFailed": "Error al enviar enlace mÃ¡gico", 
+    "authError": "OcurriÃ³ un error durante la autenticaciÃ³n",
     "demoUser": "Usuario Demo",
-    "signOut": "Cerrar Sesión"
+    "signOut": "Cerrar SesiÃ³n"
   },
   "dashboard": {
     "title": "Panel Principal",
-    "subtitle": "Resumen de tus flujos de trabajo de automatización y rendimiento del sistema.",
+    "subtitle": "Resumen de tus flujos de trabajo de automatizaciÃ³n y rendimiento del sistema.",
     "executionsToday": "Ejecuciones Hoy",
     "activeWorkflows": "Flujos Activos",
-    "successRate": "Tasa de Éxito",
+    "successRate": "Tasa de Ã‰xito",
     "avgResponseTime": "Tiempo de Respuesta Promedio",
-    "currentlyRunning": "En ejecución actualmente",
+    "currentlyRunning": "En ejecuciÃ³n actualmente",
     "successful": "exitosos",
     "recentExecutions": "Ejecuciones Recientes de Flujos",
-    "recentExecutionsDesc": "Últimas ejecuciones de automatización y su estado",
+    "recentExecutionsDesc": "Ãšltimas ejecuciones de automatizaciÃ³n y su estado",
     "systemStatus": "Estado del Sistema",
     "systemStatusDesc": "Estado actual de los servicios de la plataforma RP9",
     "noRecentExecutions": "No hay ejecuciones recientes", 
-    "executionsWillAppear": "Las ejecuciones de flujos aparecerán aquí",
-    "lastPeriod": "Últimas {period}",
+    "executionsWillAppear": "Las ejecuciones de flujos aparecerÃ¡n aquÃ­",
+    "lastPeriod": "Ãšltimas {period}",
     "successfulExecutions": "{successful} de {total} exitosas",
     "recentWorkflowExecutions": "Ejecuciones Recientes de Flujos",
-    "latestAutomationRuns": "Últimas ejecuciones de automatización y su estado",
-    "workflowExecutionsWillAppear": "Las ejecuciones de flujos aparecerán aquí",
+    "latestAutomationRuns": "Ãšltimas ejecuciones de automatizaciÃ³n y su estado",
+    "workflowExecutionsWillAppear": "Las ejecuciones de flujos aparecerÃ¡n aquÃ­",
     "currentStatusOfServices": "Estado actual de los servicios de la plataforma RP9",
     "unknownWorkflow": "Flujo Desconocido",
-    "duration": "Duración",
+    "duration": "DuraciÃ³n",
     "timeJustNow": "Ahora mismo",
     "timeMinAgo": "hace {minutes} min",
     "timeHoursAgo": "hace {hours} horas",
-    "timeDaysAgo": "hace {days} días",
+    "timeDaysAgo": "hace {days} dÃ­as",
     "status": {
-      "success": "éxito",
+      "success": "Ã©xito",
       "error": "error",
       "running": "ejecutando", 
       "waiting": "esperando",
@@ -103,18 +103,31 @@
       "n8nApi": "API n8n",
       "webhookService": "Servicio Webhook",
       "database": "Base de Datos", 
-      "authentication": "Autenticación"
+      "authentication": "AutenticaciÃ³n"
     },
     "operational": "operativo"
   },
-  "workflows": {
+    "workflows": {
     "title": "Flujos de Trabajo",
-    "subtitle": "Gestiona y monitorea tus flujos de trabajo de automatización",
+    "subtitle": "Gestiona y monitorea tus flujos de trabajo de automatizaciÃ³n",
+    "newWorkflow": "Nuevo Flujo",
     "createNew": "Crear Nuevo Flujo",
     "import": "Importar Flujo",
     "noWorkflows": "No se encontraron flujos de trabajo",
-    "workflowsWillAppear": "Tus flujos de n8n aparecerán aquí",
-    "lastExecution": "Última ejecución",
+    "noWorkflowsMatchFilters": "NingÃºn flujo coincide con tus filtros",
+    "noWorkflowsFound": "No se encontraron flujos de trabajo",
+    "createFirstWorkflow": "Crear Primer Flujo",
+    "workflowsWillAppear": "Tus flujos de n8n aparecerÃ¡n aquÃ­",
+    "searchWorkflows": "Buscar flujos...",
+    "lastRun": "Ãšltima EjecuciÃ³n",
+    "executions": "Ejecuciones",
+    "run": "Ejecutar",
+    "never": "Nunca",
+    "all": "Todos",
+    "active": "Activo",
+    "inactive": "Inactivo",
+    "success": "Exitoso",
+    "crossnetFilterActive": "Filtro Crossnet Activo",
     "status": {
       "active": "Activo",
       "inactive": "Inactivo",
@@ -122,12 +135,12 @@
       "error": "Error",
       "running": "Ejecutando"
     }
-  },
+  }
   "templates": {
     "title": "Mercado de Plantillas",
-    "subtitle": "Descubre e instala plantillas de flujos prediseñadas",
+    "subtitle": "Descubre e instala plantillas de flujos prediseÃ±adas",
     "featured": "Plantillas Destacadas", 
-    "allCategories": "Todas las Categorías",
+    "allCategories": "Todas las CategorÃ­as",
     "difficulty": {
       "beginner": "Principiante",
       "intermediate": "Intermedio",
@@ -143,22 +156,22 @@
     },
     "install": "Instalar",
     "installed": "Instalado",
-    "rating": "Calificación",
+    "rating": "CalificaciÃ³n",
     "installs": "Instalaciones",
     "estimatedTime": "Tiempo estimado",
     "minutes": "minutos",
     "free": "Gratis"
   },
   "analytics": {
-    "title": "Analíticas",
-    "subtitle": "Conocimientos profundos sobre el rendimiento de tu automatización",
-    "executionTrends": "Tendencias de Ejecución",
-    "performanceMetrics": "Métricas de Rendimiento", 
-    "errorAnalysis": "Análisis de Errores",
-    "usageStatistics": "Estadísticas de Uso"
+    "title": "AnalÃ­ticas",
+    "subtitle": "Conocimientos profundos sobre el rendimiento de tu automatizaciÃ³n",
+    "executionTrends": "Tendencias de EjecuciÃ³n",
+    "performanceMetrics": "MÃ©tricas de Rendimiento", 
+    "errorAnalysis": "AnÃ¡lisis de Errores",
+    "usageStatistics": "EstadÃ­sticas de Uso"
   },
   "settings": {
-    "title": "Configuración",
+    "title": "ConfiguraciÃ³n",
     "subtitle": "Configura las preferencias de tu Portal RP9",
     "general": "General",
     "security": "Seguridad",
@@ -167,26 +180,26 @@
     "language": "Idioma",
     "theme": "Tema",
     "timezone": "Zona Horaria",
-    "n8nConfiguration": "Configuración n8n",
+    "n8nConfiguration": "ConfiguraciÃ³n n8n",
     "apiUrl": "URL de API",
     "apiKey": "Clave de API",
-    "connectionStatus": "Estado de Conexión",
-    "testConnection": "Probar Conexión", 
+    "connectionStatus": "Estado de ConexiÃ³n",
+    "testConnection": "Probar ConexiÃ³n", 
     "connected": "Conectado",
     "disconnected": "Desconectado"
   },
   "billing": {
-    "title": "Facturación",
-    "subtitle": "Gestiona tu suscripción y uso",
+    "title": "FacturaciÃ³n",
+    "subtitle": "Gestiona tu suscripciÃ³n y uso",
     "currentPlan": "Plan Actual",
     "usage": "Uso",
     "invoices": "Facturas",
-    "paymentMethod": "Método de Pago"
+    "paymentMethod": "MÃ©todo de Pago"
   },
   "plans": {
     "starter": {
       "name": "Plan Inicial", 
-      "description": "Perfecto para equipos pequeños que están comenzando"
+      "description": "Perfecto para equipos pequeÃ±os que estÃ¡n comenzando"
     },
     "professional": {
       "name": "Plan Profesional",
@@ -198,10 +211,12 @@
     }
   },
   "errors": {
-    "generic": "Algo salió mal",
-    "network": "Ocurrió un error de red",
-    "unauthorized": "No estás autorizado para realizar esta acción",
+    "generic": "Algo saliÃ³ mal",
+    "network": "OcurriÃ³ un error de red",
+    "unauthorized": "No estÃ¡s autorizado para realizar esta acciÃ³n",
     "notFound": "El recurso solicitado no fue encontrado",
     "serverError": "Error interno del servidor"
   }
 }
+
+
