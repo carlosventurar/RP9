@@ -2,9 +2,9 @@
 // Supports 6 countries in Latin America
 
 export const i18nConfig = {
-  defaultLocale: 'es-MX',
-  locales: ['es-MX', 'es-CO', 'es-CL', 'es-PE', 'es-AR', 'es-DO'],
-  fallbackLocale: 'es-MX'
+  defaultLocale: 'es',
+  locales: ['es', 'es-MX', 'es-CO', 'es-CL', 'es-PE', 'es-AR', 'es-DO', 'en'],
+  fallbackLocale: 'es'
 }
 
 // Country-specific configurations

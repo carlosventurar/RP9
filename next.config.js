@@ -17,12 +17,34 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
+  // Optimize build performance
+  swcMinify: true,
+  compress: true,
+  poweredByHeader: false,
   // Disable static generation for pages to prevent prerender errors
   experimental: {
     missingSuspenseWithCSRBailout: false,
+    optimizePackageImports: ['lucide-react', '@radix-ui/react-icons'],
   },
   // Use app directory 
   appDir: true,
+  // Optimize webpack
+  webpack: (config, { dev, isServer }) => {
+    // Optimize bundle size
+    if (!dev && !isServer) {
+      config.optimization.splitChunks = {
+        chunks: 'all',
+        cacheGroups: {
+          vendor: {
+            test: /[\\/]node_modules[\\/]/,
+            name: 'vendors',
+            chunks: 'all',
+          },
+        },
+      }
+    }
+    return config
+  },
 }
 
 module.exports = withNextIntl(nextConfig)

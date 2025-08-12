@@ -50,6 +50,8 @@ export function middleware(request: NextRequest) {
               if (code.includes('-AR')) return 'es-AR'
               if (code.includes('-DO')) return 'es-DO'
               if (code.includes('-MX')) return 'es-MX'
+              // If it's just 'es', use the global Spanish
+              if (code === 'es') return 'es'
             }
             return null
           })
@@ -123,6 +125,7 @@ export const config = {
     // - API routes
     // - _next (Next.js internals)
     // - Static files (images, fonts, etc.)
-    '/((?!api|_next/static|_next/image|favicon.ico).*)',
+    // - Public files
+    '/((?!api|_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|woff|woff2|ttf|eot)).*)',
   ],
 }

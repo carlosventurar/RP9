@@ -1,19 +1,10 @@
-﻿{
-  "home": {
-    "hero": {
-      "title": "Automatización Empresarial Sin Código",
-      "subtitle": "Transforma procesos manuales en workflows automatizados"
-    }
-  },
-  "nav": {
-    "search": "Buscar Plantillas"
-  },
+{
   "common": {
     "loading": "Cargando...",
     "error": "Error",
     "success": "Éxito",
     "save": "Guardar",
-    "cancel": "Cancelar",
+    "cancel": "Cancelar", 
     "delete": "Eliminar",
     "edit": "Editar",
     "view": "Ver",
@@ -32,7 +23,7 @@
     "dashboard": "Panel Principal",
     "workflows": "Flujos de Trabajo",
     "templates": "Plantillas",
-    "analytics": "Analíticas",
+    "analytics": "Analíticas", 
     "settings": "Configuración",
     "billing": "Facturación",
     "logout": "Cerrar Sesión",
@@ -44,7 +35,7 @@
     "welcomeBack": "Bienvenido de vuelta",
     "createAccount": "Crear cuenta",
     "signIn": "Iniciar Sesión",
-    "signUp": "Registrarse",
+    "signUp": "Registrarse", 
     "signInSubtitle": "Inicia sesión en tu centro de automatización",
     "signUpSubtitle": "Comienza a automatizar con el Portal RP9",
     "email": "Correo Electrónico",
@@ -60,7 +51,7 @@
     "loginSuccessful": "¡Inicio de sesión exitoso! Redirigiendo...",
     "accountCreated": "¡Cuenta creada exitosamente! Por favor revisa tu correo para verificar tu cuenta.",
     "enterEmail": "Por favor ingresa tu dirección de correo electrónico",
-    "magicLinkFailed": "Error al enviar enlace mágico",
+    "magicLinkFailed": "Error al enviar enlace mágico", 
     "authError": "Ocurrió un error durante la autenticación",
     "demoUser": "Usuario Demo",
     "signOut": "Cerrar Sesión"
@@ -78,7 +69,7 @@
     "recentExecutionsDesc": "Últimas ejecuciones de automatización y su estado",
     "systemStatus": "Estado del Sistema",
     "systemStatusDesc": "Estado actual de los servicios de la plataforma RP9",
-    "noRecentExecutions": "No hay ejecuciones recientes",
+    "noRecentExecutions": "No hay ejecuciones recientes", 
     "executionsWillAppear": "Las ejecuciones de flujos aparecerán aquí",
     "lastPeriod": "Últimas {period}",
     "successfulExecutions": "{successful} de {total} exitosas",
@@ -95,14 +86,14 @@
     "status": {
       "success": "éxito",
       "error": "error",
-      "running": "ejecutando",
+      "running": "ejecutando", 
       "waiting": "esperando",
       "canceled": "cancelado"
     },
     "services": {
       "n8nApi": "API n8n",
       "webhookService": "Servicio Webhook",
-      "database": "Base de Datos",
+      "database": "Base de Datos", 
       "authentication": "Autenticación"
     },
     "operational": "operativo"
@@ -139,7 +130,7 @@
   "templates": {
     "title": "Mercado de Plantillas",
     "subtitle": "Descubre e instala plantillas de flujos prediseñadas",
-    "featured": "Plantillas Destacadas",
+    "featured": "Plantillas Destacadas", 
     "allCategories": "Todas las Categorías",
     "difficulty": {
       "beginner": "Principiante",
@@ -148,7 +139,7 @@
     },
     "categories": {
       "notifications": "Notificaciones",
-      "integrations": "Integraciones",
+      "integrations": "Integraciones", 
       "data": "Procesamiento de Datos",
       "forms": "Formularios",
       "monitoring": "Monitoreo",
@@ -166,7 +157,7 @@
     "title": "Analíticas",
     "subtitle": "Conocimientos profundos sobre el rendimiento de tu automatización",
     "executionTrends": "Tendencias de Ejecución",
-    "performanceMetrics": "Métricas de Rendimiento",
+    "performanceMetrics": "Métricas de Rendimiento", 
     "errorAnalysis": "Análisis de Errores",
     "usageStatistics": "Estadísticas de Uso"
   },
@@ -184,7 +175,7 @@
     "apiUrl": "URL de API",
     "apiKey": "Clave de API",
     "connectionStatus": "Estado de Conexión",
-    "testConnection": "Probar Conexión",
+    "testConnection": "Probar Conexión", 
     "connected": "Conectado",
     "disconnected": "Desconectado"
   },
@@ -198,7 +189,7 @@
   },
   "plans": {
     "starter": {
-      "name": "Plan Inicial",
+      "name": "Plan Inicial", 
       "description": "Perfecto para equipos pequeños que están comenzando"
     },
     "professional": {
@@ -218,5 +209,3 @@
     "serverError": "Error interno del servidor"
   }
 }
-
-
