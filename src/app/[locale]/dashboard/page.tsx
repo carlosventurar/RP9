@@ -3,8 +3,8 @@
 import { useState, useEffect } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Activity, Workflow, TrendingUp, Clock, Loader2, Phone } from "lucide-react"
-import { useDashboardTranslations } from '@/hooks/use-translations'
+import { Activity, Workflow, TrendingUp, Clock, Loader2 } from "lucide-react"
+import { useTranslations } from 'next-intl'
 import { createClient } from '@/lib/supabase/client'
 import CCKPIs from '@/components/kpi/CCKPIs'
 import FinKPIs from '@/components/kpi/FinKPIs'
@@ -39,7 +39,7 @@ export default function Dashboard() {
   const [data, setData] = useState<DashboardData | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const t = useDashboardTranslations()
+  const t = useTranslations('dashboard')
   const supabase = createClient()
 
   useEffect(() => {
