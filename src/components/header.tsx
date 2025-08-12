@@ -4,7 +4,7 @@ import * as React from "react"
 import { Moon, Sun, Search } from "lucide-react"
 import { useTheme } from "next-themes"
 import { useRouter } from 'next/navigation'
-import { useTranslation } from '@/lib/i18n/context'
+import { useTranslations } from 'next-intl'
 
 import { Button } from "@/components/ui/button"
 import {
@@ -14,7 +14,7 @@ import { LocaleSelector } from "@/components/ui/locale-selector"
 
 export function Header() {
   const { setTheme, theme } = useTheme()
-  const { t } = useTranslation()
+  const t = useTranslations('nav')
   const router = useRouter()
 
   return (
@@ -32,7 +32,7 @@ export function Header() {
             className="gap-2"
           >
             <Search className="h-4 w-4" />
-            <span className="hidden sm:inline">{t('nav.search', { fallback: 'Search Templates' })}</span>
+            <span className="hidden sm:inline">{t('search')}</span>
           </Button>
           <LocaleSelector variant="minimal" />
           <Button

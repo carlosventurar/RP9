@@ -1,7 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { useLocale, useCountry } from '@/lib/i18n/context'
+import { useRouter, usePathname } from 'next/navigation'
+import { useLocale } from 'next-intl'
 import { i18nConfig, getCountryConfig } from '@/lib/i18n/config'
 import { Button } from '@/components/ui/button'
 import {
@@ -34,15 +35,21 @@ export function LocaleSelector({
   showFlag = true,
   className = ''
 }: LocaleSelectorProps) {
-  const { locale, changeLocale } = useLocale()
-  const { countryName } = useCountry()
+  const locale = useLocale()
+  const router = useRouter()
+  const pathname = usePathname()
   const [isOpen, setIsOpen] = useState(false)
   
   const currentConfig = getCountryConfig(locale)
   const currentFlag = countryFlags[locale]
 
   const handleLocaleChange = (newLocale: string) => {
-    changeLocale(newLocale)
+    // Set cookie
+    document.cookie = `rp9-locale=${newLocale}; max-age=${60 * 60 * 24 * 365}; path=/`
+    
+    // Navigate to new locale path
+    const newPath = pathname.replace(`/${locale}`, `/${newLocale}`)
+    router.push(newPath)
     setIsOpen(false)
   }
 
@@ -83,50 +90,7 @@ export function LocaleSelector({
     )
   }
 
-  if (variant === 'full') {
-    return (
-      <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
-        <DropdownMenuTrigger asChild>
-          <Button 
-            variant="outline" 
-            className={`flex items-center gap-2 ${className}`}
-          >
-            <Globe size={16} />
-            {showFlag && <span>{currentFlag}</span>}
-            {showCountryName && <span>{countryName}</span>}
-            <ChevronDown size={14} />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-64">
-          {i18nConfig.locales.map((loc) => {
-            const config = getCountryConfig(loc)
-            const flag = countryFlags[loc]
-            
-            return (
-              <DropdownMenuItem
-                key={loc}
-                onClick={() => handleLocaleChange(loc)}
-                className="cursor-pointer flex items-center gap-3 p-3"
-              >
-                <span className="text-lg">{flag}</span>
-                <div className="flex-1">
-                  <div className="font-medium">{config.countryName}</div>
-                  <div className="text-xs text-gray-500">
-                    {config.currency} • {config.region}
-                  </div>
-                </div>
-                {loc === locale && (
-                  <span className="text-blue-600 font-bold">✓</span>
-                )}
-              </DropdownMenuItem>
-            )
-          })}
-        </DropdownMenuContent>
-      </DropdownMenu>
-    )
-  }
-
-  // Default variant
+  // Default variant (simplified)
   return (
     <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
       <DropdownMenuTrigger asChild>
@@ -135,7 +99,7 @@ export function LocaleSelector({
           className={`flex items-center gap-2 ${className}`}
         >
           {showFlag && <span>{currentFlag}</span>}
-          {showCountryName && <span className="hidden sm:inline">{countryName}</span>}
+          {showCountryName && <span className="hidden sm:inline">{currentConfig.countryName}</span>}
           <ChevronDown size={14} />
         </Button>
       </DropdownMenuTrigger>
@@ -161,56 +125,5 @@ export function LocaleSelector({
         })}
       </DropdownMenuContent>
     </DropdownMenu>
-  )
-}
-
-// Currency display component
-export function CurrencyDisplay({ 
-  amount, 
-  className = '' 
-}: { 
-  amount: number
-  className?: string 
-}) {
-  const { formatCurrency } = useLocale()
-  
-  return (
-    <span className={className}>
-      {formatCurrency(amount)}
-    </span>
-  )
-}
-
-// Date display component
-export function DateDisplay({ 
-  date, 
-  className = '' 
-}: { 
-  date: Date
-  className?: string 
-}) {
-  const { formatDate } = useLocale()
-  
-  return (
-    <span className={className}>
-      {formatDate(date)}
-    </span>
-  )
-}
-
-// Phone display component
-export function PhoneDisplay({ 
-  phone, 
-  className = '' 
-}: { 
-  phone: string
-  className?: string 
-}) {
-  const { formatPhoneNumber } = useLocale()
-  
-  return (
-    <span className={className}>
-      {formatPhoneNumber(phone)}
-    </span>
   )
 }

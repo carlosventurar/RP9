@@ -1,4 +1,13 @@
 {
+  "home": {
+    "hero": {
+      "title": "Automatización Empresarial Sin Código",
+      "subtitle": "Transforma procesos manuales en workflows automatizados"
+    }
+  },
+  "nav": {
+    "search": "Buscar Plantillas"
+  },
   "common": {
     "loading": "Cargando...",
     "error": "Error",

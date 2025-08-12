@@ -1,6 +1,6 @@
 'use client'
 
-import { useTranslation, useCountry, useCurrency } from '@/lib/i18n/context'
+import { useTranslations, useLocale } from 'next-intl'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -9,45 +9,40 @@ import {
   Calculator, 
   Globe, 
   Zap, 
-  Shield, 
-  TrendingUp,
   ArrowRight,
   CheckCircle
 } from 'lucide-react'
 import Link from 'next/link'
-import { CurrencyDisplay } from '@/components/ui/locale-selector'
+import { getCountryConfig } from '@/lib/i18n/config'
 
 export default function LocalizedHomePage() {
-  const { t } = useTranslation()
-  const { countryName, countryConfig } = useCountry()
-  const { currency } = useCurrency()
+  const t = useTranslations('home')
+  const locale = useLocale()
+  const countryConfig = getCountryConfig(locale)
 
   const features = [
     {
       icon: Bot,
-      titleKey: 'features.contact_center.title',
-      descriptionKey: 'features.contact_center.description',
-      color: 'bg-blue-500/10 text-blue-600'
+      title: 'Contact Center',
+      description: 'Automatiza respuestas y gestión de clientes'
     },
     {
       icon: Calculator, 
-      titleKey: 'features.finance.title',
-      descriptionKey: 'features.finance.description',
-      color: 'bg-green-500/10 text-green-600'
+      title: 'Finanzas',
+      description: 'Procesa facturas y pagos automáticamente'
     },
     {
       icon: Globe,
-      titleKey: 'features.integrations.title', 
-      descriptionKey: 'features.integrations.description',
-      color: 'bg-purple-500/10 text-purple-600'
+      title: 'Integraciones',
+      description: 'Conecta todas tus herramientas favoritas'
     }
   ]
 
   const pricingPlans = [
     {
-      name: t('pricing.starter.title', { fallback: 'Starter' }),
-      price: t('pricing.starter.price', { fallback: 'Gratis' }),
-      description: t('pricing.starter.description', { fallback: 'Perfecto para equipos pequeños' }),
+      name: 'Starter',
+      price: 'Gratis',
+      description: 'Perfecto para equipos pequeños',
       features: [
         'Hasta 5 usuarios',
         '1,000 ejecuciones/mes',
@@ -56,9 +51,9 @@ export default function LocalizedHomePage() {
       ]
     },
     {
-      name: t('pricing.pro.title', { fallback: 'Pro' }),
+      name: 'Pro',
       price: `$29 USD`,
-      description: t('pricing.pro.description', { fallback: 'Para empresas en crecimiento' }),
+      description: 'Para empresas en crecimiento',
       features: [
         'Usuarios ilimitados',
         '10,000 ejecuciones/mes', 
@@ -68,9 +63,9 @@ export default function LocalizedHomePage() {
       popular: true
     },
     {
-      name: t('pricing.enterprise.title', { fallback: 'Enterprise' }),
+      name: 'Enterprise',
       price: `$99 USD`,
-      description: t('pricing.enterprise.description', { fallback: 'Para grandes organizaciones' }),
+      description: 'Para grandes organizaciones',
       features: [
         'Todo ilimitado',
         'Soporte dedicado 24/7',
@@ -86,30 +81,25 @@ export default function LocalizedHomePage() {
       <section className="text-center space-y-8">
         <div className="space-y-4">
           <Badge variant="outline" className="px-4 py-2">
-            {t('hero.trusted_by', { 
-              count: '150+',
-              fallback: 'Confiado por 150+ empresas'
-            })} en {countryName}
+            Confiado por 150+ empresas en {countryConfig.countryName}
           </Badge>
           
           <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
-            {t('hero.title', { fallback: 'Automatización Empresarial Sin Código' })}
+            Automatización Empresarial Sin Código
           </h1>
           
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            {t('hero.subtitle', { 
-              fallback: 'Transforma procesos manuales en workflows automatizados. Ahorra tiempo, reduce errores y escala tu operación.' 
-            })}
+            Transforma procesos manuales en workflows automatizados. Ahorra tiempo, reduce errores y escala tu operación.
           </p>
         </div>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Button size="lg" className="gap-2">
-            {t('hero.cta.primary', { fallback: 'Comenzar Gratis' })}
+            Comenzar Gratis
             <ArrowRight size={16} />
           </Button>
           <Button size="lg" variant="outline">
-            {t('hero.cta.secondary', { fallback: 'Ver Demo' })}
+            Ver Demo
           </Button>
         </div>
       </section>
@@ -118,10 +108,10 @@ export default function LocalizedHomePage() {
       <section className="space-y-8">
         <div className="text-center space-y-4">
           <h2 className="text-3xl font-bold">
-            {t('features.title', { fallback: 'Todo lo que Necesitas para Automatizar' })}
+            Todo lo que Necesitas para Automatizar
           </h2>
           <p className="text-xl text-muted-foreground">
-            {t('features.subtitle', { fallback: 'Herramientas poderosas y fáciles de usar para transformar tu operación' })}
+            Herramientas poderosas y fáciles de usar para transformar tu operación
           </p>
         </div>
 
@@ -131,16 +121,14 @@ export default function LocalizedHomePage() {
             return (
               <Card key={index} className="border-2 hover:shadow-lg transition-all">
                 <CardHeader className="text-center">
-                  <div className={`w-12 h-12 rounded-lg ${feature.color} flex items-center justify-center mx-auto mb-4`}>
+                  <div className={`w-12 h-12 rounded-lg bg-blue-500/10 text-blue-600 flex items-center justify-center mx-auto mb-4`}>
                     <Icon size={24} />
                   </div>
-                  <CardTitle>
-                    {t(feature.titleKey, { fallback: feature.titleKey })}
-                  </CardTitle>
+                  <CardTitle>{feature.title}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <CardDescription className="text-center">
-                    {t(feature.descriptionKey, { fallback: feature.descriptionKey })}
+                    {feature.description}
                   </CardDescription>
                 </CardContent>
               </Card>
@@ -152,14 +140,12 @@ export default function LocalizedHomePage() {
       {/* Pricing Section */}
       <section className="space-y-8">
         <div className="text-center space-y-4">
-          <h2 className="text-3xl font-bold">
-            {t('pricing.title', { fallback: 'Precios Transparentes' })}
-          </h2>
+          <h2 className="text-3xl font-bold">Precios Transparentes</h2>
           <p className="text-xl text-muted-foreground">
-            {t('pricing.subtitle', { fallback: 'Planes que crecen contigo. Sin costos ocultos.' })}
+            Planes que crecen contigo. Sin costos ocultos.
           </p>
           <p className="text-sm text-muted-foreground">
-            Precios en {currency} • {countryConfig.vatRate * 100}% {countryConfig.vatRate > 0.15 ? 'IVA' : 'impuestos'} incluidos
+            Precios en {countryConfig.currency} • {countryConfig.vatRate * 100}% impuestos incluidos
           </p>
         </div>
 
@@ -175,9 +161,7 @@ export default function LocalizedHomePage() {
                 <CardTitle className="text-2xl">{plan.name}</CardTitle>
                 <div className="text-3xl font-bold">{plan.price}</div>
                 {plan.price !== 'Gratis' && (
-                  <p className="text-sm text-muted-foreground">
-                    {t('pricing.per_user', { fallback: 'por usuario/mes' })}
-                  </p>
+                  <p className="text-sm text-muted-foreground">por usuario/mes</p>
                 )}
                 <CardDescription>{plan.description}</CardDescription>
               </CardHeader>
@@ -203,7 +187,7 @@ export default function LocalizedHomePage() {
       <section className="bg-muted/50 rounded-lg p-8 space-y-6">
         <div className="text-center">
           <h3 className="text-2xl font-bold mb-4">
-            RP9 Portal en {countryName}
+            RP9 Portal en {countryConfig.countryName}
           </h3>
           <div className="grid md:grid-cols-3 gap-6">
             <div className="space-y-2">
@@ -238,7 +222,7 @@ export default function LocalizedHomePage() {
             Cumplimos con: {countryConfig.regulations.join(', ')}
           </p>
           <Button asChild>
-            <Link href={`/${countryConfig.country.toLowerCase()}/contacto`}>
+            <Link href="/contacto">
               Contactar Equipo Local
             </Link>
           </Button>
@@ -251,7 +235,7 @@ export default function LocalizedHomePage() {
           ¿Listo para Automatizar tu Operación?
         </h2>
         <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-          Únete a las {countryConfig.marketSize === 'large' ? '150+' : '50+'} empresas en {countryName} que ya confían en RP9 Portal.
+          Únete a las {countryConfig.marketSize === 'large' ? '150+' : '50+'} empresas en {countryConfig.countryName} que ya confían en RP9 Portal.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Button size="lg" className="gap-2">
