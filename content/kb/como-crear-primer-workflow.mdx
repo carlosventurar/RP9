@@ -1,0 +1,211 @@
+---
+title: "Cómo crear tu primer workflow en RP9"
+excerpt: "Una guía paso a paso para crear y configurar tu primer workflow automatizado usando n8n."
+category: "getting-started"
+tags: ["workflow", "tutorial", "n8n", "básico"]
+author: "Equipo RP9"
+created_at: "2024-08-06"
+updated_at: "2024-08-11"
+---
+
+# Cómo crear tu primer workflow en RP9
+
+¡Bienvenido a RP9! En esta guía te enseñaremos cómo crear tu primer workflow de automatización paso a paso. Al final de este tutorial, tendrás un workflow funcionando que podrás usar como base para automatizaciones más complejas.
+
+## ¿Qué es un workflow?
+
+Un workflow es una secuencia automatizada de tareas que se ejecutan en un orden específico. Por ejemplo:
+
+- **Enviar un email** cuando se recibe un nuevo lead
+- **Actualizar una hoja de cálculo** cuando se completa una venta  
+- **Crear una tarea** cuando llega un mensaje de soporte
+
+## Requisitos previos
+
+Antes de comenzar, asegúrate de tener:
+
+- ✅ Una cuenta activa en RP9
+- ✅ Acceso al dashboard principal
+- ✅ Plan Starter o superior (workflows ilimitados en Pro/Enterprise)
+
+## Paso 1: Acceder al editor de workflows
+
+1. Inicia sesión en tu cuenta de RP9
+2. Ve al **Dashboard principal**
+3. Haz clic en **"Workflows"** en el menú lateral
+4. Selecciona **"Crear Nuevo Workflow"**
+
+```bash
+Dashboard → Workflows → Crear Nuevo Workflow
+```
+
+## Paso 2: Configurar el trigger (disparador)
+
+El trigger es lo que inicia tu workflow. RP9 ofrece varios tipos:
+
+### Triggers disponibles:
+
+| Tipo | Descripción | Ejemplo de uso |
+|------|-------------|----------------|
+| **Webhook** | Se activa cuando recibe una petición HTTP | Formularios web, APIs externas |
+| **Programado** | Se ejecuta en intervalos de tiempo | Reportes diarios, backups |
+| **Manual** | Se ejecuta cuando tú lo inicias | Procesos bajo demanda |
+| **Email** | Se activa al recibir emails | Procesamiento de órdenes |
+
+### Configurar un webhook (recomendado para principiantes):
+
+1. Selecciona **"Webhook"** como trigger
+2. Copia la URL generada (algo como `https://api.rp9.com/webhook/abc123`)
+3. Configura los campos que esperas recibir:
+
+```json
+{
+  "nombre": "Juan Pérez",
+  "email": "juan@empresa.com",
+  "mensaje": "Interesado en sus servicios"
+}
+```
+
+## Paso 3: Agregar nodos de procesamiento
+
+Los nodos procesan los datos del trigger. Algunos nodos útiles para empezar:
+
+### 📧 Nodo de Email
+Para enviar notificaciones automáticas:
+
+1. Arrastra el nodo **"Email"** al canvas
+2. Conecta el trigger con el nodo de email
+3. Configura:
+   - **Para**: `admin@tuempresa.com`
+   - **Asunto**: `Nuevo lead: {{$node["Webhook"].json["nombre"]}}`
+   - **Mensaje**: Usar los datos del webhook
+
+### 📊 Nodo de Google Sheets
+Para guardar datos en una hoja de cálculo:
+
+1. Agrega el nodo **"Google Sheets"**
+2. Conecta tu cuenta de Google (OAuth seguro)
+3. Selecciona la hoja de cálculo
+4. Mapea los campos:
+   - Columna A: `{{$node["Webhook"].json["nombre"]}}`
+   - Columna B: `{{$node["Webhook"].json["email"]}}`
+   - Columna C: `{{$node["Webhook"].json["mensaje"]}}`
+
+## Paso 4: Probar tu workflow
+
+Antes de activarlo en producción:
+
+1. Haz clic en **"Ejecutar Prueba"**
+2. El sistema simula datos de entrada
+3. Verifica que cada nodo se ejecute correctamente
+4. Revisa los logs en tiempo real
+
+### Ejemplo de datos de prueba:
+
+```json
+{
+  "nombre": "María García",
+  "email": "maria@test.com", 
+  "mensaje": "Prueba de workflow",
+  "timestamp": "2024-08-11T10:30:00Z"
+}
+```
+
+## Paso 5: Activar y monitorear
+
+Una vez que funcione correctamente:
+
+1. Haz clic en **"Activar Workflow"**
+2. El toggle cambiará a verde 🟢
+3. Copia la URL del webhook
+4. Intégrala en tu sitio web o app
+
+### Monitoreo en tiempo real:
+
+- Ve a **"Ejecuciones"** para ver el historial
+- Configura alertas para fallos
+- Revisa métricas de rendimiento
+
+## Ejemplo completo: Lead desde formulario web
+
+Aquí tienes un workflow completo que puedes copiar:
+
+```yaml
+# Workflow: Captura de Leads
+Trigger: Webhook
+URL: https://api.rp9.com/webhook/tu-id-unico
+
+Nodos:
+1. Validar Email
+   - Verificar formato de email
+   - Rechazar si es inválido
+
+2. Enviar Email de Bienvenida
+   - Para: {{email}}
+   - Asunto: "¡Gracias por tu interés!"
+   - Template: email-bienvenida.html
+
+3. Guardar en CRM
+   - Sistema: HubSpot/Salesforce
+   - Contacto: Crear nuevo
+   - Tags: ["lead-web", "interesado"]
+
+4. Notificar al Equipo
+   - Slack: Canal #ventas
+   - Mensaje: "Nuevo lead: {{nombre}} - {{email}}"
+```
+
+## Consejos para principiantes
+
+### ✅ Buenas prácticas:
+
+- **Empieza simple**: Un trigger + una acción
+- **Prueba siempre**: Usa datos de prueba antes de activar
+- **Documenta**: Agrega notas a tus nodos
+- **Monitorea**: Revisa las ejecuciones regularmente
+
+### ❌ Errores comunes:
+
+- No validar datos de entrada
+- Workflows demasiado complejos al inicio
+- No configurar manejo de errores
+- Olvidar probar con datos reales
+
+## Recursos adicionales
+
+### Plantillas listas para usar:
+
+- 📧 [Email Marketing Automation](./email-marketing-automation)
+- 🛒 [E-commerce Order Processing](./ecommerce-order-processing)  
+- 📊 [Daily Reports Generator](./daily-reports-generator)
+- 🎫 [Support Ticket Routing](./support-ticket-routing)
+
+### Videos tutoriales:
+
+- [Workflow Básico en 5 minutos](https://youtube.com/watch?v=abc123)
+- [Conectar APIs externas](https://youtube.com/watch?v=def456)
+- [Manejo de errores avanzado](https://youtube.com/watch?v=ghi789)
+
+## Próximos pasos
+
+Una vez que domines los conceptos básicos:
+
+1. 🔗 **[Aprende sobre integraciones](./conectar-servicios-externos)**
+2. ⚡ **[Optimiza el rendimiento](./optimizar-workflows)**  
+3. 🔧 **[Manejo avanzado de errores](./manejo-errores-workflows)**
+4. 📈 **[Monitoreo y analytics](./monitoreo-workflows)**
+
+## ¿Necesitas ayuda?
+
+Si tienes problemas siguiendo esta guía:
+
+- 💬 **Chat en vivo**: Disponible L-V 9:00-17:00
+- 📧 **Email**: soporte@rp9.com
+- 🎫 **Ticket**: [Crear ticket de soporte](../new)
+- 📚 **Comunidad**: [Foro de usuarios](https://community.rp9.com)
+
+---
+
+**⭐ ¿Te fue útil esta guía?** 
+
+Tu feedback nos ayuda a mejorar nuestro contenido.

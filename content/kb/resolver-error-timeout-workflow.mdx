@@ -1,0 +1,493 @@
+---
+title: "Resolver errores de timeout en workflows"
+excerpt: "Soluciones comunes para workflows que fallan por timeout y cómo optimizar el rendimiento."
+category: "troubleshooting"
+tags: ["error", "timeout", "rendimiento", "debugging"]
+author: "Carlos Ruiz"
+created_at: "2024-08-06"
+updated_at: "2024-08-06"
+---
+
+# Resolver errores de timeout en workflows
+
+Los errores de timeout son uno de los problemas más comunes en workflows de automatización. En esta guía aprenderás a identificar las causas y aplicar soluciones efectivas.
+
+## ¿Qué es un timeout?
+
+Un timeout ocurre cuando un nodo o workflow tarda más tiempo del límite configurado en ejecutarse. Por defecto, RP9 tiene estos límites:
+
+| Plan | Timeout por Nodo | Timeout Total | Max Ejecuciones Concurrentes |
+|------|------------------|---------------|-------------------------------|
+| **Starter** | 30 segundos | 5 minutos | 2 |
+| **Pro** | 60 segundos | 15 minutos | 5 |
+| **Enterprise** | 120 segundos | 30 minutos | 20 |
+
+## Síntomas comunes
+
+### 🔴 Errores típicos que verás:
+
+```bash
+Error: Execution timeout (30s exceeded)
+Node: "HTTP Request" execution timed out
+Workflow stopped: Maximum execution time reached
+Connection timeout to external API
+```
+
+### 📊 Indicadores en el dashboard:
+
+- ⏰ Ejecuciones marcadas como "Timeout"
+- 📈 Tiempo de ejecución cerca del límite
+- 🔄 Workflows que se cuelgan en "Running"
+- ❌ Fallos intermitentes en APIs externas
+
+## Causas principales
+
+### 1. APIs externas lentas
+
+**Problema**: Servicios externos que tardan en responder
+```javascript
+// ❌ Problemático - sin timeout personalizado
+const response = await fetch('https://api-lenta.com/data');
+```
+
+**Solución**: Configurar timeouts específicos
+```javascript
+// ✅ Mejor - con timeout controlado
+const controller = new AbortController();
+const timeoutId = setTimeout(() => controller.abort(), 10000); // 10s
+
+try {
+  const response = await fetch('https://api-lenta.com/data', {
+    signal: controller.signal,
+    timeout: 10000
+  });
+  clearTimeout(timeoutId);
+} catch (error) {
+  if (error.name === 'AbortError') {
+    // Manejar timeout específicamente
+    return { error: 'API timeout', retry: true };
+  }
+}
+```
+
+### 2. Procesamiento de grandes volúmenes
+
+**Problema**: Procesar miles de registros en un solo nodo
+```javascript
+// ❌ Problemático - procesar todo junto
+const allUsers = await getUsers(); // 10,000 usuarios
+for (const user of allUsers) {
+  await sendEmail(user); // 10,000 emails = timeout
+}
+```
+
+**Solución**: Procesar por lotes
+```javascript
+// ✅ Mejor - procesamiento por lotes
+const batchSize = 50;
+const users = await getUsers();
+
+for (let i = 0; i < users.length; i += batchSize) {
+  const batch = users.slice(i, i + batchSize);
+  
+  // Procesar lote en paralelo
+  await Promise.all(
+    batch.map(user => sendEmail(user))
+  );
+  
+  // Pausa entre lotes para no saturar
+  await new Promise(resolve => setTimeout(resolve, 1000));
+}
+```
+
+### 3. Bucles infinitos o ineficientes
+
+**Problema**: Lógica que no termina o es muy lenta
+```javascript
+// ❌ Problemático - bucle potencialmente infinito
+let retries = 0;
+while (true) {
+  const result = await checkStatus();
+  if (result.complete) break;
+  retries++;
+  await sleep(1000);
+}
+```
+
+**Solución**: Límites y timeouts explícitos
+```javascript
+// ✅ Mejor - con límites claros
+const maxRetries = 30; // máximo 30 intentos
+const retryDelay = 2000; // 2 segundos entre intentos
+
+for (let i = 0; i < maxRetries; i++) {
+  const result = await checkStatus();
+  if (result.complete) {
+    return result;
+  }
+  
+  if (i < maxRetries - 1) { // No esperar en el último intento
+    await sleep(retryDelay);
+  }
+}
+
+throw new Error(`Proceso no completado después de ${maxRetries} intentos`);
+```
+
+### 4. Conexiones de base de datos
+
+**Problema**: Queries lentas o conexiones colgadas
+```sql
+-- ❌ Problemático - query sin optimizar
+SELECT * FROM users u 
+JOIN orders o ON u.id = o.user_id 
+WHERE u.created_at > '2020-01-01'
+ORDER BY u.created_at; -- Sin índice
+```
+
+**Solución**: Optimizar queries y usar timeouts
+```sql
+-- ✅ Mejor - query optimizada
+SELECT u.id, u.name, COUNT(o.id) as order_count
+FROM users u 
+LEFT JOIN orders o ON u.id = o.user_id 
+WHERE u.created_at > '2020-01-01'
+  AND u.status = 'active'
+GROUP BY u.id, u.name
+ORDER BY u.created_at
+LIMIT 1000; -- Limitar resultados
+```
+
+## Soluciones paso a paso
+
+### Solución 1: Configurar timeouts personalizados
+
+#### En nodos HTTP Request:
+1. Ve al nodo que falla por timeout
+2. En **Settings** → **Timeout**: Cambia de 30s a 60s o más
+3. Agrega **Retry on Failure**: 3 intentos con 5s de delay
+
+#### En código personalizado:
+```javascript
+// Timeout personalizado en Function node
+const timeout = (ms) => new Promise((_, reject) => 
+  setTimeout(() => reject(new Error('Timeout')), ms)
+);
+
+try {
+  const result = await Promise.race([
+    slowOperation(),
+    timeout(45000) // 45 segundos
+  ]);
+  return result;
+} catch (error) {
+  if (error.message === 'Timeout') {
+    return { error: 'Operation timed out', retry: true };
+  }
+  throw error;
+}
+```
+
+### Solución 2: Implementar reintentos inteligentes
+
+```javascript
+// Función de retry con backoff exponencial
+async function retryWithBackoff(fn, maxRetries = 3, baseDelay = 1000) {
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      return await fn();
+    } catch (error) {
+      if (attempt === maxRetries) {
+        throw error;
+      }
+      
+      // Backoff exponencial: 1s, 2s, 4s, 8s...
+      const delay = baseDelay * Math.pow(2, attempt - 1);
+      console.log(`Intento ${attempt} falló, reintentando en ${delay}ms`);
+      await sleep(delay);
+    }
+  }
+}
+
+// Uso
+const result = await retryWithBackoff(async () => {
+  return await fetch('https://api-inestable.com/data');
+}, 3, 2000);
+```
+
+### Solución 3: Dividir workflows complejos
+
+**En lugar de un workflow monolítico:**
+```
+[Trigger] → [Procesar 1000 items] → [Enviar emails] → [Actualizar BD]
+```
+
+**Divide en workflows más pequeños:**
+```
+[Trigger] → [Validar datos] → [Queue: Procesar]
+                                ↓
+[Queue Worker] → [Procesar 50 items] → [Queue: Enviar]
+                                         ↓
+[Email Worker] → [Enviar 50 emails] → [Queue: Actualizar]
+                                        ↓
+[DB Worker] → [Actualizar BD por lotes]
+```
+
+### Solución 4: Usar webhooks para procesos largos
+
+Para operaciones que toman mucho tiempo:
+
+```javascript
+// 1. Iniciar proceso asíncrono
+const jobId = await startLongRunningProcess(data);
+
+// 2. Responder inmediatamente con job ID
+return {
+  jobId: jobId,
+  status: 'processing',
+  checkUrl: `https://api.rp9.com/jobs/${jobId}`
+};
+
+// 3. El proceso externo enviará webhook cuando termine
+// Webhook URL: https://hooks.rp9.com/webhook/job-complete
+```
+
+## Monitoreo y debugging
+
+### 1. Configurar alertas
+
+En RP9 Dashboard:
+1. Ve a **Workflows** → **Tu workflow** → **Settings**
+2. Activa **"Alert on timeout"**
+3. Configura email/Slack para notificaciones
+
+### 2. Análisis de performance
+
+```javascript
+// Agregar métricas a tus nodos
+const startTime = Date.now();
+
+try {
+  const result = await slowOperation();
+  const duration = Date.now() - startTime;
+  
+  console.log(`Operación completada en ${duration}ms`);
+  
+  // Alertar si es muy lento
+  if (duration > 20000) { // 20 segundos
+    console.warn(`Operación lenta detectada: ${duration}ms`);
+  }
+  
+  return result;
+} catch (error) {
+  const duration = Date.now() - startTime;
+  console.error(`Operación falló después de ${duration}ms: ${error.message}`);
+  throw error;
+}
+```
+
+### 3. Logs detallados
+
+```javascript
+// Logger estructurado
+function logOperation(operation, data, duration, success) {
+  console.log(JSON.stringify({
+    timestamp: new Date().toISOString(),
+    operation: operation,
+    duration: duration,
+    success: success,
+    data: data,
+    workflow: $workflow.name,
+    execution: $execution.id
+  }));
+}
+
+// Uso
+const start = Date.now();
+try {
+  const result = await apiCall();
+  logOperation('api_call', { url: 'https://api.com' }, Date.now() - start, true);
+  return result;
+} catch (error) {
+  logOperation('api_call', { error: error.message }, Date.now() - start, false);
+  throw error;
+}
+```
+
+## Optimizaciones específicas por tipo
+
+### Para APIs REST:
+- ✅ Usar **connection pooling**
+- ✅ Implementar **circuit breaker**
+- ✅ **Cache** respuestas cuando posible
+- ✅ **Comprimir** requests/responses
+- ✅ Usar **HTTP/2** si está disponible
+
+### Para bases de datos:
+- ✅ **Índices** apropiados
+- ✅ **Query optimization**
+- ✅ **Connection pooling**
+- ✅ **Read replicas** para consultas
+- ✅ **Pagination** en lugar de SELECT *
+
+### Para procesamiento de archivos:
+- ✅ **Streaming** en lugar de cargar todo en memoria
+- ✅ **Procesar por chunks**
+- ✅ **Validar tamaño** antes de procesar
+- ✅ **Usar workers** para CPU intensivo
+
+## Casos de uso comunes
+
+### Caso 1: Importar CSV grande
+
+**Problema**: CSV de 100MB causa timeout
+
+**Solución**:
+```javascript
+// Procesar CSV por líneas usando streaming
+const fs = require('fs');
+const readline = require('readline');
+
+async function processLargeCSV(filePath) {
+  const fileStream = fs.createReadStream(filePath);
+  const rl = readline.createInterface({
+    input: fileStream,
+    crlfDelay: Infinity
+  });
+
+  let batch = [];
+  let lineCount = 0;
+  const batchSize = 100;
+
+  for await (const line of rl) {
+    batch.push(parseCsvLine(line));
+    lineCount++;
+
+    if (batch.length >= batchSize) {
+      await processBatch(batch);
+      batch = [];
+      
+      // Log progreso
+      console.log(`Procesadas ${lineCount} líneas`);
+    }
+  }
+
+  // Procesar último batch
+  if (batch.length > 0) {
+    await processBatch(batch);
+  }
+
+  return { processed: lineCount };
+}
+```
+
+### Caso 2: Sincronizar miles de contactos
+
+**Problema**: Sync de 10,000 contactos de CRM a Email Marketing
+
+**Solución**:
+```javascript
+// Usar queue distribuído
+async function syncContactsInBatches() {
+  const contacts = await getCrmContacts();
+  const batchSize = 50;
+  
+  for (let i = 0; i < contacts.length; i += batchSize) {
+    const batch = contacts.slice(i, i + batchSize);
+    
+    // Procesar en paralelo pero limitado
+    await Promise.all(
+      batch.map(contact => 
+        syncContactToEmailPlatform(contact)
+          .catch(err => console.error(`Error syncing ${contact.id}:`, err))
+      )
+    );
+    
+    // Pausa para no saturar APIs
+    await sleep(1000);
+    
+    // Log progreso cada 500
+    if (i % 500 === 0) {
+      console.log(`Sincronizados ${i}/${contacts.length} contactos`);
+    }
+  }
+}
+```
+
+## Herramientas de debugging
+
+### 1. Network monitoring
+```javascript
+// Monitorear latencia de red
+async function monitorApiLatency(url) {
+  const start = process.hrtime.bigint();
+  
+  try {
+    const response = await fetch(url);
+    const end = process.hrtime.bigint();
+    const latency = Number(end - start) / 1000000; // ms
+    
+    console.log(`API latency: ${latency.toFixed(2)}ms`);
+    
+    if (latency > 5000) {
+      console.warn(`High latency detected: ${latency}ms`);
+    }
+    
+    return response;
+  } catch (error) {
+    const end = process.hrtime.bigint();
+    const duration = Number(end - start) / 1000000;
+    console.error(`API failed after ${duration.toFixed(2)}ms:`, error.message);
+    throw error;
+  }
+}
+```
+
+### 2. Memory monitoring
+```javascript
+// Monitorear uso de memoria
+function logMemoryUsage() {
+  const usage = process.memoryUsage();
+  console.log({
+    rss: `${Math.round(usage.rss / 1024 / 1024)} MB`,
+    heapTotal: `${Math.round(usage.heapTotal / 1024 / 1024)} MB`,
+    heapUsed: `${Math.round(usage.heapUsed / 1024 / 1024)} MB`,
+    external: `${Math.round(usage.external / 1024 / 1024)} MB`
+  });
+  
+  // Alertar si uso es muy alto
+  if (usage.heapUsed > 500 * 1024 * 1024) { // 500MB
+    console.warn('High memory usage detected');
+  }
+}
+```
+
+## Recursos adicionales
+
+### Documentación:
+- [Performance Best Practices](./performance-best-practices)
+- [Error Handling Guide](./error-handling-guide)
+- [Monitoring & Alerting](./monitoring-alerting)
+
+### Herramientas:
+- [RP9 Performance Analyzer](https://tools.rp9.com/analyzer)
+- [Workflow Debugger](https://tools.rp9.com/debugger)
+- [Load Testing Tool](https://tools.rp9.com/load-test)
+
+### Plantillas optimizadas:
+- 🔄 [Bulk Data Processing](./templates/bulk-processing)
+- 📊 [API Integration with Retries](./templates/api-with-retries)
+- 🗄️ [Database Sync Optimized](./templates/db-sync)
+
+## ¿Sigues teniendo problemas?
+
+Si los timeouts persisten:
+
+- 🔧 **Análisis personalizado**: Nuestro equipo puede revisar tu workflow específico
+- 📞 **Consulta técnica**: Agendar llamada con ingeniero de soporte
+- 💬 **Chat especializado**: Soporte de performance L-V 9:00-17:00
+- 🎫 **Ticket prioritario**: [Crear ticket de performance](../new?category=performance)
+
+---
+
+**⭐ ¿Resolviste el timeout?** Tu feedback ayuda a otros usuarios.

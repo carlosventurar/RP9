@@ -37,6 +37,16 @@
 [functions.security-cleanup]
   schedule = "0 4 * * *"  # Daily security cleanup at 04:00 UTC
 
+# Scheduled Functions - Fase 10: Soporte, SLAs & Customer Success
+[functions.cs-healthscore]
+  schedule = "0 3 * * *"  # Daily health score calculation at 03:00 UTC
+
+[functions.qbr-scheduler]
+  schedule = "0 4 * * 1"  # Weekly QBR scheduling on Mondays at 04:00 UTC
+
+[functions.renewal-dunning]
+  schedule = "0 5 * * *"  # Daily renewal/dunning check at 05:00 UTC
+
 # Fase 4: Security & SRE Functions
 [functions.backup-run]
   schedule = "0 2 * * *"  # Daily at 2:00 AM UTC
