@@ -67,6 +67,13 @@
 [functions.catalog-featured]
   schedule = "0 4 * * *"   # Daily at 04:00 UTC - recalculate featured scores
 
+# Scheduled Functions - Fase 13: Orchestrator Multi-tenancy
+[functions.tenants-limits-enforce]
+  schedule = "0 * * * *"   # Hourly at :00 - tenant limits enforcement with Stripe sync
+
+[functions.tenants-promote-scan]
+  schedule = "0 */4 * * *"  # Every 4 hours at :00 - scan for promotion candidates
+
 # Fase 4: Security & SRE Functions
 [functions.backup-run]
   schedule = "0 2 * * *"  # Daily at 2:00 AM UTC
