@@ -202,7 +202,7 @@ export function TTVCohorts({ data }: TTVCohortsProps) {
           )}
           
           {data.some(d => d.avg_days > 14) && (
-            <p>• ⏰ Oportunidad: Algunas cohortes tardan >14 días en TTV</p>
+            <p>• ⏰ Oportunidad: Algunas cohortes tardan &gt;14 días en TTV</p>
           )}
         </div>
       </div>

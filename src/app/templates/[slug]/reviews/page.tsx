@@ -37,9 +37,14 @@ export default function TemplateReviewsPage() {
       if (!templateKey) return
 
       try {
-        // Fetch template details (for now our mock API supports lookup by id param)
-        const response = await fetch(`/api/templates?id=${templateKey}`)
-        const data = await response.json()
+        // Try lookup by slug first, then fallback to id
+        let response = await fetch(`/api/templates?slug=${templateKey}`)
+        let data = await response.json()
+
+        if (!data.success || data.data.length === 0) {
+          response = await fetch(`/api/templates?id=${templateKey}`)
+          data = await response.json()
+        }
 
         if (data.success && data.data.length > 0) {
           setTemplate(data.data[0])

@@ -419,7 +419,7 @@ export default function FinancialDashboard() {
                 <div className="bg-blue-50 p-4 rounded-lg">
                   <h4 className="font-medium text-blue-900 mb-2">💡 Tips de Optimización</h4>
                   <ul className="text-sm text-blue-800 space-y-1">
-                    <li>• Revisar workflows con >1000 ejecuciones/día para optimización</li>
+                    <li>• Revisar workflows con &gt;1000 ejecuciones/día para optimización</li>
                     <li>• Implementar cache para reducir llamadas API externas</li>
                     <li>• Usar templates de batch processing para operaciones masivas</li>
                     <li>• Monitorear P95 de tiempo de ejecución para detectar ineficiencias</li>

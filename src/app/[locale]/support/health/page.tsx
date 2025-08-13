@@ -261,9 +261,9 @@ export default function HealthScorePage() {
   const getTrendIcon = () => {
     const trend = getScoreTrend()
     switch (trend) {
-      case 'up': return <TrendingUp className=\"h-4 w-4 text-green-500\" />
-      case 'down': return <TrendingDown className=\"h-4 w-4 text-red-500\" />
-      default: return <Minus className=\"h-4 w-4 text-gray-500\" />
+      case 'up': return <TrendingUp className="h-4 w-4 text-green-500" />
+      case 'down': return <TrendingDown className="h-4 w-4 text-red-500" />
+      default: return <Minus className="h-4 w-4 text-gray-500" />
     }
   }
 

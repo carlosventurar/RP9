@@ -240,12 +240,12 @@ export default function IncidentsPage() {
   }
 
   return (
-    <div className=\"container mx-auto py-6 space-y-6\">
+    <div className="container mx-auto py-6 space-y-6">
       {/* Header */}
-      <div className=\"flex items-center gap-4 mb-6\">
-        <Button variant=\"ghost\" size=\"sm\" asChild>
-          <Link href=\"/support\">
-            <ArrowLeft className=\"h-4 w-4 mr-2\" />
+      <div className="flex items-center gap-4 mb-6">
+        <Button variant="ghost" size="sm" asChild>
+          <Link href="/support">
+            <ArrowLeft className="h-4 w-4 mr-2" />
             Volver a Soporte
           </Link>
         </Button>

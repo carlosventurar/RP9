@@ -63,16 +63,26 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url)
     const category = searchParams.get('category')
     const search = searchParams.get('search')
-    
+    const id = searchParams.get('id')
+    const slug = searchParams.get('slug')
+
     let filteredTemplates = mockTemplates
-    
+
+    // If requesting a single template by id or slug
+    if (id || slug) {
+      const match = mockTemplates.filter(t =>
+        (id && t.id === id) || (slug && t.name.toLowerCase().replace(/\s+/g, '-') === slug)
+      )
+      return NextResponse.json({ success: true, data: match })
+    }
+
     // Filter by category
     if (category && category !== 'all') {
-      filteredTemplates = filteredTemplates.filter(t => 
+      filteredTemplates = filteredTemplates.filter(t =>
         t.category.toLowerCase() === category.toLowerCase()
       )
     }
-    
+
     // Filter by search term
     if (search) {
       const searchLower = search.toLowerCase()
@@ -82,7 +92,7 @@ export async function GET(request: NextRequest) {
         t.tags.some(tag => tag.toLowerCase().includes(searchLower))
       )
     }
-    
+
     return NextResponse.json({
       success: true,
       data: filteredTemplates,
@@ -92,7 +102,7 @@ export async function GET(request: NextRequest) {
         premium: filteredTemplates.filter(t => t.price > 0).length
       }
     })
-    
+
   } catch (error) {
     console.error('Templates API error:', error)
     return NextResponse.json({
