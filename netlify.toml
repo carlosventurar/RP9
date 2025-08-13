@@ -60,6 +60,13 @@
 [functions.analytics-alerts]
   schedule = "0,30 * * * *"  # Every 30 minutes - anomaly detection and alerts
 
+# Scheduled Functions - Fase 12: Marketplace & Plantillas Monetizadas
+[functions.payouts-run]
+  schedule = "0 6 15 * *"  # Monthly on 15th at 06:00 UTC - Stripe Connect payouts
+
+[functions.catalog-featured]
+  schedule = "0 4 * * *"   # Daily at 04:00 UTC - recalculate featured scores
+
 # Fase 4: Security & SRE Functions
 [functions.backup-run]
   schedule = "0 2 * * *"  # Daily at 2:00 AM UTC

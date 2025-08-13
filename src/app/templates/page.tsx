@@ -268,6 +268,28 @@ const difficultyColors = {
   advanced: 'bg-red-500/20 text-red-300 border-red-500/50'
 }
 
+// Transform marketplace item to template format for backward compatibility
+function transformMarketplaceItem(item: any): Template {
+  return {
+    id: item.id,
+    name: item.title,
+    description: item.short_desc,
+    category: item.catalog_categories?.name || item.category_key,
+    subcategory: null,
+    workflow_json: {},
+    icon_url: item.primary_image,
+    preview_images: item.images || [],
+    tags: item.tags_array || [],
+    difficulty: item.metadata?.complexity || 'intermediate',
+    estimated_time: item.metadata?.setup_time_minutes || 15,
+    price: item.one_off_price_cents ? item.one_off_price_cents / 100 : 0,
+    install_count: item.install_count || 0,
+    rating: item.rating_avg || 0,
+    is_featured: item.is_featured || false,
+    is_active: item.status === 'approved'
+  }
+}
+
 export default function TemplatesPage() {
   const { token, isAuthenticated } = useAuth()
   const [templates, setTemplates] = useState<Template[]>([])
@@ -282,14 +304,22 @@ export default function TemplatesPage() {
     const fetchTemplates = async () => {
       setLoading(true)
       try {
-        const response = await fetch('/api/templates')
+        // Use new marketplace API
+        const params = new URLSearchParams({
+          sort: 'featured',
+          limit: '50'
+        })
+        
+        const response = await fetch(`/.netlify/functions/marketplace-list?${params}`)
         const data = await response.json()
         
-        if (data.success && data.data) {
-          setTemplates(data.data)
-          setFilteredTemplates(data.data)
+        if (data.success && data.data?.items) {
+          // Transform marketplace items to template format
+          const transformedTemplates = data.data.items.map(transformMarketplaceItem)
+          setTemplates(transformedTemplates)
+          setFilteredTemplates(transformedTemplates)
         } else {
-          console.error('API Error:', data.error)
+          console.error('Marketplace API Error:', data.error)
           // Fallback to mock data if API fails
           setTemplates(mockTemplates)
           setFilteredTemplates(mockTemplates)
@@ -341,22 +371,28 @@ export default function TemplatesPage() {
         return
       }
       
-      const response = await fetch('/api/templates/install', {
+      // Get tenant_id from auth (assuming it's available)
+      // In production, get this from the authenticated user context
+      const tenant_id = 'user-tenant-placeholder' // TODO: get from auth context
+      
+      const response = await fetch('/.netlify/functions/marketplace-install', {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({ 
-          templateId: template.id,
-          customName: `${template.name} (Installed)`
+          item_slug: template.id, // Using id as slug fallback
+          tenant_id,
+          user_id: 'user-placeholder', // TODO: get from auth context
+          custom_name: `${template.name} (Installed)`
         })
       })
       
       const data = await response.json()
       
       if (data.success) {
-        alert(`Template "${template.name}" installed successfully!\n\nWorkflow ID: ${data.data.workflowId}\nInstructions: Check your n8n instance for the new workflow.`)
+        alert(`Template "${template.name}" installed successfully!\n\nWorkflow ID: ${data.data.workflow_id}\nn8n URL: ${data.data.n8n_url}`)
         
         // Update install count locally
         setTemplates(prev => prev.map(t => 
@@ -365,7 +401,11 @@ export default function TemplatesPage() {
             : t
         ))
       } else {
-        throw new Error(data.error || 'Installation failed')
+        if (data.requires_purchase) {
+          alert(`This is a premium template. Please purchase it first.\n\nPrice: $${(data.item.one_off_price_cents || 0) / 100}`)
+        } else {
+          throw new Error(data.error || 'Installation failed')
+        }
       }
     } catch (error) {
       console.error('Failed to install template:', error)
