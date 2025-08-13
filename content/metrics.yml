@@ -1,0 +1,338 @@
+# RP9 Analytics Metrics Governance
+# Definiciones oficiales de todas las métricas del sistema analytics
+
+version: "1.0"
+updated: "2024-01-15"
+owner: "Data Analytics Team"
+
+# NORTH STAR METRIC
+north_star_metric:
+  name: "ROI USD Mensual"
+  description: "Retorno de inversión en USD por mes, calculado como el valor de horas ahorradas menos costos de plataforma"
+  calculation: "(horas_ahorradas * $50/hora) - costos_plataforma_usd"
+  business_importance: "Métrica principal que mide el valor real generado por la plataforma para cada tenant"
+  target: "> $2000/mes para tenants enterprise"
+  alert_threshold:
+    critical: "< $0 (ROI negativo)"
+    high: "< $500/mes"
+    medium: "< $1000/mes"
+
+# EXECUTIVE METRICS
+executive_metrics:
+  
+  roi_usd:
+    name: "ROI en USD"
+    description: "Retorno de inversión calculado como valor generado menos costos"
+    formula: "valor_horas_ahorradas - costo_total_usd"
+    unit: "USD"
+    frequency: "daily"
+    source_tables: ["outcomes", "usage_executions", "kpi_rollups_daily"]
+    business_context: "Indica la rentabilidad real de usar la plataforma"
+    
+  ttv_days_avg:
+    name: "Time To Value Promedio"
+    description: "Días promedio desde signup hasta primer outcome exitoso"
+    formula: "AVG(fecha_primer_outcome - fecha_signup)"
+    unit: "días"
+    frequency: "weekly"
+    source_tables: ["outcomes", "tenants"]
+    business_context: "Mide qué tan rápido los usuarios obtienen valor de la plataforma"
+    target: "< 7 días"
+    
+  adoption_rate:
+    name: "Tasa de Adopción"
+    description: "Porcentaje de usuarios que completaron su primera ejecución exitosa"
+    formula: "(usuarios_con_primera_ejecucion / total_usuarios) * 100"
+    unit: "porcentaje"
+    frequency: "daily"
+    source_tables: ["funnel_events", "usage_executions"]
+    business_context: "Indica qué tan efectivo es el onboarding"
+    target: "> 75%"
+    
+  hours_saved_total:
+    name: "Horas Ahorradas Total"
+    description: "Total de horas de trabajo manual ahorradas mediante automatización"
+    formula: "SUM(hours_saved) FROM outcomes"
+    unit: "horas"
+    frequency: "daily"
+    source_tables: ["outcomes", "templates_metadata"]
+    business_context: "Cuantifica el impacto directo en productividad"
+
+# OPERATIONAL METRICS
+operational_metrics:
+  
+  success_rate:
+    name: "Tasa de Éxito"
+    description: "Porcentaje de ejecuciones que terminaron exitosamente"
+    formula: "(ejecuciones_exitosas / ejecuciones_totales) * 100"
+    unit: "porcentaje"
+    frequency: "realtime"
+    source_tables: ["usage_executions"]
+    business_context: "Indicador de estabilidad y confiabilidad de la plataforma"
+    sla: "> 95%"
+    
+  error_rate:
+    name: "Tasa de Error"
+    description: "Porcentaje de ejecuciones que fallaron"
+    formula: "(ejecuciones_error / ejecuciones_totales) * 100"
+    unit: "porcentaje"
+    frequency: "realtime"
+    source_tables: ["usage_executions"]
+    business_context: "Indicador inverso de calidad del servicio"
+    alert_threshold: "> 5%"
+    
+  p95_execution_time:
+    name: "P95 Tiempo de Ejecución"
+    description: "Percentil 95 del tiempo de ejecución de workflows"
+    formula: "PERCENTILE_95(execution_time_ms)"
+    unit: "milisegundos"
+    frequency: "hourly"
+    source_tables: ["usage_executions"]
+    business_context: "Mide performance y experiencia de usuario"
+    sla: "< 30 segundos"
+    
+  data_freshness_score:
+    name: "Score de Frescura de Datos"
+    description: "Porcentaje que indica qué tan actualizados están los datos analytics"
+    formula: "100 - ((lag_promedio_minutos / lag_maximo_aceptable) * 100)"
+    unit: "porcentaje"
+    frequency: "hourly"
+    source_tables: ["kpi_rollups_daily"]
+    business_context: "Indica confiabilidad de dashboards y reportes"
+    target: "> 90%"
+
+# FINANCIAL METRICS
+financial_metrics:
+  
+  cost_total_usd:
+    name: "Costo Total USD"
+    description: "Costo total de ejecuciones en la plataforma"
+    formula: "SUM(cost_usd) FROM usage_executions"
+    unit: "USD"
+    frequency: "daily"
+    source_tables: ["usage_executions"]
+    business_context: "Control de gastos operacionales"
+    
+  cost_per_execution:
+    name: "Costo por Ejecución"
+    description: "Costo promedio por ejecución individual"
+    formula: "costo_total / ejecuciones_totales"
+    unit: "USD"
+    frequency: "daily"
+    source_tables: ["usage_executions"]
+    business_context: "Eficiencia de costos operacionales"
+    benchmark: "< $0.05"
+    
+  savings_multiple:
+    name: "Múltiplo de Ahorros"
+    description: "Cuántas veces el valor generado supera los costos"
+    formula: "valor_horas_ahorradas / costo_total_usd"
+    unit: "ratio"
+    frequency: "daily"
+    source_tables: ["outcomes", "usage_executions"]
+    business_context: "Rentabilidad de la inversión en la plataforma"
+    target: "> 3x"
+
+# FUNNEL METRICS
+funnel_metrics:
+  
+  wizard_starts:
+    name: "Inicios de Wizard"
+    description: "Usuarios que iniciaron el wizard de onboarding"
+    formula: "COUNT(DISTINCT user_id) WHERE step = 'wizard_start'"
+    unit: "usuarios"
+    frequency: "realtime"
+    source_tables: ["funnel_events"]
+    business_context: "Top del embudo de conversión"
+    
+  template_installs:
+    name: "Instalaciones de Templates"
+    description: "Templates instalados por usuarios"
+    formula: "COUNT(DISTINCT user_id) WHERE step = 'template_install'"
+    unit: "instalaciones"
+    frequency: "realtime"
+    source_tables: ["funnel_events"]
+    business_context: "Segundo paso del embudo"
+    
+  first_executions:
+    name: "Primeras Ejecuciones"
+    description: "Usuarios que ejecutaron su primer workflow"
+    formula: "COUNT(DISTINCT user_id) WHERE step = 'first_execution'"
+    unit: "usuarios"
+    frequency: "realtime"
+    source_tables: ["funnel_events"]
+    business_context: "Paso de activación del embudo"
+    
+  conversion_rate:
+    name: "Tasa de Conversión Funnel"
+    description: "Porcentaje que completa el embudo completo"
+    formula: "(first_successes / wizard_starts) * 100"
+    unit: "porcentaje"
+    frequency: "daily"
+    source_tables: ["funnel_events"]
+    business_context: "Eficiencia del proceso de onboarding"
+    target: "> 60%"
+
+# COHORT METRICS
+cohort_metrics:
+  
+  ttv_rate:
+    name: "Tasa TTV por Cohorte"
+    description: "Porcentaje de usuarios que logran TTV en cada cohorte semanal"
+    formula: "(usuarios_con_ttv / usuarios_signup) * 100"
+    unit: "porcentaje"
+    frequency: "weekly"
+    source_tables: ["mv_ttv_cohorts_weekly"]
+    business_context: "Efectividad del onboarding por período de registro"
+    
+  retention_rate:
+    name: "Tasa de Retención"
+    description: "Porcentaje de usuarios activos después de N días"
+    formula: "(usuarios_activos_dia_N / usuarios_signup) * 100"
+    unit: "porcentaje"
+    frequency: "monthly"
+    source_tables: ["usage_executions", "tenants"]
+    business_context: "Engagement a largo plazo"
+
+# DATA QUALITY METRICS
+data_quality_metrics:
+  
+  data_collection_errors:
+    name: "Errores de Recolección"
+    description: "Errores en el proceso ETL de datos de n8n"
+    formula: "COUNT(errors) FROM collection logs"
+    unit: "errores"
+    frequency: "hourly"
+    source_tables: ["kpi_rollups_daily"]
+    business_context: "Confiabilidad del pipeline de datos"
+    alert_threshold: "> 10/hora"
+    
+  aggregation_lag:
+    name: "Lag de Agregación"
+    description: "Retraso en procesamiento de rollups diarios"
+    formula: "NOW() - MAX(updated_at) FROM kpi_rollups_daily"
+    unit: "minutos"
+    frequency: "hourly"
+    source_tables: ["kpi_rollups_daily"]
+    business_context: "Frescura de métricas agregadas"
+    sla: "< 60 minutos"
+
+# BUSINESS CONTEXT
+business_context:
+  
+  template_categories:
+    finance: "Templates de finanzas y contabilidad"
+    sales: "Templates de CRM y ventas"
+    marketing: "Templates de marketing digital"
+    hr: "Templates de recursos humanos"
+    operations: "Templates de operaciones y logística"
+    ecommerce: "Templates de e-commerce"
+    
+  outcome_categories:
+    cfdi: "Generación de facturas CFDI"
+    ticket: "Creación de tickets de soporte"
+    email: "Envío de emails automatizados"
+    payment: "Procesamiento de pagos"
+    invoice: "Generación de facturas"
+    report: "Generación de reportes"
+    other: "Otros outcomes de valor"
+    
+  execution_modes:
+    manual: "Ejecución manual por usuario"
+    trigger: "Ejecución por trigger automático"
+    webhook: "Ejecución vía webhook"
+    error: "Ejecución que falló"
+
+# CALCULATION STANDARDS
+calculation_standards:
+  
+  hours_saved_estimation:
+    description: "Estimación estándar de horas ahorradas por template"
+    methodology: "Basado en tiempo promedio de tarea manual vs automatizada"
+    hourly_rate: "$50 USD/hora"
+    review_frequency: "trimestral"
+    
+  cost_calculation:
+    description: "Cálculo de costo por ejecución"
+    factors: ["tiempo_ejecucion", "complejidad_nodos", "llamadas_api"]
+    base_rate: "$0.001/minuto"
+    review_frequency: "mensual"
+    
+  roi_methodology:
+    description: "Metodología de cálculo de ROI"
+    formula: "(valor_generado - costos_operacionales) / costos_operacionales"
+    currency: "USD"
+    period: "mensual"
+
+# ALERT CONFIGURATION
+alert_configuration:
+  
+  critical_alerts:
+    - metric: "success_rate"
+      condition: "< 95%"
+      notification: "slack_immediate"
+    - metric: "roi_usd"
+      condition: "< 0"
+      notification: "slack_immediate + email"
+      
+  high_alerts:
+    - metric: "error_rate"
+      condition: "> 10%"
+      notification: "slack_immediate"
+    - metric: "p95_execution_time"
+      condition: "> 30000ms"
+      notification: "slack_immediate"
+      
+  medium_alerts:
+    - metric: "ttv_days_avg"
+      condition: "> 14"
+      notification: "slack_summary"
+    - metric: "adoption_rate"
+      condition: "< 60%"
+      notification: "slack_summary"
+
+# REPORTING SCHEDULE
+reporting_schedule:
+  
+  daily_reports:
+    - "Operational Health Dashboard"
+    - "Cost Monitoring Report"
+    
+  weekly_reports:
+    - "Executive Summary"
+    - "Cohort Analysis Report"
+    
+  monthly_reports:
+    - "Comprehensive Analytics Report"
+    - "ROI Analysis Report"
+    - "Tenant Performance Review"
+
+# GOVERNANCE
+governance:
+  
+  data_owners:
+    executive_metrics: "VP of Product"
+    operational_metrics: "Head of Engineering"
+    financial_metrics: "CFO"
+    funnel_metrics: "Head of Growth"
+    
+  approval_process:
+    metric_changes: "Data Governance Committee"
+    new_metrics: "VP of Product + Head of Engineering"
+    calculation_changes: "Data Analytics Team + Business Owner"
+    
+  review_cycle:
+    quarterly: "Metric definitions and targets"
+    monthly: "Alert thresholds and SLAs"
+    weekly: "Data quality and freshness"
+
+# DOCUMENTATION
+documentation:
+  
+  changelog: "/docs/analytics-changelog.md"
+  technical_specs: "/docs/analytics-technical-specs.md"
+  business_glossary: "/docs/analytics-business-glossary.md"
+  troubleshooting: "/docs/analytics-troubleshooting.md"
+  
+  last_updated: "2024-01-15"
+  next_review: "2024-04-15"

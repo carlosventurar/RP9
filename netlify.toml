@@ -47,6 +47,19 @@
 [functions.renewal-dunning]
   schedule = "0 5 * * *"  # Daily renewal/dunning check at 05:00 UTC
 
+# Scheduled Functions - Fase 11: Analytics & Reporting
+[functions.analytics-collector]
+  schedule = "0,15,30,45 * * * *"  # Every 15 minutes - n8n data collection
+
+[functions.analytics-aggregate]
+  schedule = "0 2 * * *"  # Daily at 02:00 UTC - rollups and materialized views refresh
+
+[functions.analytics-lag-monitor]
+  schedule = "0 * * * *"  # Every hour - data lag monitoring and alerts
+
+[functions.analytics-alerts]
+  schedule = "0,30 * * * *"  # Every 30 minutes - anomaly detection and alerts
+
 # Fase 4: Security & SRE Functions
 [functions.backup-run]
   schedule = "0 2 * * *"  # Daily at 2:00 AM UTC
