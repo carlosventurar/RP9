@@ -25,7 +25,8 @@ interface Template {
 export default function TemplateReviewsPage() {
   const params = useParams()
   const router = useRouter()
-  const templateId = params?.id as string
+  // Use "slug" to match the segment name under /templates/[slug]
+  const templateKey = params?.slug as string
 
   const [template, setTemplate] = useState<Template | null>(null)
   const [reviewModalOpen, setReviewModalOpen] = useState(false)
@@ -33,11 +34,11 @@ export default function TemplateReviewsPage() {
 
   useEffect(() => {
     const fetchTemplate = async () => {
-      if (!templateId) return
+      if (!templateKey) return
 
       try {
-        // Fetch template details
-        const response = await fetch(`/api/templates?id=${templateId}`)
+        // Fetch template details (for now our mock API supports lookup by id param)
+        const response = await fetch(`/api/templates?id=${templateKey}`)
         const data = await response.json()
 
         if (data.success && data.data.length > 0) {
@@ -51,7 +52,7 @@ export default function TemplateReviewsPage() {
     }
 
     fetchTemplate()
-  }, [templateId])
+  }, [templateKey])
 
   const handleReviewSubmitted = () => {
     setReviewModalOpen(false)
@@ -157,7 +158,7 @@ export default function TemplateReviewsPage() {
       {/* Reviews Section */}
       <div className="bg-card border rounded-lg p-6">
         <ReviewsList 
-          templateId={templateId}
+          templateId={templateKey}
           showTitle={true}
         />
       </div>
@@ -172,3 +173,4 @@ export default function TemplateReviewsPage() {
     </div>
   )
 }
+
