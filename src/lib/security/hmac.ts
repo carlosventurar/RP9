@@ -18,11 +18,13 @@ export interface WebhookValidationResult {
 }
 
 /**
- * Generate HMAC signature for outgoing requests
+ * Generate HMAC signature for outgoing requests following RP9 Phase 9 spec
+ * Format: sha256=hmac(secret, timestamp + "\n" + rawBody)
  */
 export function generateHMACSignature(
   payload: string | Buffer, 
-  config: HMACConfig
+  config: HMACConfig,
+  timestamp?: string
 ): string {
   const { secret, algorithm = 'sha256', encoding = 'hex' } = config
   
@@ -30,19 +32,33 @@ export function generateHMACSignature(
     throw new Error('HMAC secret is required')
   }
 
+  // Phase 9 spec: timestamp + "\n" + rawBody
+  const ts = timestamp || Math.floor(Date.now() / 1000).toString()
+  const signaturePayload = `${ts}\n${payload}`
+
   const hmac = crypto.createHmac(algorithm, secret)
-  hmac.update(payload)
+  hmac.update(signaturePayload)
   return hmac.digest(encoding)
 }
 
 /**
+ * Sign body following RP9 Phase 9 specification
+ */
+export function signBody(bodyRaw: string, timestamp: string, secret: string): string {
+  const payload = `${timestamp}\n${bodyRaw}`
+  const mac = crypto.createHmac('sha256', secret).update(payload).digest('hex')
+  return `sha256=${mac}`
+}
+
+/**
  * Verify HMAC signature from incoming webhooks
- * Supports common webhook signature formats
+ * Supports common webhook signature formats and Phase 9 specification
  */
 export function verifyHMACSignature(
   payload: string | Buffer,
   receivedSignature: string,
-  config: HMACConfig
+  config: HMACConfig,
+  timestamp?: string
 ): WebhookValidationResult {
   try {
     const { secret, algorithm = 'sha256' } = config
@@ -56,7 +72,7 @@ export function verifyHMACSignature(
     }
 
     // Generate expected signature
-    const computedSignature = generateHMACSignature(payload, config)
+    const computedSignature = generateHMACSignature(payload, config, timestamp)
     
     // Clean up received signature (remove prefixes like 'sha256=')
     const cleanReceivedSignature = receivedSignature.replace(/^(sha256=|sha1=)/, '')
@@ -78,6 +94,36 @@ export function verifyHMACSignature(
       isValid: false,
       error: error instanceof Error ? error.message : 'Unknown HMAC verification error'
     }
+  }
+}
+
+/**
+ * Verify webhook signature following RP9 Phase 9 specification
+ * Validates timestamp window (±5 minutes by default)
+ */
+export function verifySignature(
+  bodyRaw: string, 
+  timestamp: string, 
+  signatureHeader: string | undefined, 
+  secret: string, 
+  skewSec: number = 300
+): boolean {
+  if (!signatureHeader) return false
+  
+  const now = Math.floor(Date.now() / 1000)
+  const ts = parseInt(timestamp || '0', 10)
+  
+  // Validate timestamp window
+  if (!ts || Math.abs(now - ts) > skewSec) return false
+  
+  const expected = signBody(bodyRaw, timestamp, secret)
+  
+  try {
+    const a = Buffer.from(signatureHeader.replace(/^sha256=/, '').trim(), 'hex')
+    const b = Buffer.from(expected.replace(/^sha256=/, '').trim(), 'hex')
+    return a.length === b.length && crypto.timingSafeEqual(a, b)
+  } catch {
+    return false
   }
 }
 

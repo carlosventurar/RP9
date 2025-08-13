@@ -27,6 +27,16 @@
 [functions.billing-dunning]
   schedule = "0 */4 * * *"  # Every 4 hours
 
+# Scheduled Functions - Fase 9: Security & Compliance
+[functions.schedule-rotate-keys]
+  schedule = "0 3 1 */3 *"  # Quarterly key rotation: 1st day at 03:00
+
+[functions.schedule-backup-restore-check]
+  schedule = "0 2 * * *"  # Daily backup test at 02:00 UTC
+
+[functions.security-cleanup]
+  schedule = "0 4 * * *"  # Daily security cleanup at 04:00 UTC
+
 # Fase 4: Security & SRE Functions
 [functions.backup-run]
   schedule = "0 2 * * *"  # Daily at 2:00 AM UTC

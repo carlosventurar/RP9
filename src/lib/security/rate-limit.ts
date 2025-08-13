@@ -1,7 +1,10 @@
 /**
- * Simple in-memory rate limiting for Netlify Functions
+ * Rate limiting for Netlify Functions
+ * Supports both in-memory cache and Supabase storage for Phase 9 compliance
  * For production, consider Redis-based rate limiting for better persistence
  */
+
+import { createClient } from '@supabase/supabase-js'
 
 interface RateLimitEntry {
   count: number
@@ -255,5 +258,164 @@ export function getRateLimitStats(): { totalEntries: number, oldestEntry: number
     totalEntries: store.size,
     oldestEntry: Math.min(...resetTimes),
     newestEntry: Math.max(...resetTimes)
+  }
+}
+
+// ===== PHASE 9 SPECIFIC FUNCTIONS =====
+
+interface Phase9RateLimitResult {
+  success: boolean
+  limit: number
+  remaining: number
+  resetTime: number
+  retryAfter?: number
+}
+
+/**
+ * Check rate limit using Supabase (Phase 9 specification)
+ * Key format: tenant:apikey or tenant:ip
+ */
+export async function checkRateLimitPhase9(
+  supabase: any,
+  key: string, 
+  maxPerMin: number = 300
+): Promise<Phase9RateLimitResult> {
+  const now = new Date()
+  const windowStart = new Date(
+    now.getFullYear(), 
+    now.getMonth(), 
+    now.getDate(), 
+    now.getHours(), 
+    now.getMinutes()
+  )
+  const windowIso = windowStart.toISOString()
+  const resetTime = windowStart.getTime() + 60000 // Next minute
+
+  try {
+    // Get or create rate limit entry
+    const { data, error } = await supabase
+      .from('rate_limits')
+      .select('*')
+      .eq('key', key)
+      .eq('window_start', windowIso)
+      .single()
+
+    let count = 0
+    
+    if (error && error.code === 'PGRST116') {
+      // No existing entry, create new one
+      const { data: newData, error: insertError } = await supabase
+        .from('rate_limits')
+        .insert({ key, window_start: windowIso, count: 1 })
+        .select()
+        .single()
+      
+      if (insertError) {
+        console.error('Rate limit insert error:', insertError)
+        return {
+          success: true, // Fail open
+          limit: maxPerMin,
+          remaining: maxPerMin - 1,
+          resetTime
+        }
+      }
+      
+      count = 1
+    } else if (error) {
+      console.error('Rate limit query error:', error)
+      return {
+        success: true, // Fail open
+        limit: maxPerMin,
+        remaining: maxPerMin,
+        resetTime
+      }
+    } else {
+      count = data.count
+      
+      // Check limits
+      if (count >= maxPerMin) {
+        return {
+          success: false,
+          limit: maxPerMin,
+          remaining: 0,
+          resetTime,
+          retryAfter: Math.ceil((resetTime - Date.now()) / 1000)
+        }
+      }
+      
+      // Increment counter
+      const { error: updateError } = await supabase
+        .from('rate_limits')
+        .update({ count: count + 1 })
+        .eq('key', key)
+        .eq('window_start', windowIso)
+      
+      if (updateError) {
+        console.error('Rate limit update error:', updateError)
+      }
+      
+      count = count + 1
+    }
+
+    return {
+      success: true,
+      limit: maxPerMin,
+      remaining: maxPerMin - count,
+      resetTime
+    }
+  } catch (error) {
+    console.error('Rate limit check error:', error)
+    // Fail open for availability
+    return {
+      success: true,
+      limit: maxPerMin,
+      remaining: maxPerMin,
+      resetTime
+    }
+  }
+}
+
+/**
+ * Generate rate limit key for tenant and API key (Phase 9)
+ */
+export function generateRateLimitKeyPhase9(tenantId: string, apiKeyPrefix?: string, ip?: string): string {
+  if (apiKeyPrefix) {
+    return `tenant:${tenantId}:key:${apiKeyPrefix}`
+  }
+  if (ip) {
+    return `tenant:${tenantId}:ip:${ip}`
+  }
+  return `tenant:${tenantId}`
+}
+
+/**
+ * Middleware for Phase 9 specification with Supabase
+ */
+export async function rateLimitMiddlewarePhase9(
+  supabase: any,
+  tenantId: string,
+  apiKeyPrefix?: string,
+  ip?: string,
+  maxPerMin?: number
+): Promise<Phase9RateLimitResult> {
+  const key = generateRateLimitKeyPhase9(tenantId, apiKeyPrefix, ip)
+  const limit = maxPerMin || parseInt(process.env.RATE_LIMIT_MAX_PER_MIN || '300')
+  
+  return checkRateLimitPhase9(supabase, key, limit)
+}
+
+/**
+ * Clean up old rate limit entries (for maintenance)
+ */
+export async function cleanupRateLimitsPhase9(supabase: any, olderThanHours: number = 2): Promise<void> {
+  const cutoff = new Date(Date.now() - olderThanHours * 60 * 60 * 1000)
+  
+  try {
+    await supabase
+      .from('rate_limits')
+      .delete()
+      .lt('window_start', cutoff.toISOString())
+  } catch (error) {
+    console.error('Error cleaning up rate limits:', error)
   }
 }
