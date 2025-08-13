@@ -286,7 +286,7 @@ export default function KnowledgeBasePage() {
         </Button>
       </div>
 
-      <div className=\"space-y-6\">
+      <div className="space-y-6">
         <div>
           <h1 className=\"text-3xl font-bold flex items-center gap-3\">
             <BookOpen className=\"h-8 w-8\" />

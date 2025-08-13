@@ -289,9 +289,9 @@ export default function HealthScorePage() {
 
   if (loading) {
     return (
-      <div className=\"min-h-screen flex items-center justify-center\">
-        <div className=\"text-center\">
-          <RefreshCw className=\"h-8 w-8 animate-spin mx-auto mb-4\" />
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <RefreshCw className="h-8 w-8 animate-spin mx-auto mb-4" />
           <p>Cargando Health Score...</p>
         </div>
       </div>
@@ -300,9 +300,9 @@ export default function HealthScorePage() {
 
   if (!currentScore) {
     return (
-      <div className=\"container mx-auto py-6\">
+      <div className="container mx-auto py-6">
         <Alert>
-          <AlertTriangle className=\"h-4 w-4\" />
+          <AlertTriangle className="h-4 w-4" />
           <AlertDescription>
             No se pudo cargar el Health Score. Intenta refrescar la página.
           </AlertDescription>
@@ -314,12 +314,12 @@ export default function HealthScorePage() {
   const riskInfo = riskConfig[currentScore.risk_level]
 
   return (
-    <div className=\"container mx-auto py-6 space-y-6\">
+    <div className="container mx-auto py-6 space-y-6">
       {/* Header */}
-      <div className=\"flex items-center gap-4 mb-6\">
-        <Button variant=\"ghost\" size=\"sm\" asChild>
-          <Link href=\"/support\">
-            <ArrowLeft className=\"h-4 w-4 mr-2\" />
+      <div className="flex items-center gap-4 mb-6">
+        <Button variant="ghost" size="sm" asChild>
+          <Link href="/support">
+            <ArrowLeft className="h-4 w-4 mr-2" />
             Volver a Soporte
           </Link>
         </Button>

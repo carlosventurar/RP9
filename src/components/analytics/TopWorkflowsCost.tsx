@@ -180,7 +180,7 @@ export function TopWorkflowsCost({ data }: TopWorkflowsCostProps) {
           <h4 className="font-medium text-orange-800 mb-2">🎯 Oportunidades de Optimización</h4>
           <div className="text-sm text-orange-700 space-y-1">
             {data.filter(w => w.avg_cost > 0.10).length > 0 && (
-              <p>• <strong>{data.filter(w => w.avg_cost > 0.10).length}</strong> workflows con costo >$0.10 por ejecución</p>
+              <p>• <strong>{data.filter(w => w.avg_cost > 0.10).length}</strong> workflows con costo &gt;$0.10 por ejecución</p>
             )}
             {data.filter(w => w.execution_count > 1000 && w.avg_cost > 0.05).length > 0 && (
               <p>• <strong>{data.filter(w => w.execution_count > 1000 && w.avg_cost > 0.05).length}</strong> workflows de alto volumen y costo</p>
@@ -208,7 +208,7 @@ export function TopWorkflowsCost({ data }: TopWorkflowsCostProps) {
         </div>
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 rounded" style={{ backgroundColor: '#ef4444' }}></div>
-          <span className="text-xs">>$0.10 (Crítico)</span>
+          <span className="text-xs">&gt;$0.10 (Crítico)</span>
         </div>
       </div>
     </div>
