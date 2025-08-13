@@ -193,10 +193,10 @@ export default function NewTicketPage() {
   }
 
   return (
-    <div className=\"container mx-auto py-6 max-w-4xl\">
+    <div className="container mx-auto py-6 max-w-4xl">
       {/* Header */}
-      <div className=\"flex items-center gap-4 mb-6\">
-        <Button variant=\"ghost\" size=\"sm\" asChild>
+      <div className="flex items-center gap-4 mb-6">
+        <Button variant="ghost" size="sm" asChild>
           <Link href=\"/support\">
             <ArrowLeft className=\"h-4 w-4 mr-2\" />
             Volver a Soporte

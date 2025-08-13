@@ -325,26 +325,26 @@ export default function HealthScorePage() {
         </Button>
       </div>
 
-      <div className=\"space-y-6\">
-        <div className=\"flex items-center justify-between\">
+      <div className="space-y-6">
+        <div className="flex items-center justify-between">
           <div>
-            <h1 className=\"text-3xl font-bold flex items-center gap-3\">
-              <Heart className=\"h-8 w-8\" />
+            <h1 className="text-3xl font-bold flex items-center gap-3">
+              <Heart className="h-8 w-8" />
               Health Score del Cliente
             </h1>
-            <p className=\"text-muted-foreground mt-2\">
+            <p className="text-muted-foreground mt-2">
               Puntuación integral del estado de tu cuenta y uso de la plataforma
             </p>
           </div>
-          
-          <div className=\"flex items-center gap-3\">
-            <div className=\"text-sm text-muted-foreground\">
+
+          <div className="flex items-center gap-3">
+            <div className="text-sm text-muted-foreground">
               Actualizado {formatTimeAgo(currentScore.created_at)}
             </div>
-            <Button 
-              variant=\"outline\" 
-              size=\"sm\" 
-              onClick={recalculateScore} 
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={recalculateScore}
               disabled={refreshing}
             >
               <RefreshCw className={`h-4 w-4 mr-2 ${refreshing ? 'animate-spin' : ''}`} />
@@ -354,17 +354,17 @@ export default function HealthScorePage() {
         </div>
 
         {/* Score principal */}
-        <div className=\"grid grid-cols-1 lg:grid-cols-3 gap-6\">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Score actual */}
           <Card className={`lg:col-span-1 ${riskInfo.bgColor} border-2`}>
-            <CardContent className=\"p-6 text-center\">
-              <div className=\"space-y-4\">
-                <div className=\"text-6xl font-bold flex items-center justify-center gap-2\">
+            <CardContent className="p-6 text-center">
+              <div className="space-y-4">
+                <div className="text-6xl font-bold flex items-center justify-center gap-2">
                   {currentScore.score}
-                  <span className=\"text-2xl text-muted-foreground\">/100</span>
+                  <span className="text-2xl text-muted-foreground">/100</span>
                   {getTrendIcon()}
                 </div>
-                
+
                 <div>
                   <Badge className={`${riskInfo.color} text-white text-lg px-4 py-1`}>
                     {riskInfo.icon} {riskInfo.label}
@@ -374,9 +374,9 @@ export default function HealthScorePage() {
                   </p>
                 </div>
 
-                <Progress 
-                  value={currentScore.score} 
-                  className=\"h-3\"
+                <Progress
+                  value={currentScore.score}
+                  className="h-3"
                 />
               </div>
             </CardContent>

@@ -147,9 +147,9 @@ export default function SupportPage() {
 
   if (loading) {
     return (
-      <div className=\"min-h-screen flex items-center justify-center\">
-        <div className=\"text-center\">
-          <RefreshCw className=\"h-8 w-8 animate-spin mx-auto mb-4\" />
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <RefreshCw className="h-8 w-8 animate-spin mx-auto mb-4" />
           <p>Cargando tickets...</p>
         </div>
       </div>

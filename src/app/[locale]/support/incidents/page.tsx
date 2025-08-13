@@ -252,9 +252,9 @@ export default function IncidentsPage() {
       </div>
 
       <div className="space-y-6">
-        <div className=\"flex items-center justify-between\">
+        <div className="flex items-center justify-between">
           <div>
-            <h1 className=\"text-3xl font-bold flex items-center gap-3\">
+            <h1 className="text-3xl font-bold flex items-center gap-3">
               <Activity className=\"h-8 w-8\" />
               Estado del Sistema
             </h1>
