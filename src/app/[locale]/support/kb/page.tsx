@@ -292,36 +292,36 @@ export default function KnowledgeBasePage() {
             <BookOpen className="h-8 w-8" />
             Base de Conocimiento
           </h1>
-          <p className=\"text-muted-foreground mt-2\">
+          <p className="text-muted-foreground mt-2">
             Encuentra respuestas a preguntas frecuentes y aprende a usar RP9 al máximo
           </p>
         </div>
 
         {/* Búsqueda y filtros */}
         <Card>
-          <CardContent className=\"p-6\">
-            <div className=\"space-y-4\">
+          <CardContent className="p-6">
+            <div className="space-y-4">
               {/* Barra de búsqueda */}
-              <div className=\"relative\">
-                <Search className=\"h-4 w-4 absolute left-3 top-3 text-muted-foreground\" />
+              <div className="relative">
+                <Search className="h-4 w-4 absolute left-3 top-3 text-muted-foreground" />
                 <Input
-                  placeholder=\"Buscar artículos, guías, tutoriales...\"
+                  placeholder="Buscar artículos, guías, tutoriales..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className=\"pl-10 text-base\"
+                  className="pl-10 text-base"
                 />
               </div>
 
               {/* Filtros */}
-              <div className=\"flex flex-wrap gap-4 items-center\">
-                <div className=\"flex items-center gap-2\">
-                  <Filter className=\"h-4 w-4 text-muted-foreground\" />
+              <div className="flex flex-wrap gap-4 items-center">
+                <div className="flex items-center gap-2">
+                  <Filter className="h-4 w-4 text-muted-foreground" />
                   <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-                    <SelectTrigger className=\"w-48\">
+                    <SelectTrigger className="w-48">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value=\"all\">Todas las categorías</SelectItem>
+                      <SelectItem value="all">Todas las categorías</SelectItem>
                       {categories.map((category) => (
                         <SelectItem key={category.id} value={category.id}>
                           {category.icon} {category.name}
@@ -331,28 +331,28 @@ export default function KnowledgeBasePage() {
                   </Select>
                 </div>
 
-                <div className=\"flex items-center gap-2\">
-                  <span className=\"text-sm text-muted-foreground\">Ordenar por:</span>
+                <div className="flex items-center gap-2">
+                  <span className="text-sm text-muted-foreground">Ordenar por:</span>
                   <Select value={sortBy} onValueChange={setSortBy}>
-                    <SelectTrigger className=\"w-40\">
+                    <SelectTrigger className="w-40">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value=\"popular\">
-                        <div className=\"flex items-center gap-2\">
-                          <Eye className=\"h-4 w-4\" />
+                      <SelectItem value="popular">
+                        <div className="flex items-center gap-2">
+                          <Eye className="h-4 w-4" />
                           Más visto
                         </div>
                       </SelectItem>
-                      <SelectItem value=\"recent\">
-                        <div className=\"flex items-center gap-2\">
-                          <TrendingUp className=\"h-4 w-4\" />
+                      <SelectItem value="recent">
+                        <div className="flex items-center gap-2">
+                          <TrendingUp className="h-4 w-4" />
                           Más reciente
                         </div>
                       </SelectItem>
-                      <SelectItem value=\"helpful\">
-                        <div className=\"flex items-center gap-2\">
-                          <ThumbsUp className=\"h-4 w-4\" />
+                      <SelectItem value="helpful">
+                        <div className="flex items-center gap-2">
+                          <ThumbsUp className="h-4 w-4" />
                           Más útil
                         </div>
                       </SelectItem>
@@ -362,7 +362,7 @@ export default function KnowledgeBasePage() {
               </div>
 
               {/* Estadísticas */}
-              <div className=\"flex items-center gap-6 text-sm text-muted-foreground pt-2 border-t\">
+              <div className="flex items-center gap-6 text-sm text-muted-foreground pt-2 border-t">
                 <span>{filteredArticles.length} artículos encontrados</span>
                 <span>{categories.reduce((sum, cat) => sum + cat.article_count, 0)} artículos totales</span>
                 <span>{categories.length} categorías</span>
@@ -371,25 +371,25 @@ export default function KnowledgeBasePage() {
           </CardContent>
         </Card>
 
-        <Tabs defaultValue=\"articles\" className=\"space-y-6\">
+        <Tabs defaultValue="articles" className="space-y-6">
           <TabsList>
-            <TabsTrigger value=\"articles\">Artículos ({filteredArticles.length})</TabsTrigger>
-            <TabsTrigger value=\"categories\">Categorías ({categories.length})</TabsTrigger>
+            <TabsTrigger value="articles">Artículos ({filteredArticles.length})</TabsTrigger>
+            <TabsTrigger value="categories">Categorías ({categories.length})</TabsTrigger>
           </TabsList>
 
           {/* Lista de artículos */}
-          <TabsContent value=\"articles\" className=\"space-y-4\">
+          <TabsContent value="articles" className="space-y-4">
             {filteredArticles.length === 0 ? (
               <Card>
-                <CardContent className=\"p-8 text-center\">
-                  <BookOpen className=\"h-12 w-12 mx-auto mb-4 text-muted-foreground\" />
-                  <h3 className=\"text-lg font-semibold mb-2\">No se encontraron artículos</h3>
-                  <p className=\"text-muted-foreground mb-4\">
+                <CardContent className="p-8 text-center">
+                  <BookOpen className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+                  <h3 className="text-lg font-semibold mb-2">No se encontraron artículos</h3>
+                  <p className="text-muted-foreground mb-4">
                     {searchTerm || selectedCategory !== 'all'
                       ? 'Intenta ajustar los filtros de búsqueda'
                       : 'Aún no hay artículos disponibles'}
                   </p>
-                  <Button variant=\"outline\" onClick={() => {
+                  <Button variant="outline" onClick={() => {
                     setSearchTerm('')
                     setSelectedCategory('all')
                   }}>
@@ -398,31 +398,31 @@ export default function KnowledgeBasePage() {
                 </CardContent>
               </Card>
             ) : (
-              <div className=\"grid grid-cols-1 lg:grid-cols-2 gap-6\">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {filteredArticles.map((article) => {
                   const category = categories.find(c => c.id === article.category)
                   const helpfulPercentage = getHelpfulPercentage(article)
                   
                   return (
-                    <Card key={article.id} className=\"hover:shadow-md transition-shadow group\">
-                      <CardContent className=\"p-6\">
-                        <div className=\"space-y-3\">
+                    <Card key={article.id} className="hover:shadow-md transition-shadow group">
+                      <CardContent className="p-6">
+                        <div className="space-y-3">
                           {/* Header */}
-                          <div className=\"flex items-start justify-between\">
-                            <div className=\"flex items-center gap-2\">
+                          <div className="flex items-start justify-between">
+                            <div className="flex items-center gap-2">
                               {category && (
-                                <Badge variant=\"secondary\">
+                                <Badge variant="secondary">
                                   {category.icon} {category.name}
                                 </Badge>
                               )}
-                              <div className=\"flex items-center gap-1 text-sm text-muted-foreground\">
-                                <Eye className=\"h-3 w-3\" />
+                              <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                                <Eye className="h-3 w-3" />
                                 {article.views_count}
                               </div>
                             </div>
                             {helpfulPercentage > 0 && (
-                              <div className=\"flex items-center gap-1 text-sm text-green-600\">
-                                <ThumbsUp className=\"h-3 w-3\" />
+                              <div className="flex items-center gap-1 text-sm text-green-600">
+                                <ThumbsUp className="h-3 w-3" />
                                 {helpfulPercentage}%
                               </div>
                             )}
@@ -430,26 +430,26 @@ export default function KnowledgeBasePage() {
 
                           {/* Título y excerpt */}
                           <div>
-                            <h3 className=\"font-semibold text-lg mb-2 group-hover:text-primary transition-colors\">
+                            <h3 className="font-semibold text-lg mb-2 group-hover:text-primary transition-colors">
                               <Link href={`/support/kb/${article.slug}`}>
                                 {article.title}
                               </Link>
                             </h3>
-                            <p className=\"text-muted-foreground text-sm leading-relaxed\">
+                            <p className="text-muted-foreground text-sm leading-relaxed">
                               {article.excerpt}
                             </p>
                           </div>
 
                           {/* Tags */}
                           {article.tags.length > 0 && (
-                            <div className=\"flex flex-wrap gap-1\">
+                            <div className="flex flex-wrap gap-1">
                               {article.tags.slice(0, 4).map((tag) => (
-                                <Badge key={tag} variant=\"outline\" className=\"text-xs\">
+                                <Badge key={tag} variant="outline" className="text-xs">
                                   {tag}
                                 </Badge>
                               ))}
                               {article.tags.length > 4 && (
-                                <Badge variant=\"outline\" className=\"text-xs text-muted-foreground\">
+                                <Badge variant="outline" className="text-xs text-muted-foreground">
                                   +{article.tags.length - 4}
                                 </Badge>
                               )}
@@ -457,27 +457,27 @@ export default function KnowledgeBasePage() {
                           )}
 
                           {/* Footer */}
-                          <div className=\"flex items-center justify-between pt-2 border-t\">
-                            <div className=\"text-xs text-muted-foreground\">
+                          <div className="flex items-center justify-between pt-2 border-t">
+                            <div className="text-xs text-muted-foreground">
                               Por {article.author} • Actualizado {formatTimeAgo(article.updated_at)}
                             </div>
-                            <div className=\"flex items-center gap-2\">
+                            <div className="flex items-center gap-2">
                               <Button
-                                variant=\"ghost\"
-                                size=\"sm\"
+                                variant="ghost"
+                                size="sm"
                                 onClick={() => handleFeedback(article.id, true)}
-                                className=\"h-8 px-2\"
+                                className="h-8 px-2"
                               >
-                                <ThumbsUp className=\"h-3 w-3 mr-1\" />
+                                <ThumbsUp className="h-3 w-3 mr-1" />
                                 {article.helpful_count}
                               </Button>
                               <Button
-                                variant=\"ghost\"
-                                size=\"sm\"
+                                variant="ghost"
+                                size="sm"
                                 onClick={() => handleFeedback(article.id, false)}
-                                className=\"h-8 px-2\"
+                                className="h-8 px-2"
                               >
-                                <ThumbsDown className=\"h-3 w-3 mr-1\" />
+                                <ThumbsDown className="h-3 w-3 mr-1" />
                                 {article.not_helpful_count}
                               </Button>
                             </div>
@@ -492,30 +492,30 @@ export default function KnowledgeBasePage() {
           </TabsContent>
 
           {/* Lista de categorías */}
-          <TabsContent value=\"categories\" className=\"space-y-4\">
-            <div className=\"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6\">
+          <TabsContent value="categories" className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {categories.map((category) => (
-                <Card key={category.id} className=\"hover:shadow-md transition-shadow\">
-                  <CardContent className=\"p-6\">
-                    <div className=\"text-center space-y-3\">
-                      <div className=\"text-4xl\">{category.icon}</div>
+                <Card key={category.id} className="hover:shadow-md transition-shadow">
+                  <CardContent className="p-6">
+                    <div className="text-center space-y-3">
+                      <div className="text-4xl">{category.icon}</div>
                       <div>
-                        <h3 className=\"font-semibold text-lg\">{category.name}</h3>
-                        <p className=\"text-sm text-muted-foreground mt-1\">
+                        <h3 className="font-semibold text-lg">{category.name}</h3>
+                        <p className="text-sm text-muted-foreground mt-1">
                           {category.description}
                         </p>
                       </div>
-                      <div className=\"flex items-center justify-between text-sm\">
-                        <span className=\"text-muted-foreground\">
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-muted-foreground">
                           {category.article_count} artículos
                         </span>
                         <Button 
-                          variant=\"outline\" 
-                          size=\"sm\"
+                          variant="outline" 
+                          size="sm"
                           onClick={() => {
                             setSelectedCategory(category.id)
                             // Cambiar a tab de artículos automáticamente
-                            document.querySelector('[value=\"articles\"]')?.click()
+                            document.querySelector('[value="articles"]')?.click()
                           }}
                         >
                           Explorar
@@ -531,20 +531,20 @@ export default function KnowledgeBasePage() {
 
         {/* CTA */}
         <Card>
-          <CardContent className=\"p-6 text-center\">
-            <h3 className=\"text-lg font-semibold mb-2 flex items-center justify-center gap-2\">
-              <MessageSquare className=\"h-5 w-5\" />
+          <CardContent className="p-6 text-center">
+            <h3 className="text-lg font-semibold mb-2 flex items-center justify-center gap-2">
+              <MessageSquare className="h-5 w-5" />
               ¿No encuentras lo que buscas?
             </h3>
-            <p className=\"text-muted-foreground mb-4\">
+            <p className="text-muted-foreground mb-4">
               Nuestro equipo de soporte está aquí para ayudarte con cualquier pregunta
             </p>
-            <div className=\"flex justify-center gap-3\">
+            <div className="flex justify-center gap-3">
               <Button asChild>
-                <Link href=\"/support/new\">Crear Ticket de Soporte</Link>
+                <Link href="/support/new">Crear Ticket de Soporte</Link>
               </Button>
-              <Button variant=\"outline\" asChild>
-                <Link href=\"/support\">Ver Todos los Tickets</Link>
+              <Button variant="outline" asChild>
+                <Link href="/support">Ver Todos los Tickets</Link>
               </Button>
             </div>
           </CardContent>

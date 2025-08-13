@@ -255,27 +255,27 @@ export default function IncidentsPage() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold flex items-center gap-3">
-              <Activity className=\"h-8 w-8\" />
+              <Activity className="h-8 w-8" />
               Estado del Sistema
             </h1>
-            <p className=\"text-muted-foreground mt-2\">
+            <p className="text-muted-foreground mt-2">
               Estado actual de nuestros servicios e incidentes activos
             </p>
           </div>
           
-          <div className=\"flex items-center gap-3\">
-            <div className=\"text-sm text-muted-foreground\">
+          <div className="flex items-center gap-3">
+            <div className="text-sm text-muted-foreground">
               Actualizado {formatTimeAgo(lastUpdated.toISOString())}
             </div>
-            <Button variant=\"outline\" size=\"sm\" onClick={loadIncidents} disabled={loading}>
+            <Button variant="outline" size="sm" onClick={loadIncidents} disabled={loading}>
               <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
               Actualizar
             </Button>
-            <Button variant=\"outline\" size=\"sm\" asChild>
-              <Link href=\"https://status.rp9.com\" target=\"_blank\">
-                <Globe className=\"h-4 w-4 mr-2\" />
+            <Button variant="outline" size="sm" asChild>
+              <Link href="https://status.rp9.com" target="_blank">
+                <Globe className="h-4 w-4 mr-2" />
                 Página de Estado
-                <ExternalLink className=\"h-3 w-3 ml-1\" />
+                <ExternalLink className="h-3 w-3 ml-1" />
               </Link>
             </Button>
           </div>
@@ -283,49 +283,49 @@ export default function IncidentsPage() {
 
         {/* Estado general */}
         <Card>
-          <CardContent className=\"p-6\">
-            <div className=\"flex items-center justify-between\">
-              <div className=\"flex items-center gap-3\">
-                <div className=\"text-2xl\">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="text-2xl">
                   {componentStatusConfig[overallStatus].icon}
                 </div>
                 <div>
-                  <h2 className=\"text-xl font-semibold\">
+                  <h2 className="text-xl font-semibold">
                     {overallStatus === 'operational' 
                       ? 'Todos los sistemas operativos' 
                       : 'Algunos sistemas afectados'}
                   </h2>
-                  <p className=\"text-muted-foreground\">
+                  <p className="text-muted-foreground">
                     {overallStatus === 'operational' 
                       ? 'Todos nuestros servicios están funcionando normalmente'
                       : `${activeIncidents.length} incidente${activeIncidents.length !== 1 ? 's' : ''} activo${activeIncidents.length !== 1 ? 's' : ''}`}
                   </p>
                 </div>
               </div>
-              <Badge variant={componentStatusConfig[overallStatus].color} className=\"text-sm\">
+              <Badge variant={componentStatusConfig[overallStatus].color} className="text-sm">
                 {componentStatusConfig[overallStatus].label}
               </Badge>
             </div>
           </CardContent>
         </Card>
 
-        <Tabs defaultValue=\"current\" className=\"space-y-6\">
+        <Tabs defaultValue="current" className="space-y-6">
           <TabsList>
-            <TabsTrigger value=\"current\">
+            <TabsTrigger value="current">
               Incidentes Actuales ({activeIncidents.length})
             </TabsTrigger>
-            <TabsTrigger value=\"components\">Estado de Componentes</TabsTrigger>
-            <TabsTrigger value=\"history\">Historial</TabsTrigger>
+            <TabsTrigger value="components">Estado de Componentes</TabsTrigger>
+            <TabsTrigger value="history">Historial</TabsTrigger>
           </TabsList>
 
           {/* Incidentes actuales */}
-          <TabsContent value=\"current\" className=\"space-y-4\">
+          <TabsContent value="current" className="space-y-4">
             {activeIncidents.length === 0 ? (
               <Card>
-                <CardContent className=\"p-8 text-center\">
-                  <CheckCircle className=\"h-12 w-12 mx-auto mb-4 text-green-500\" />
-                  <h3 className=\"text-lg font-semibold mb-2\">No hay incidentes activos</h3>
-                  <p className=\"text-muted-foreground\">
+                <CardContent className="p-8 text-center">
+                  <CheckCircle className="h-12 w-12 mx-auto mb-4 text-green-500" />
+                  <h3 className="text-lg font-semibold mb-2">No hay incidentes activos</h3>
+                  <p className="text-muted-foreground">
                     Todos nuestros servicios están funcionando normalmente
                   </p>
                 </CardContent>
@@ -334,9 +334,9 @@ export default function IncidentsPage() {
               activeIncidents.map((incident) => (
                 <Card key={incident.id}>
                   <CardHeader>
-                    <div className=\"flex items-start justify-between\">
+                    <div className="flex items-start justify-between">
                       <div>
-                        <CardTitle className=\"flex items-center gap-3\">
+                        <CardTitle className="flex items-center gap-3">
                           {severityConfig[incident.severity].icon} {incident.title}
                           <Badge variant={severityConfig[incident.severity].color}>
                             {incident.severity}
@@ -345,35 +345,35 @@ export default function IncidentsPage() {
                             {statusConfig[incident.status].icon} {statusConfig[incident.status].label}
                           </Badge>
                         </CardTitle>
-                        <CardDescription className=\"mt-2\">
+                        <CardDescription className="mt-2">
                           {incident.description}
                         </CardDescription>
                       </div>
                       
                       {incident.status_provider_id && (
-                        <Button variant=\"outline\" size=\"sm\" asChild>
-                          <Link href={`https://status.rp9.com/incidents/${incident.status_provider_id}`} target=\"_blank\">
-                            <ExternalLink className=\"h-4 w-4 mr-2\" />
+                        <Button variant="outline" size="sm" asChild>
+                          <Link href={`https://status.rp9.com/incidents/${incident.status_provider_id}`} target="_blank">
+                            <ExternalLink className="h-4 w-4 mr-2" />
                             Ver en Status Page
                           </Link>
                         </Button>
                       )}
                     </div>
                   </CardHeader>
-                  <CardContent className=\"space-y-4\">
+                  <CardContent className="space-y-4">
                     {/* Información del incidente */}
-                    <div className=\"grid grid-cols-1 md:grid-cols-3 gap-4 text-sm\">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
                       <div>
-                        <span className=\"font-medium\">Impacto:</span>
-                        <p className=\"text-muted-foreground\">{incident.impact || 'Evaluando impacto'}</p>
+                        <span className="font-medium">Impacto:</span>
+                        <p className="text-muted-foreground">{incident.impact || 'Evaluando impacto'}</p>
                       </div>
                       <div>
-                        <span className=\"font-medium\">Servicios afectados:</span>
-                        <p className=\"text-muted-foreground\">{incident.affected_services.join(', ')}</p>
+                        <span className="font-medium">Servicios afectados:</span>
+                        <p className="text-muted-foreground">{incident.affected_services.join(', ')}</p>
                       </div>
                       <div>
-                        <span className=\"font-medium\">Tiempo estimado:</span>
-                        <p className=\"text-muted-foreground\">
+                        <span className="font-medium">Tiempo estimado:</span>
+                        <p className="text-muted-foreground">
                           {incident.eta 
                             ? new Date(incident.eta).toLocaleString('es-MX')
                             : 'Por determinar'}
@@ -383,31 +383,31 @@ export default function IncidentsPage() {
 
                     {/* Timeline de updates */}
                     <div>
-                      <h4 className=\"font-medium mb-3 flex items-center gap-2\">
-                        <Clock className=\"h-4 w-4\" />
+                      <h4 className="font-medium mb-3 flex items-center gap-2">
+                        <Clock className="h-4 w-4" />
                         Actualizaciones
                       </h4>
-                      <div className=\"space-y-3\">
+                      <div className="space-y-3">
                         {incident.updates.map((update) => (
-                          <div key={update.id} className=\"flex gap-3 p-3 bg-muted/50 rounded\">
-                            <div className=\"text-sm text-muted-foreground whitespace-nowrap\">
+                          <div key={update.id} className="flex gap-3 p-3 bg-muted/50 rounded">
+                            <div className="text-sm text-muted-foreground whitespace-nowrap">
                               {formatTimeAgo(update.at)}
                             </div>
-                            <div className=\"flex-1\">
-                              <div className=\"flex items-center gap-2 mb-1\">
-                                <Badge variant={statusConfig[update.status as keyof typeof statusConfig].color} className=\"text-xs\">
+                            <div className="flex-1">
+                              <div className="flex items-center gap-2 mb-1">
+                                <Badge variant={statusConfig[update.status as keyof typeof statusConfig].color} className="text-xs">
                                   {statusConfig[update.status as keyof typeof statusConfig].label}
                                 </Badge>
                                 {update.published_externally && (
-                                  <Badge variant=\"outline\" className=\"text-xs\">
-                                    <Globe className=\"h-3 w-3 mr-1\" />
+                                  <Badge variant="outline" className="text-xs">
+                                    <Globe className="h-3 w-3 mr-1" />
                                     Público
                                   </Badge>
                                 )}
                               </div>
-                              <p className=\"text-sm\">{update.message}</p>
+                              <p className="text-sm">{update.message}</p>
                               {update.by_user && (
-                                <p className=\"text-xs text-muted-foreground mt-1\">
+                                <p className="text-xs text-muted-foreground mt-1">
                                   Por {update.by_user}
                                 </p>
                               )}
@@ -423,19 +423,19 @@ export default function IncidentsPage() {
           </TabsContent>
 
           {/* Estado de componentes */}
-          <TabsContent value=\"components\" className=\"space-y-4\">
-            <div className=\"grid grid-cols-1 md:grid-cols-2 gap-4\">
+          <TabsContent value="components" className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {systemStatus.map((component) => (
                 <Card key={component.component}>
-                  <CardContent className=\"p-4\">
-                    <div className=\"flex items-center justify-between mb-2\">
-                      <h3 className=\"font-medium\">{component.component}</h3>
+                  <CardContent className="p-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <h3 className="font-medium">{component.component}</h3>
                       <Badge variant={componentStatusConfig[component.status].color}>
                         {componentStatusConfig[component.status].icon} {componentStatusConfig[component.status].label}
                       </Badge>
                     </div>
                     {component.description && (
-                      <p className=\"text-sm text-muted-foreground\">{component.description}</p>
+                      <p className="text-sm text-muted-foreground">{component.description}</p>
                     )}
                   </CardContent>
                 </Card>
@@ -444,31 +444,31 @@ export default function IncidentsPage() {
           </TabsContent>
 
           {/* Historial */}
-          <TabsContent value=\"history\" className=\"space-y-4\">
+          <TabsContent value="history" className="space-y-4">
             {resolvedIncidents.length === 0 ? (
               <Card>
-                <CardContent className=\"p-8 text-center\">
-                  <Clock className=\"h-12 w-12 mx-auto mb-4 text-muted-foreground\" />
-                  <h3 className=\"text-lg font-semibold mb-2\">No hay incidentes recientes</h3>
-                  <p className=\"text-muted-foreground\">
+                <CardContent className="p-8 text-center">
+                  <Clock className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+                  <h3 className="text-lg font-semibold mb-2">No hay incidentes recientes</h3>
+                  <p className="text-muted-foreground">
                     No se han reportado incidentes en los últimos 30 días
                   </p>
                 </CardContent>
               </Card>
             ) : (
               resolvedIncidents.map((incident) => (
-                <Card key={incident.id} className=\"opacity-75\">
-                  <CardContent className=\"p-4\">
-                    <div className=\"flex items-center justify-between\">
+                <Card key={incident.id} className="opacity-75">
+                  <CardContent className="p-4">
+                    <div className="flex items-center justify-between">
                       <div>
-                        <h3 className=\"font-medium flex items-center gap-2\">
+                        <h3 className="font-medium flex items-center gap-2">
                           {severityConfig[incident.severity].icon} {incident.title}
-                          <Badge variant=\"outline\">Resuelto</Badge>
+                          <Badge variant="outline">Resuelto</Badge>
                         </h3>
-                        <p className=\"text-sm text-muted-foreground mt-1\">
+                        <p className="text-sm text-muted-foreground mt-1">
                           {incident.description}
                         </p>
-                        <div className=\"flex items-center gap-4 mt-2 text-xs text-muted-foreground\">
+                        <div className="flex items-center gap-4 mt-2 text-xs text-muted-foreground">
                           <span>Inicio: {formatTimeAgo(incident.created_at)}</span>
                           <span>Resolución: {formatTimeAgo(incident.updated_at)}</span>
                           <span>Duración: {formatDistanceToNow(new Date(incident.created_at), {
@@ -476,7 +476,7 @@ export default function IncidentsPage() {
                           })}</span>
                         </div>
                       </div>
-                      <Badge variant={severityConfig[incident.severity].color} className=\"opacity-75\">
+                      <Badge variant={severityConfig[incident.severity].color} className="opacity-75">
                         {incident.severity}
                       </Badge>
                     </div>
@@ -488,32 +488,32 @@ export default function IncidentsPage() {
         </Tabs>
 
         {/* Información adicional */}
-        <div className=\"grid grid-cols-1 md:grid-cols-2 gap-6\">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <Card>
             <CardHeader>
-              <CardTitle className=\"text-base\">¿Experimentas problemas?</CardTitle>
+              <CardTitle className="text-base">¿Experimentas problemas?</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className=\"text-sm text-muted-foreground mb-4\">
+              <p className="text-sm text-muted-foreground mb-4">
                 Si experimentas problemas no listados aquí, crea un ticket de soporte
               </p>
               <Button asChild>
-                <Link href=\"/support/new\">Reportar Problema</Link>
+                <Link href="/support/new">Reportar Problema</Link>
               </Button>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader>
-              <CardTitle className=\"text-base\">Suscribirse a Actualizaciones</CardTitle>
+              <CardTitle className="text-base">Suscribirse a Actualizaciones</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className=\"text-sm text-muted-foreground mb-4\">
+              <p className="text-sm text-muted-foreground mb-4">
                 Recibe notificaciones automáticas sobre el estado de nuestros servicios
               </p>
-              <Button variant=\"outline\" asChild>
-                <Link href=\"https://status.rp9.com/subscribe\" target=\"_blank\">
-                  <Globe className=\"h-4 w-4 mr-2\" />
+              <Button variant="outline" asChild>
+                <Link href="https://status.rp9.com/subscribe" target="_blank">
+                  <Globe className="h-4 w-4 mr-2" />
                   Suscribirse
                 </Link>
               </Button>

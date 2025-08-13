@@ -383,10 +383,10 @@ export default function HealthScorePage() {
           </Card>
 
           {/* Gráfica de tendencia */}
-          <Card className=\"lg:col-span-2\">
+          <Card className="lg:col-span-2">
             <CardHeader>
-              <CardTitle className=\"flex items-center gap-2\">
-                <BarChart3 className=\"h-5 w-5\" />
+              <CardTitle className="flex items-center gap-2">
+                <BarChart3 className="h-5 w-5" />
                 Tendencia de Health Score
               </CardTitle>
               <CardDescription>
@@ -394,19 +394,19 @@ export default function HealthScorePage() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <ResponsiveContainer width=\"100%\" height={200}>
+              <ResponsiveContainer width="100%" height={200}>
                 <LineChart data={chartData}>
-                  <CartesianGrid strokeDasharray=\"3 3\" />
-                  <XAxis dataKey=\"date\" />
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="date" />
                   <YAxis domain={[0, 100]} />
                   <Tooltip 
                     formatter={(value: any, name: string) => [`${value}/100`, 'Score']}
                     labelFormatter={(date) => `Fecha: ${date}`}
                   />
                   <Line 
-                    type=\"monotone\" 
-                    dataKey=\"score\" 
-                    stroke=\"#8884d8\" 
+                    type="monotone" 
+                    dataKey="score" 
+                    stroke="#8884d8" 
                     strokeWidth={3}
                     dot={{ fill: '#8884d8', strokeWidth: 2, r: 6 }}
                   />
@@ -416,43 +416,43 @@ export default function HealthScorePage() {
           </Card>
         </div>
 
-        <Tabs defaultValue=\"breakdown\" className=\"space-y-6\">
+        <Tabs defaultValue="breakdown" className="space-y-6">
           <TabsList>
-            <TabsTrigger value=\"breakdown\">Desglose por Componentes</TabsTrigger>
-            <TabsTrigger value=\"details\">Detalles y Métricas</TabsTrigger>
-            <TabsTrigger value=\"recommendations\">Recomendaciones</TabsTrigger>
+            <TabsTrigger value="breakdown">Desglose por Componentes</TabsTrigger>
+            <TabsTrigger value="details">Detalles y Métricas</TabsTrigger>
+            <TabsTrigger value="recommendations">Recomendaciones</TabsTrigger>
           </TabsList>
 
           {/* Desglose por componentes */}
-          <TabsContent value=\"breakdown\" className=\"space-y-6\">
-            <div className=\"grid grid-cols-1 lg:grid-cols-3 gap-6\">
+          <TabsContent value="breakdown" className="space-y-6">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               {/* Scores por componente */}
-              <div className=\"lg:col-span-2 space-y-4\">
+              <div className="lg:col-span-2 space-y-4">
                 {Object.entries(currentScore.breakdown).map(([component, score]) => {
                   const config = componentConfig[component as keyof typeof componentConfig]
                   const Icon = config.icon
                   
                   return (
                     <Card key={component}>
-                      <CardContent className=\"p-4\">
-                        <div className=\"flex items-center justify-between mb-3\">
-                          <div className=\"flex items-center gap-3\">
-                            <div className=\"p-2 bg-primary/10 rounded-lg\">
-                              <Icon className=\"h-5 w-5 text-primary\" />
+                      <CardContent className="p-4">
+                        <div className="flex items-center justify-between mb-3">
+                          <div className="flex items-center gap-3">
+                            <div className="p-2 bg-primary/10 rounded-lg">
+                              <Icon className="h-5 w-5 text-primary" />
                             </div>
                             <div>
-                              <h3 className=\"font-semibold\">{config.name}</h3>
-                              <p className=\"text-sm text-muted-foreground\">
+                              <h3 className="font-semibold">{config.name}</h3>
+                              <p className="text-sm text-muted-foreground">
                                 {config.description} • Peso: {config.weight}
                               </p>
                             </div>
                           </div>
-                          <div className=\"text-right\">
-                            <div className=\"text-2xl font-bold\">{score}</div>
-                            <div className=\"text-sm text-muted-foreground\">/ 100</div>
+                          <div className="text-right">
+                            <div className="text-2xl font-bold">{score}</div>
+                            <div className="text-sm text-muted-foreground">/ 100</div>
                           </div>
                         </div>
-                        <Progress value={score} className=\"h-2\" />
+                        <Progress value={score} className="h-2" />
                       </CardContent>
                     </Card>
                   )
@@ -468,16 +468,16 @@ export default function HealthScorePage() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <ResponsiveContainer width=\"100%\" height={250}>
+                  <ResponsiveContainer width="100%" height={250}>
                     <PieChart>
                       <Pie
                         data={pieData}
-                        cx=\"50%\"
-                        cy=\"50%\"
+                        cx="50%"
+                        cy="50%"
                         innerRadius={40}
                         outerRadius={80}
                         paddingAngle={5}
-                        dataKey=\"value\"
+                        dataKey="value"
                       >
                         {pieData.map((entry, index) => (
                           <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
@@ -493,11 +493,11 @@ export default function HealthScorePage() {
                   </ResponsiveContainer>
                   
                   {/* Leyenda */}
-                  <div className=\"space-y-1 mt-4\">
+                  <div className="space-y-1 mt-4">
                     {pieData.map((entry, index) => (
-                      <div key={entry.name} className=\"flex items-center gap-2 text-xs\">
+                      <div key={entry.name} className="flex items-center gap-2 text-xs">
                         <div 
-                          className=\"w-3 h-3 rounded\" 
+                          className="w-3 h-3 rounded" 
                           style={{ backgroundColor: COLORS[index % COLORS.length] }}
                         />
                         <span>{entry.name}: {entry.value}/100</span>
@@ -510,42 +510,42 @@ export default function HealthScorePage() {
           </TabsContent>
 
           {/* Detalles y métricas */}
-          <TabsContent value=\"details\" className=\"space-y-6\">
-            <div className=\"grid grid-cols-1 md:grid-cols-2 gap-6\">
+          <TabsContent value="details" className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Uso de Plataforma */}
               <Card>
                 <CardHeader>
-                  <CardTitle className=\"flex items-center gap-2\">
-                    <Activity className=\"h-5 w-5\" />
+                  <CardTitle className="flex items-center gap-2">
+                    <Activity className="h-5 w-5" />
                     Uso de Plataforma
                   </CardTitle>
                 </CardHeader>
-                <CardContent className=\"space-y-3\">
-                  <div className=\"grid grid-cols-2 gap-4 text-sm\">
+                <CardContent className="space-y-3">
+                  <div className="grid grid-cols-2 gap-4 text-sm">
                     <div>
-                      <span className=\"text-muted-foreground\">Ejecuciones Totales</span>
-                      <div className=\"font-semibold\">{currentScore.factors.usage.totalExecutions}</div>
+                      <span className="text-muted-foreground">Ejecuciones Totales</span>
+                      <div className="font-semibold">{currentScore.factors.usage.totalExecutions}</div>
                     </div>
                     <div>
-                      <span className=\"text-muted-foreground\">Workflows Activos</span>
-                      <div className=\"font-semibold\">{currentScore.factors.usage.activeWorkflows}</div>
+                      <span className="text-muted-foreground">Workflows Activos</span>
+                      <div className="font-semibold">{currentScore.factors.usage.activeWorkflows}</div>
                     </div>
                     <div>
-                      <span className=\"text-muted-foreground\">Tiempo Promedio</span>
-                      <div className=\"font-semibold\">{(currentScore.factors.usage.avgExecutionTime / 1000).toFixed(1)}s</div>
+                      <span className="text-muted-foreground">Tiempo Promedio</span>
+                      <div className="font-semibold">{(currentScore.factors.usage.avgExecutionTime / 1000).toFixed(1)}s</div>
                     </div>
                     <div>
-                      <span className=\"text-muted-foreground\">Última Ejecución</span>
-                      <div className=\"font-semibold\">{formatTimeAgo(currentScore.factors.usage.lastExecution)}</div>
+                      <span className="text-muted-foreground">Última Ejecución</span>
+                      <div className="font-semibold">{formatTimeAgo(currentScore.factors.usage.lastExecution)}</div>
                     </div>
                   </div>
                   
                   {currentScore.factors.usage.breakdown && (
-                    <div className=\"pt-3 border-t space-y-2\">
-                      <h4 className=\"font-medium text-sm\">Desglose:</h4>
+                    <div className="pt-3 border-t space-y-2">
+                      <h4 className="font-medium text-sm">Desglose:</h4>
                       {Object.entries(currentScore.factors.usage.breakdown).map(([key, value]) => (
-                        <div key={key} className=\"flex justify-between text-xs\">
-                          <span className=\"capitalize\">{key.replace(/([A-Z])/g, ' $1').toLowerCase()}</span>
+                        <div key={key} className="flex justify-between text-xs">
+                          <span className="capitalize">{key.replace(/([A-Z])/g, ' $1').toLowerCase()}</span>
                           <span>{value}/100</span>
                         </div>
                       ))}
@@ -557,27 +557,27 @@ export default function HealthScorePage() {
               {/* Tasa de Éxito */}
               <Card>
                 <CardHeader>
-                  <CardTitle className=\"flex items-center gap-2\">
-                    <CheckCircle className=\"h-5 w-5\" />
+                  <CardTitle className="flex items-center gap-2">
+                    <CheckCircle className="h-5 w-5" />
                     Tasa de Éxito
                   </CardTitle>
                 </CardHeader>
-                <CardContent className=\"space-y-3\">
-                  <div className=\"grid grid-cols-2 gap-4 text-sm\">
+                <CardContent className="space-y-3">
+                  <div className="grid grid-cols-2 gap-4 text-sm">
                     <div>
-                      <span className=\"text-muted-foreground\">Exitosas</span>
-                      <div className=\"font-semibold text-green-600\">{currentScore.factors.success.successfulExecutions}</div>
+                      <span className="text-muted-foreground">Exitosas</span>
+                      <div className="font-semibold text-green-600">{currentScore.factors.success.successfulExecutions}</div>
                     </div>
                     <div>
-                      <span className=\"text-muted-foreground\">Fallidas</span>
-                      <div className=\"font-semibold text-red-600\">{currentScore.factors.success.failedExecutions}</div>
+                      <span className="text-muted-foreground">Fallidas</span>
+                      <div className="font-semibold text-red-600">{currentScore.factors.success.failedExecutions}</div>
                     </div>
-                    <div className=\"col-span-2\">
-                      <span className=\"text-muted-foreground\">Tasa de Éxito</span>
-                      <div className=\"font-semibold text-lg\">
+                    <div className="col-span-2">
+                      <span className="text-muted-foreground">Tasa de Éxito</span>
+                      <div className="font-semibold text-lg">
                         {(currentScore.factors.success.successRate * 100).toFixed(1)}%
                       </div>
-                      <Progress value={currentScore.factors.success.successRate * 100} className=\"h-2 mt-1\" />
+                      <Progress value={currentScore.factors.success.successRate * 100} className="h-2 mt-1" />
                     </div>
                   </div>
                 </CardContent>
@@ -586,24 +586,24 @@ export default function HealthScorePage() {
               {/* Incidentes */}
               <Card>
                 <CardHeader>
-                  <CardTitle className=\"flex items-center gap-2\">
-                    <AlertTriangle className=\"h-5 w-5\" />
+                  <CardTitle className="flex items-center gap-2">
+                    <AlertTriangle className="h-5 w-5" />
                     Incidentes y Soporte
                   </CardTitle>
                 </CardHeader>
-                <CardContent className=\"space-y-3\">
-                  <div className=\"grid grid-cols-2 gap-4 text-sm\">
+                <CardContent className="space-y-3">
+                  <div className="grid grid-cols-2 gap-4 text-sm">
                     <div>
-                      <span className=\"text-muted-foreground\">Tickets Totales</span>
-                      <div className=\"font-semibold\">{currentScore.factors.incidents.totalTickets}</div>
+                      <span className="text-muted-foreground">Tickets Totales</span>
+                      <div className="font-semibold">{currentScore.factors.incidents.totalTickets}</div>
                     </div>
                     <div>
-                      <span className=\"text-muted-foreground\">Críticos (P1)</span>
-                      <div className=\"font-semibold text-red-600\">{currentScore.factors.incidents.criticalIssues}</div>
+                      <span className="text-muted-foreground">Críticos (P1)</span>
+                      <div className="font-semibold text-red-600">{currentScore.factors.incidents.criticalIssues}</div>
                     </div>
-                    <div className=\"col-span-2\">
-                      <span className=\"text-muted-foreground\">Tiempo Promedio Resolución</span>
-                      <div className=\"font-semibold\">{currentScore.factors.incidents.avgResolutionTime}h</div>
+                    <div className="col-span-2">
+                      <span className="text-muted-foreground">Tiempo Promedio Resolución</span>
+                      <div className="font-semibold">{currentScore.factors.incidents.avgResolutionTime}h</div>
                     </div>
                   </div>
                 </CardContent>
@@ -612,28 +612,28 @@ export default function HealthScorePage() {
               {/* Satisfacción */}
               <Card>
                 <CardHeader>
-                  <CardTitle className=\"flex items-center gap-2\">
-                    <Heart className=\"h-5 w-5\" />
+                  <CardTitle className="flex items-center gap-2">
+                    <Heart className="h-5 w-5" />
                     Satisfacción del Cliente
                   </CardTitle>
                 </CardHeader>
-                <CardContent className=\"space-y-3\">
-                  <div className=\"text-center\">
+                <CardContent className="space-y-3">
+                  <div className="text-center">
                     {currentScore.factors.nps.npsScore !== null ? (
                       <div>
-                        <div className=\"text-2xl font-bold\">
+                        <div className="text-2xl font-bold">
                           {currentScore.factors.nps.npsScore}
                         </div>
-                        <div className=\"text-sm text-muted-foreground\">NPS Score</div>
-                        <div className=\"text-xs text-muted-foreground mt-1\">
+                        <div className="text-sm text-muted-foreground">NPS Score</div>
+                        <div className="text-xs text-muted-foreground mt-1">
                           Basado en {currentScore.factors.nps.npsCount} respuestas
                         </div>
                       </div>
                     ) : (
-                      <div className=\"text-muted-foreground\">
-                        <MessageSquare className=\"h-8 w-8 mx-auto mb-2\" />
-                        <div className=\"text-sm\">Datos insuficientes</div>
-                        <div className=\"text-xs\">Mínimo 3 respuestas NPS</div>
+                      <div className="text-muted-foreground">
+                        <MessageSquare className="h-8 w-8 mx-auto mb-2" />
+                        <div className="text-sm">Datos insuficientes</div>
+                        <div className="text-xs">Mínimo 3 respuestas NPS</div>
                       </div>
                     )}
                   </div>
@@ -643,8 +643,8 @@ export default function HealthScorePage() {
           </TabsContent>
 
           {/* Recomendaciones */}
-          <TabsContent value=\"recommendations\" className=\"space-y-6\">
-            <div className=\"grid grid-cols-1 lg:grid-cols-2 gap-6\">
+          <TabsContent value="recommendations" className="space-y-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <Card>
                 <CardHeader>
                   <CardTitle>Acciones Recomendadas</CardTitle>
@@ -653,13 +653,13 @@ export default function HealthScorePage() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className=\"space-y-3\">
+                  <div className="space-y-3">
                     {currentScore.recommendations.map((recommendation, index) => (
-                      <div key={index} className=\"flex gap-3 p-3 bg-muted/50 rounded-lg\">
-                        <div className=\"bg-primary text-primary-foreground rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold flex-shrink-0\">
+                      <div key={index} className="flex gap-3 p-3 bg-muted/50 rounded-lg">
+                        <div className="bg-primary text-primary-foreground rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold flex-shrink-0">
                           {index + 1}
                         </div>
-                        <p className=\"text-sm\">{recommendation}</p>
+                        <p className="text-sm">{recommendation}</p>
                       </div>
                     ))}
                   </div>
@@ -674,30 +674,30 @@ export default function HealthScorePage() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className=\"space-y-4\">
-                    <Button asChild className=\"w-full\">
-                      <Link href=\"/support/new\">
-                        <MessageSquare className=\"h-4 w-4 mr-2\" />
+                  <div className="space-y-4">
+                    <Button asChild className="w-full">
+                      <Link href="/support/new">
+                        <MessageSquare className="h-4 w-4 mr-2" />
                         Contactar Customer Success
                       </Link>
                     </Button>
                     
-                    <Button variant=\"outline\" asChild className=\"w-full\">
-                      <Link href=\"/support/kb\">
+                    <Button variant="outline" asChild className="w-full">
+                      <Link href="/support/kb">
                         Explorar Base de Conocimiento
                       </Link>
                     </Button>
                     
-                    <Button variant=\"outline\" asChild className=\"w-full\">
-                      <Link href=\"/workflows\">
-                        <Zap className=\"h-4 w-4 mr-2\" />
+                    <Button variant="outline" asChild className="w-full">
+                      <Link href="/workflows">
+                        <Zap className="h-4 w-4 mr-2" />
                         Optimizar Workflows
                       </Link>
                     </Button>
 
-                    <div className=\"pt-4 border-t text-sm text-muted-foreground\">
+                    <div className="pt-4 border-t text-sm text-muted-foreground">
                       <p>
-                        <Calendar className=\"h-4 w-4 inline mr-1\" />
+                        <Calendar className="h-4 w-4 inline mr-1" />
                         Próxima actualización programada para {new Date(Date.now() + 24 * 60 * 60 * 1000).toLocaleDateString('es-MX')}
                       </p>
                     </div>

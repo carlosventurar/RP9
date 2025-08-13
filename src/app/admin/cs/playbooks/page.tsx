@@ -310,82 +310,82 @@ export default function CSPlaybooksPage() {
   const completedExecutions = executions.filter(e => e.status === 'completed')
 
   return (
-    <div className=\"container mx-auto py-6 space-y-6\">
+    <div className="container mx-auto py-6 space-y-6">
       {/* Header */}
-      <div className=\"flex items-center gap-4 mb-6\">
-        <Button variant=\"ghost\" size=\"sm\" asChild>
-          <Link href=\"/admin\">
-            <ArrowLeft className=\"h-4 w-4 mr-2\" />
+      <div className="flex items-center gap-4 mb-6">
+        <Button variant="ghost" size="sm" asChild>
+          <Link href="/admin">
+            <ArrowLeft className="h-4 w-4 mr-2" />
             Volver a Admin
           </Link>
         </Button>
       </div>
 
-      <div className=\"space-y-6\">
-        <div className=\"flex items-center justify-between\">
+      <div className="space-y-6">
+        <div className="flex items-center justify-between">
           <div>
-            <h1 className=\"text-3xl font-bold flex items-center gap-3\">
-              <Users className=\"h-8 w-8\" />
+            <h1 className="text-3xl font-bold flex items-center gap-3">
+              <Users className="h-8 w-8" />
               Customer Success Playbooks
             </h1>
-            <p className=\"text-muted-foreground mt-2\">
+            <p className="text-muted-foreground mt-2">
               Workflows automatizados para activación, adopción, expansión y retención
             </p>
           </div>
           
-          <div className=\"flex items-center gap-3\">
-            <Button variant=\"outline\">
-              <Target className=\"h-4 w-4 mr-2\" />
+          <div className="flex items-center gap-3">
+            <Button variant="outline">
+              <Target className="h-4 w-4 mr-2" />
               Nuevo Playbook
             </Button>
             <Button>
-              <Play className=\"h-4 w-4 mr-2\" />
+              <Play className="h-4 w-4 mr-2" />
               Ejecutar Playbook
             </Button>
           </div>
         </div>
 
         {/* Estadísticas rápidas */}
-        <div className=\"grid grid-cols-2 md:grid-cols-4 gap-4\">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <Card>
-            <CardContent className=\"p-4 text-center\">
-              <div className=\"text-2xl font-bold text-blue-600\">{activeExecutions.length}</div>
-              <div className=\"text-sm text-muted-foreground\">Ejecuciones Activas</div>
+            <CardContent className="p-4 text-center">
+              <div className="text-2xl font-bold text-blue-600">{activeExecutions.length}</div>
+              <div className="text-sm text-muted-foreground">Ejecuciones Activas</div>
             </CardContent>
           </Card>
           <Card>
-            <CardContent className=\"p-4 text-center\">
-              <div className=\"text-2xl font-bold text-green-600\">{completedExecutions.length}</div>
-              <div className=\"text-sm text-muted-foreground\">Completadas</div>
+            <CardContent className="p-4 text-center">
+              <div className="text-2xl font-bold text-green-600">{completedExecutions.length}</div>
+              <div className="text-sm text-muted-foreground">Completadas</div>
             </CardContent>
           </Card>
           <Card>
-            <CardContent className=\"p-4 text-center\">
-              <div className=\"text-2xl font-bold text-purple-600\">{playbooks.length}</div>
-              <div className=\"text-sm text-muted-foreground\">Playbooks Activos</div>
+            <CardContent className="p-4 text-center">
+              <div className="text-2xl font-bold text-purple-600">{playbooks.length}</div>
+              <div className="text-sm text-muted-foreground">Playbooks Activos</div>
             </CardContent>
           </Card>
           <Card>
-            <CardContent className=\"p-4 text-center\">
-              <div className=\"text-2xl font-bold text-orange-600\">
+            <CardContent className="p-4 text-center">
+              <div className="text-2xl font-bold text-orange-600">
                 {Math.round(executions.filter(e => e.status === 'completed').length / executions.length * 100)}%
               </div>
-              <div className=\"text-sm text-muted-foreground\">Tasa de Éxito</div>
+              <div className="text-sm text-muted-foreground">Tasa de Éxito</div>
             </CardContent>
           </Card>
         </div>
 
-        <Tabs value={activeTab} onValueChange={setActiveTab} className=\"space-y-6\">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
           <TabsList>
-            <TabsTrigger value=\"overview\">Vista General</TabsTrigger>
-            <TabsTrigger value=\"playbooks\">Playbooks</TabsTrigger>
-            <TabsTrigger value=\"executions\">Ejecuciones Activas</TabsTrigger>
-            <TabsTrigger value=\"analytics\">Analytics</TabsTrigger>
+            <TabsTrigger value="overview">Vista General</TabsTrigger>
+            <TabsTrigger value="playbooks">Playbooks</TabsTrigger>
+            <TabsTrigger value="executions">Ejecuciones Activas</TabsTrigger>
+            <TabsTrigger value="analytics">Analytics</TabsTrigger>
           </TabsList>
 
           {/* Vista General */}
-          <TabsContent value=\"overview\" className=\"space-y-6\">
-            <div className=\"grid grid-cols-1 lg:grid-cols-2 gap-6\">
+          <TabsContent value="overview" className="space-y-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* Playbooks por tipo */}
               <Card>
                 <CardHeader>
@@ -394,19 +394,19 @@ export default function CSPlaybooksPage() {
                     Distribución de playbooks según fase del customer journey
                   </CardDescription>
                 </CardHeader>
-                <CardContent className=\"space-y-4\">
+                <CardContent className="space-y-4">
                   {Object.entries(playbookTypes).map(([type, config]) => {
                     const count = playbooks.filter(p => p.type === type).length
                     return (
-                      <div key={type} className=\"flex items-center justify-between\">
-                        <div className=\"flex items-center gap-3\">
+                      <div key={type} className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
                           <div className={`w-3 h-3 rounded-full ${config.color}`} />
                           <div>
-                            <div className=\"font-medium\">{config.name}</div>
-                            <div className=\"text-sm text-muted-foreground\">{config.description}</div>
+                            <div className="font-medium">{config.name}</div>
+                            <div className="text-sm text-muted-foreground">{config.description}</div>
                           </div>
                         </div>
-                        <Badge variant=\"secondary\">{count}</Badge>
+                        <Badge variant="secondary">{count}</Badge>
                       </div>
                     )
                   })}
@@ -421,22 +421,22 @@ export default function CSPlaybooksPage() {
                     Últimas actividades de Customer Success
                   </CardDescription>
                 </CardHeader>
-                <CardContent className=\"space-y-3\">
+                <CardContent className="space-y-3">
                   {executions.slice(0, 5).map((execution) => {
                     const playbook = playbooks.find(p => p.id === execution.playbook_id)
                     return (
-                      <div key={execution.id} className=\"flex items-center justify-between p-2 bg-muted/50 rounded\">
+                      <div key={execution.id} className="flex items-center justify-between p-2 bg-muted/50 rounded">
                         <div>
-                          <div className=\"font-medium text-sm\">{execution.tenant_name}</div>
-                          <div className=\"text-xs text-muted-foreground\">
+                          <div className="font-medium text-sm">{execution.tenant_name}</div>
+                          <div className="text-xs text-muted-foreground">
                             {playbook?.name} • {execution.assigned_csm}
                           </div>
                         </div>
-                        <div className=\"text-right\">
-                          <Badge className={getStatusColor(execution.status)} variant=\"secondary\">
+                        <div className="text-right">
+                          <Badge className={getStatusColor(execution.status)} variant="secondary">
                             {getStatusLabel(execution.status)}
                           </Badge>
-                          <div className=\"text-xs text-muted-foreground mt-1\">
+                          <div className="text-xs text-muted-foreground mt-1">
                             {execution.progress}%
                           </div>
                         </div>
@@ -449,51 +449,51 @@ export default function CSPlaybooksPage() {
           </TabsContent>
 
           {/* Lista de Playbooks */}
-          <TabsContent value=\"playbooks\" className=\"space-y-6\">
-            <div className=\"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6\">
+          <TabsContent value="playbooks" className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {playbooks.map((playbook) => {
                 const config = playbookTypes[playbook.type]
                 const execCount = executions.filter(e => e.playbook_id === playbook.id).length
                 
                 return (
-                  <Card key={playbook.id} className=\"hover:shadow-md transition-shadow\">
+                  <Card key={playbook.id} className="hover:shadow-md transition-shadow">
                     <CardHeader>
-                      <div className=\"flex items-center justify-between\">
-                        <Badge className={config.color} variant=\"secondary\">
+                      <div className="flex items-center justify-between">
+                        <Badge className={config.color} variant="secondary">
                           {config.icon} {config.name}
                         </Badge>
-                        <Badge variant=\"outline\">{execCount} ejecuciones</Badge>
+                        <Badge variant="outline">{execCount} ejecuciones</Badge>
                       </div>
-                      <CardTitle className=\"text-lg\">{playbook.name}</CardTitle>
+                      <CardTitle className="text-lg">{playbook.name}</CardTitle>
                       <CardDescription>{playbook.description}</CardDescription>
                     </CardHeader>
-                    <CardContent className=\"space-y-4\">
-                      <div className=\"grid grid-cols-2 gap-4 text-sm\">
+                    <CardContent className="space-y-4">
+                      <div className="grid grid-cols-2 gap-4 text-sm">
                         <div>
-                          <span className=\"text-muted-foreground\">Timeline:</span>
-                          <div className=\"font-medium\">{playbook.timeline_days} días</div>
+                          <span className="text-muted-foreground">Timeline:</span>
+                          <div className="font-medium">{playbook.timeline_days} días</div>
                         </div>
                         <div>
-                          <span className=\"text-muted-foreground\">Pasos:</span>
-                          <div className=\"font-medium\">{playbook.steps.length}</div>
+                          <span className="text-muted-foreground">Pasos:</span>
+                          <div className="font-medium">{playbook.steps.length}</div>
                         </div>
                       </div>
                       
                       <div>
-                        <span className=\"text-sm text-muted-foreground\">Trigger:</span>
-                        <div className=\"text-sm mt-1 p-2 bg-muted/50 rounded\">{playbook.trigger}</div>
+                        <span className="text-sm text-muted-foreground">Trigger:</span>
+                        <div className="text-sm mt-1 p-2 bg-muted/50 rounded">{playbook.trigger}</div>
                       </div>
 
-                      <div className=\"flex gap-2\">
+                      <div className="flex gap-2">
                         <Button 
-                          variant=\"outline\" 
-                          size=\"sm\" 
+                          variant="outline" 
+                          size="sm" 
                           onClick={() => setSelectedPlaybook(playbook)}
                         >
                           Ver Detalles
                         </Button>
-                        <Button size=\"sm\">
-                          <Play className=\"h-3 w-3 mr-1\" />
+                        <Button size="sm">
+                          <Play className="h-3 w-3 mr-1" />
                           Ejecutar
                         </Button>
                       </div>
@@ -505,20 +505,20 @@ export default function CSPlaybooksPage() {
           </TabsContent>
 
           {/* Ejecuciones Activas */}
-          <TabsContent value=\"executions\" className=\"space-y-6\">
-            <div className=\"space-y-4\">
+          <TabsContent value="executions" className="space-y-6">
+            <div className="space-y-4">
               {activeExecutions.map((execution) => {
                 const playbook = playbooks.find(p => p.id === execution.playbook_id)
                 const daysLeft = Math.ceil((new Date(execution.due_date).getTime() - Date.now()) / (1000 * 60 * 60 * 24))
                 
                 return (
                   <Card key={execution.id}>
-                    <CardContent className=\"p-6\">
-                      <div className=\"flex items-start justify-between mb-4\">
+                    <CardContent className="p-6">
+                      <div className="flex items-start justify-between mb-4">
                         <div>
-                          <h3 className=\"font-semibold text-lg\">{execution.tenant_name}</h3>
-                          <p className=\"text-muted-foreground\">{playbook?.name}</p>
-                          <div className=\"flex items-center gap-4 mt-2 text-sm\">
+                          <h3 className="font-semibold text-lg">{execution.tenant_name}</h3>
+                          <p className="text-muted-foreground">{playbook?.name}</p>
+                          <div className="flex items-center gap-4 mt-2 text-sm">
                             <span>CSM: {execution.assigned_csm}</span>
                             <span>Paso {execution.current_step} de {playbook?.steps.length}</span>
                             <span className={daysLeft < 2 ? 'text-red-600' : 'text-muted-foreground'}>
@@ -526,33 +526,33 @@ export default function CSPlaybooksPage() {
                             </span>
                           </div>
                         </div>
-                        <div className=\"text-right\">
-                          <div className=\"text-2xl font-bold\">{execution.progress}%</div>
-                          <Progress value={execution.progress} className=\"w-32 mt-1\" />
+                        <div className="text-right">
+                          <div className="text-2xl font-bold">{execution.progress}%</div>
+                          <Progress value={execution.progress} className="w-32 mt-1" />
                         </div>
                       </div>
 
                       {execution.notes && (
-                        <div className=\"mb-4 p-3 bg-muted/50 rounded\">
-                          <div className=\"text-sm font-medium mb-1\">Notas:</div>
-                          <div className=\"text-sm\">{execution.notes}</div>
+                        <div className="mb-4 p-3 bg-muted/50 rounded">
+                          <div className="text-sm font-medium mb-1">Notas:</div>
+                          <div className="text-sm">{execution.notes}</div>
                         </div>
                       )}
 
-                      <div className=\"flex gap-2\">
-                        <Button variant=\"outline\" size=\"sm\">
-                          <MessageSquare className=\"h-3 w-3 mr-1\" />
+                      <div className="flex gap-2">
+                        <Button variant="outline" size="sm">
+                          <MessageSquare className="h-3 w-3 mr-1" />
                           Contactar Cliente
                         </Button>
-                        <Button variant=\"outline\" size=\"sm\">
-                          <Calendar className=\"h-3 w-3 mr-1\" />
+                        <Button variant="outline" size="sm">
+                          <Calendar className="h-3 w-3 mr-1" />
                           Agendar Follow-up
                         </Button>
-                        <Button variant=\"outline\" size=\"sm\">
-                          <Pause className=\"h-3 w-3 mr-1\" />
+                        <Button variant="outline" size="sm">
+                          <Pause className="h-3 w-3 mr-1" />
                           Pausar
                         </Button>
-                        <Button variant=\"outline\" size=\"sm\">
+                        <Button variant="outline" size="sm">
                           Marcar Completado
                         </Button>
                       </div>
@@ -564,8 +564,8 @@ export default function CSPlaybooksPage() {
           </TabsContent>
 
           {/* Analytics */}
-          <TabsContent value=\"analytics\" className=\"space-y-6\">
-            <div className=\"grid grid-cols-1 md:grid-cols-2 gap-6\">
+          <TabsContent value="analytics" className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <Card>
                 <CardHeader>
                   <CardTitle>Performance por Playbook</CardTitle>
@@ -574,19 +574,19 @@ export default function CSPlaybooksPage() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className=\"space-y-4\">
+                  <div className="space-y-4">
                     {playbooks.map((playbook) => {
                       const playbookExecutions = executions.filter(e => e.playbook_id === playbook.id)
                       const completed = playbookExecutions.filter(e => e.status === 'completed').length
                       const successRate = playbookExecutions.length > 0 ? (completed / playbookExecutions.length) * 100 : 0
                       
                       return (
-                        <div key={playbook.id} className=\"space-y-2\">
-                          <div className=\"flex justify-between text-sm\">
+                        <div key={playbook.id} className="space-y-2">
+                          <div className="flex justify-between text-sm">
                             <span>{playbook.name}</span>
                             <span>{Math.round(successRate)}% éxito</span>
                           </div>
-                          <Progress value={successRate} className=\"h-2\" />
+                          <Progress value={successRate} className="h-2" />
                         </div>
                       )
                     })}
@@ -602,28 +602,28 @@ export default function CSPlaybooksPage() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className=\"space-y-4\">
-                    <div className=\"grid grid-cols-2 gap-4\">
-                      <div className=\"text-center\">
-                        <div className=\"text-2xl font-bold text-green-600\">92%</div>
-                        <div className=\"text-sm text-muted-foreground\">Tasa de Activación</div>
+                  <div className="space-y-4">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="text-center">
+                        <div className="text-2xl font-bold text-green-600">92%</div>
+                        <div className="text-sm text-muted-foreground">Tasa de Activación</div>
                       </div>
-                      <div className=\"text-center\">
-                        <div className=\"text-2xl font-bold text-blue-600\">4.2d</div>
-                        <div className=\"text-sm text-muted-foreground\">Tiempo Promedio</div>
+                      <div className="text-center">
+                        <div className="text-2xl font-bold text-blue-600">4.2d</div>
+                        <div className="text-sm text-muted-foreground">Tiempo Promedio</div>
                       </div>
                     </div>
                     
-                    <div className=\"space-y-3\">
-                      <div className=\"flex justify-between text-sm\">
+                    <div className="space-y-3">
+                      <div className="flex justify-between text-sm">
                         <span>María González</span>
                         <span>8 activos, 95% éxito</span>
                       </div>
-                      <div className=\"flex justify-between text-sm\">
+                      <div className="flex justify-between text-sm">
                         <span>Carlos Ruiz</span>
                         <span>6 activos, 88% éxito</span>
                       </div>
-                      <div className=\"flex justify-between text-sm\">
+                      <div className="flex justify-between text-sm">
                         <span>Ana López</span>
                         <span>5 activos, 100% éxito</span>
                       </div>
@@ -637,43 +637,43 @@ export default function CSPlaybooksPage() {
 
         {/* Modal de detalles de playbook */}
         {selectedPlaybook && (
-          <div className=\"fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50\">
-            <Card className=\"max-w-2xl w-full max-h-[80vh] overflow-y-auto\">
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+            <Card className="max-w-2xl w-full max-h-[80vh] overflow-y-auto">
               <CardHeader>
-                <div className=\"flex items-center justify-between\">
+                <div className="flex items-center justify-between">
                   <CardTitle>{selectedPlaybook.name}</CardTitle>
-                  <Button variant=\"ghost\" size=\"sm\" onClick={() => setSelectedPlaybook(null)}>
+                  <Button variant="ghost" size="sm" onClick={() => setSelectedPlaybook(null)}>
                     ✕
                   </Button>
                 </div>
                 <CardDescription>{selectedPlaybook.description}</CardDescription>
               </CardHeader>
-              <CardContent className=\"space-y-6\">
-                <div className=\"grid grid-cols-2 gap-4 text-sm\">
+              <CardContent className="space-y-6">
+                <div className="grid grid-cols-2 gap-4 text-sm">
                   <div>
-                    <span className=\"text-muted-foreground\">Tipo:</span>
-                    <div className=\"font-medium\">{playbookTypes[selectedPlaybook.type].name}</div>
+                    <span className="text-muted-foreground">Tipo:</span>
+                    <div className="font-medium">{playbookTypes[selectedPlaybook.type].name}</div>
                   </div>
                   <div>
-                    <span className=\"text-muted-foreground\">Timeline:</span>
-                    <div className=\"font-medium\">{selectedPlaybook.timeline_days} días</div>
+                    <span className="text-muted-foreground">Timeline:</span>
+                    <div className="font-medium">{selectedPlaybook.timeline_days} días</div>
                   </div>
                   <div>
-                    <span className=\"text-muted-foreground\">Trigger:</span>
-                    <div className=\"font-medium\">{selectedPlaybook.trigger}</div>
+                    <span className="text-muted-foreground">Trigger:</span>
+                    <div className="font-medium">{selectedPlaybook.trigger}</div>
                   </div>
                   <div>
-                    <span className=\"text-muted-foreground\">Pasos:</span>
-                    <div className=\"font-medium\">{selectedPlaybook.steps.length}</div>
+                    <span className="text-muted-foreground">Pasos:</span>
+                    <div className="font-medium">{selectedPlaybook.steps.length}</div>
                   </div>
                 </div>
 
                 <div>
-                  <h4 className=\"font-medium mb-3\">Criterios de Éxito:</h4>
-                  <ul className=\"space-y-1 text-sm\">
+                  <h4 className="font-medium mb-3">Criterios de Éxito:</h4>
+                  <ul className="space-y-1 text-sm">
                     {selectedPlaybook.success_criteria.map((criteria, index) => (
-                      <li key={index} className=\"flex items-center gap-2\">
-                        <CheckCircle className=\"h-4 w-4 text-green-500\" />
+                      <li key={index} className="flex items-center gap-2">
+                        <CheckCircle className="h-4 w-4 text-green-500" />
                         {criteria}
                       </li>
                     ))}
@@ -681,18 +681,18 @@ export default function CSPlaybooksPage() {
                 </div>
 
                 <div>
-                  <h4 className=\"font-medium mb-3\">Pasos del Playbook:</h4>
-                  <div className=\"space-y-3\">
+                  <h4 className="font-medium mb-3">Pasos del Playbook:</h4>
+                  <div className="space-y-3">
                     {selectedPlaybook.steps.map((step, index) => (
-                      <div key={step.id} className=\"flex gap-3 p-3 bg-muted/50 rounded\">
-                        <div className=\"bg-primary text-primary-foreground rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold flex-shrink-0\">
+                      <div key={step.id} className="flex gap-3 p-3 bg-muted/50 rounded">
+                        <div className="bg-primary text-primary-foreground rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold flex-shrink-0">
                           {index + 1}
                         </div>
-                        <div className=\"flex-1\">
-                          <div className=\"font-medium\">{step.title}</div>
-                          <div className=\"text-sm text-muted-foreground mt-1\">{step.description}</div>
+                        <div className="flex-1">
+                          <div className="font-medium">{step.title}</div>
+                          <div className="text-sm text-muted-foreground mt-1">{step.description}</div>
                           {step.due_date && (
-                            <div className=\"text-xs text-muted-foreground mt-2\">
+                            <div className="text-xs text-muted-foreground mt-2">
                               Vence: {formatTimeAgo(step.due_date)}
                             </div>
                           )}

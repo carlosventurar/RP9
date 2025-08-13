@@ -151,9 +151,9 @@ export default function SLAPage() {
 
   if (loading) {
     return (
-      <div className=\"min-h-screen flex items-center justify-center\">
-        <div className=\"text-center\">
-          <Clock className=\"h-8 w-8 animate-spin mx-auto mb-4\" />
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <Clock className="h-8 w-8 animate-spin mx-auto mb-4" />
           <p>Cargando información SLA...</p>
         </div>
       </div>
@@ -163,24 +163,24 @@ export default function SLAPage() {
   const userPlan = getCurrentPlan()
 
   return (
-    <div className=\"container mx-auto py-6 space-y-6\">
+    <div className="container mx-auto py-6 space-y-6">
       {/* Header */}
-      <div className=\"flex items-center gap-4 mb-6\">
-        <Button variant=\"ghost\" size=\"sm\" asChild>
-          <Link href=\"/support\">
-            <ArrowLeft className=\"h-4 w-4 mr-2\" />
+      <div className="flex items-center gap-4 mb-6">
+        <Button variant="ghost" size="sm" asChild>
+          <Link href="/support">
+            <ArrowLeft className="h-4 w-4 mr-2" />
             Volver a Soporte
           </Link>
         </Button>
       </div>
 
-      <div className=\"space-y-6\">
+      <div className="space-y-6">
         <div>
-          <h1 className=\"text-3xl font-bold flex items-center gap-3\">
-            <Shield className=\"h-8 w-8\" />
+          <h1 className="text-3xl font-bold flex items-center gap-3">
+            <Shield className="h-8 w-8" />
             Acuerdos de Nivel de Servicio (SLA)
           </h1>
-          <p className=\"text-muted-foreground mt-2\">
+          <p className="text-muted-foreground mt-2">
             Conoce nuestros compromisos de tiempo de respuesta y resolución según tu plan de soporte
           </p>
         </div>
@@ -188,7 +188,7 @@ export default function SLAPage() {
         {/* Tu plan actual */}
         {userPlan && (
           <Alert>
-            <CheckCircle className=\"h-4 w-4\" />
+            <CheckCircle className="h-4 w-4" />
             <AlertDescription>
               <strong>Tu plan actual:</strong> {userPlan.name_es} - 
               Primera respuesta en {formatTime(userPlan.frt_minutes)}, 
@@ -197,15 +197,15 @@ export default function SLAPage() {
           </Alert>
         )}
 
-        <Tabs defaultValue=\"matrix\" className=\"space-y-6\">
+        <Tabs defaultValue="matrix" className="space-y-6">
           <TabsList>
-            <TabsTrigger value=\"matrix\">Matriz SLA</TabsTrigger>
-            <TabsTrigger value=\"plans\">Comparar Planes</TabsTrigger>
-            <TabsTrigger value=\"definitions\">Definiciones</TabsTrigger>
+            <TabsTrigger value="matrix">Matriz SLA</TabsTrigger>
+            <TabsTrigger value="plans">Comparar Planes</TabsTrigger>
+            <TabsTrigger value="definitions">Definiciones</TabsTrigger>
           </TabsList>
 
           {/* Matriz SLA */}
-          <TabsContent value=\"matrix\" className=\"space-y-6\">
+          <TabsContent value="matrix" className="space-y-6">
             {plans.map((plan) => {
               const planSLAs = getPlanSLA(plan.key)
               const isCurrentPlan = plan.key === currentPlan
@@ -213,55 +213,55 @@ export default function SLAPage() {
               return (
                 <Card key={plan.key} className={isCurrentPlan ? 'ring-2 ring-primary' : ''}>
                   <CardHeader>
-                    <div className=\"flex items-center justify-between\">
+                    <div className="flex items-center justify-between">
                       <div>
-                        <CardTitle className=\"flex items-center gap-2\">
+                        <CardTitle className="flex items-center gap-2">
                           {plan.name_es}
                           {isCurrentPlan && (
-                            <Badge variant=\"default\">Tu Plan</Badge>
+                            <Badge variant="default">Tu Plan</Badge>
                           )}
                         </CardTitle>
                         <CardDescription>
                           Soporte {plan.support_hours} • Canales: {plan.channels.map(ch => channelIcons[ch as keyof typeof channelIcons]?.label).join(', ')}
                         </CardDescription>
                       </div>
-                      <div className=\"flex gap-2\">
+                      <div className="flex gap-2">
                         {plan.channels.map((channel) => {
                           const ChannelIcon = channelIcons[channel as keyof typeof channelIcons]?.icon
-                          return ChannelIcon ? <ChannelIcon key={channel} className=\"h-5 w-5 text-muted-foreground\" /> : null
+                          return ChannelIcon ? <ChannelIcon key={channel} className="h-5 w-5 text-muted-foreground" /> : null
                         })}
                       </div>
                     </div>
                   </CardHeader>
                   <CardContent>
-                    <div className=\"overflow-x-auto\">
-                      <table className=\"w-full\">
+                    <div className="overflow-x-auto">
+                      <table className="w-full">
                         <thead>
-                          <tr className=\"border-b\">
-                            <th className=\"text-left py-2 font-medium\">Severidad</th>
-                            <th className=\"text-left py-2 font-medium\">Descripción</th>
-                            <th className=\"text-center py-2 font-medium\">Primera Respuesta</th>
-                            <th className=\"text-center py-2 font-medium\">Tiempo de Resolución</th>
+                          <tr className="border-b">
+                            <th className="text-left py-2 font-medium">Severidad</th>
+                            <th className="text-left py-2 font-medium">Descripción</th>
+                            <th className="text-center py-2 font-medium">Primera Respuesta</th>
+                            <th className="text-center py-2 font-medium">Tiempo de Resolución</th>
                           </tr>
                         </thead>
                         <tbody>
                           {planSLAs.map((sla) => (
-                            <tr key={`${plan.key}-${sla.severity}`} className=\"border-b last:border-b-0\">
-                              <td className=\"py-3\">
+                            <tr key={`${plan.key}-${sla.severity}`} className="border-b last:border-b-0">
+                              <td className="py-3">
                                 <Badge variant={severityConfig[sla.severity as keyof typeof severityConfig].color}>
                                   {severityConfig[sla.severity as keyof typeof severityConfig].icon} {sla.severity}
                                 </Badge>
                               </td>
-                              <td className=\"py-3 text-sm text-muted-foreground\">
+                              <td className="py-3 text-sm text-muted-foreground">
                                 {sla.description_es}
                               </td>
-                              <td className=\"py-3 text-center\">
-                                <Badge variant=\"outline\" className=\"font-mono\">
+                              <td className="py-3 text-center">
+                                <Badge variant="outline" className="font-mono">
                                   {formatTime(sla.frt_minutes)}
                                 </Badge>
                               </td>
-                              <td className=\"py-3 text-center\">
-                                <Badge variant=\"outline\" className=\"font-mono\">
+                              <td className="py-3 text-center">
+                                <Badge variant="outline" className="font-mono">
                                   {formatTime(sla.restore_minutes)}
                                 </Badge>
                               </td>
@@ -277,36 +277,36 @@ export default function SLAPage() {
           </TabsContent>
 
           {/* Comparar planes */}
-          <TabsContent value=\"plans\" className=\"space-y-6\">
-            <div className=\"grid grid-cols-1 md:grid-cols-3 gap-6\">
+          <TabsContent value="plans" className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {plans.map((plan) => {
                 const isCurrentPlan = plan.key === currentPlan
                 const planSLAs = getPlanSLA(plan.key)
                 
                 return (
                   <Card key={plan.key} className={isCurrentPlan ? 'ring-2 ring-primary' : ''}>
-                    <CardHeader className=\"text-center\">
-                      <CardTitle className=\"flex items-center justify-center gap-2\">
+                    <CardHeader className="text-center">
+                      <CardTitle className="flex items-center justify-center gap-2">
                         {plan.name_es}
                         {isCurrentPlan && (
-                          <Badge variant=\"default\">Actual</Badge>
+                          <Badge variant="default">Actual</Badge>
                         )}
                       </CardTitle>
                       <CardDescription>
                         Soporte {plan.support_hours}
                       </CardDescription>
                     </CardHeader>
-                    <CardContent className=\"space-y-4\">
+                    <CardContent className="space-y-4">
                       {/* Canales */}
                       <div>
-                        <h4 className=\"font-medium mb-2\">Canales de Soporte</h4>
-                        <div className=\"space-y-1\">
+                        <h4 className="font-medium mb-2">Canales de Soporte</h4>
+                        <div className="space-y-1">
                           {plan.channels.map((channel) => {
                             const ChannelIcon = channelIcons[channel as keyof typeof channelIcons]?.icon
                             const label = channelIcons[channel as keyof typeof channelIcons]?.label
                             return (
-                              <div key={channel} className=\"flex items-center gap-2 text-sm\">
-                                {ChannelIcon && <ChannelIcon className=\"h-4 w-4\" />}
+                              <div key={channel} className="flex items-center gap-2 text-sm">
+                                {ChannelIcon && <ChannelIcon className="h-4 w-4" />}
                                 {label}
                               </div>
                             )
@@ -316,14 +316,14 @@ export default function SLAPage() {
 
                       {/* SLA por severidad */}
                       <div>
-                        <h4 className=\"font-medium mb-2\">Tiempos de Respuesta</h4>
-                        <div className=\"space-y-2\">
+                        <h4 className="font-medium mb-2">Tiempos de Respuesta</h4>
+                        <div className="space-y-2">
                           {planSLAs.map((sla) => (
-                            <div key={sla.severity} className=\"flex items-center justify-between text-sm\">
-                              <Badge variant={severityConfig[sla.severity as keyof typeof severityConfig].color} className=\"text-xs\">
+                            <div key={sla.severity} className="flex items-center justify-between text-sm">
+                              <Badge variant={severityConfig[sla.severity as keyof typeof severityConfig].color} className="text-xs">
                                 {sla.severity}
                               </Badge>
-                              <span className=\"font-mono text-xs\">
+                              <span className="font-mono text-xs">
                                 {formatTime(sla.frt_minutes)}
                               </span>
                             </div>
@@ -332,16 +332,16 @@ export default function SLAPage() {
                       </div>
 
                       {/* Escalamiento */}
-                      <div className=\"pt-2 border-t\">
-                        <div className=\"flex items-center gap-2 text-sm\">
+                      <div className="pt-2 border-t">
+                        <div className="flex items-center gap-2 text-sm">
                           {plan.escalation_enabled ? (
                             <>
-                              <CheckCircle className=\"h-4 w-4 text-green-500\" />
+                              <CheckCircle className="h-4 w-4 text-green-500" />
                               Escalamiento automático
                             </>
                           ) : (
                             <>
-                              <AlertTriangle className=\"h-4 w-4 text-muted-foreground\" />
+                              <AlertTriangle className="h-4 w-4 text-muted-foreground" />
                               Sin escalamiento
                             </>
                           )}
@@ -349,8 +349,8 @@ export default function SLAPage() {
                       </div>
 
                       {!isCurrentPlan && (
-                        <Button variant=\"outline\" className=\"w-full\" asChild>
-                          <Link href=\"/billing\">Cambiar Plan</Link>
+                        <Button variant="outline" className="w-full" asChild>
+                          <Link href="/billing">Cambiar Plan</Link>
                         </Button>
                       )}
                     </CardContent>
@@ -361,8 +361,8 @@ export default function SLAPage() {
           </TabsContent>
 
           {/* Definiciones */}
-          <TabsContent value=\"definitions\" className=\"space-y-6\">
-            <div className=\"grid grid-cols-1 md:grid-cols-2 gap-6\">
+          <TabsContent value="definitions" className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Definiciones de severidad */}
               <Card>
                 <CardHeader>
@@ -371,15 +371,15 @@ export default function SLAPage() {
                     Clasificación de tickets según su impacto en el negocio
                   </CardDescription>
                 </CardHeader>
-                <CardContent className=\"space-y-4\">
+                <CardContent className="space-y-4">
                   {Object.entries(severityConfig).map(([severity, config]) => (
-                    <div key={severity} className=\"space-y-2\">
-                      <div className=\"flex items-center gap-2\">
+                    <div key={severity} className="space-y-2">
+                      <div className="flex items-center gap-2">
                         <Badge variant={config.color}>
                           {config.icon} {config.label}
                         </Badge>
                       </div>
-                      <p className=\"text-sm text-muted-foreground pl-2 border-l-2 border-muted\">
+                      <p className="text-sm text-muted-foreground pl-2 border-l-2 border-muted">
                         {config.description}
                       </p>
                     </div>
@@ -395,33 +395,33 @@ export default function SLAPage() {
                     Explicación de nuestras métricas de tiempo
                   </CardDescription>
                 </CardHeader>
-                <CardContent className=\"space-y-4\">
-                  <div className=\"space-y-2\">
-                    <h4 className=\"font-medium flex items-center gap-2\">
-                      <Clock className=\"h-4 w-4\" />
+                <CardContent className="space-y-4">
+                  <div className="space-y-2">
+                    <h4 className="font-medium flex items-center gap-2">
+                      <Clock className="h-4 w-4" />
                       Tiempo de Primera Respuesta (FRT)
                     </h4>
-                    <p className=\"text-sm text-muted-foreground pl-6\">
+                    <p className="text-sm text-muted-foreground pl-6">
                       Tiempo desde que creas el ticket hasta que recibas la primera respuesta de nuestro equipo.
                     </p>
                   </div>
 
-                  <div className=\"space-y-2\">
-                    <h4 className=\"font-medium flex items-center gap-2\">
-                      <CheckCircle className=\"h-4 w-4\" />
+                  <div className="space-y-2">
+                    <h4 className="font-medium flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4" />
                       Tiempo de Resolución
                     </h4>
-                    <p className=\"text-sm text-muted-foreground pl-6\">
+                    <p className="text-sm text-muted-foreground pl-6">
                       Tiempo desde que creas el ticket hasta que el problema se resuelve completamente.
                     </p>
                   </div>
 
-                  <div className=\"space-y-2\">
-                    <h4 className=\"font-medium flex items-center gap-2\">
-                      <AlertTriangle className=\"h-4 w-4\" />
+                  <div className="space-y-2">
+                    <h4 className="font-medium flex items-center gap-2">
+                      <AlertTriangle className="h-4 w-4" />
                       Horario de Soporte
                     </h4>
-                    <div className=\"text-sm text-muted-foreground pl-6 space-y-1\">
+                    <div className="text-sm text-muted-foreground pl-6 space-y-1">
                       <p><strong>8x5:</strong> Lunes a Viernes, 9:00 - 17:00 (GMT-6)</p>
                       <p><strong>24x5:</strong> Lunes a Viernes, 24 horas</p>
                       <p><strong>24x7:</strong> Todos los días, 24 horas</p>
@@ -431,27 +431,27 @@ export default function SLAPage() {
               </Card>
 
               {/* Excepciones */}
-              <Card className=\"md:col-span-2\">
+              <Card className="md:col-span-2">
                 <CardHeader>
-                  <CardTitle className=\"flex items-center gap-2\">
-                    <Info className=\"h-4 w-4\" />
+                  <CardTitle className="flex items-center gap-2">
+                    <Info className="h-4 w-4" />
                     Excepciones y Consideraciones
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className=\"grid grid-cols-1 md:grid-cols-2 gap-4 text-sm\">
-                    <div className=\"space-y-2\">
-                      <h4 className=\"font-medium\">SLA se pausa cuando:</h4>
-                      <ul className=\"space-y-1 text-muted-foreground\">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                    <div className="space-y-2">
+                      <h4 className="font-medium">SLA se pausa cuando:</h4>
+                      <ul className="space-y-1 text-muted-foreground">
                         <li>• Esperamos información adicional de tu parte</li>
-                        <li>• El ticket está en estado \"Esperando Cliente\"</li>
+                        <li>• El ticket está en estado "Esperando Cliente"</li>
                         <li>• Se requiere acceso a sistemas externos</li>
                         <li>• Durante mantenimientos programados</li>
                       </ul>
                     </div>
-                    <div className=\"space-y-2\">
-                      <h4 className=\"font-medium\">Escalamiento automático:</h4>
-                      <ul className=\"space-y-1 text-muted-foreground\">
+                    <div className="space-y-2">
+                      <h4 className="font-medium">Escalamiento automático:</h4>
+                      <ul className="space-y-1 text-muted-foreground">
                         <li>• P1: Escalamiento inmediato al manager</li>
                         <li>• P2: Escalamiento a las 2 horas sin respuesta</li>
                         <li>• P3: Escalamiento a las 24 horas sin respuesta</li>
@@ -467,17 +467,17 @@ export default function SLAPage() {
 
         {/* CTA */}
         <Card>
-          <CardContent className=\"p-6 text-center\">
-            <h3 className=\"text-lg font-semibold mb-2\">¿Necesitas crear un ticket?</h3>
-            <p className=\"text-muted-foreground mb-4\">
+          <CardContent className="p-6 text-center">
+            <h3 className="text-lg font-semibold mb-2">¿Necesitas crear un ticket?</h3>
+            <p className="text-muted-foreground mb-4">
               Nuestro equipo está listo para ayudarte según los SLA de tu plan
             </p>
-            <div className=\"flex justify-center gap-3\">
+            <div className="flex justify-center gap-3">
               <Button asChild>
-                <Link href=\"/support/new\">Crear Ticket</Link>
+                <Link href="/support/new">Crear Ticket</Link>
               </Button>
-              <Button variant=\"outline\" asChild>
-                <Link href=\"/support/kb\">Ver Base de Conocimiento</Link>
+              <Button variant="outline" asChild>
+                <Link href="/support/kb">Ver Base de Conocimiento</Link>
               </Button>
             </div>
           </CardContent>

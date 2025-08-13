@@ -197,16 +197,16 @@ export default function NewTicketPage() {
       {/* Header */}
       <div className="flex items-center gap-4 mb-6">
         <Button variant="ghost" size="sm" asChild>
-          <Link href=\"/support\">
-            <ArrowLeft className=\"h-4 w-4 mr-2\" />
+          <Link href="/support">
+            <ArrowLeft className="h-4 w-4 mr-2" />
             Volver a Soporte
           </Link>
         </Button>
       </div>
 
-      <div className=\"grid grid-cols-1 lg:grid-cols-3 gap-6\">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Formulario principal */}
-        <div className=\"lg:col-span-2\">
+        <div className="lg:col-span-2">
           <Card>
             <CardHeader>
               <CardTitle>Crear Nuevo Ticket</CardTitle>
@@ -215,40 +215,40 @@ export default function NewTicketPage() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <form onSubmit={handleSubmit} className=\"space-y-6\">
+              <form onSubmit={handleSubmit} className="space-y-6">
                 {/* Asunto */}
                 <div>
-                  <Label htmlFor=\"subject\">Asunto *</Label>
+                  <Label htmlFor="subject">Asunto *</Label>
                   <Input
-                    id=\"subject\"
+                    id="subject"
                     value={formData.subject}
                     onChange={(e) => setFormData(prev => ({ ...prev, subject: e.target.value }))}
-                    placeholder=\"Ej: Error en la integración con webhook de Stripe\"
+                    placeholder="Ej: Error en la integración con webhook de Stripe"
                     className={errors.subject ? 'border-destructive' : ''}
                   />
                   {errors.subject && (
-                    <p className=\"text-sm text-destructive mt-1\">{errors.subject}</p>
+                    <p className="text-sm text-destructive mt-1">{errors.subject}</p>
                   )}
-                  <p className=\"text-xs text-muted-foreground mt-1\">
+                  <p className="text-xs text-muted-foreground mt-1">
                     {formData.subject.length}/200 caracteres
                   </p>
                 </div>
 
                 {/* Descripción */}
                 <div>
-                  <Label htmlFor=\"description\">Descripción *</Label>
+                  <Label htmlFor="description">Descripción *</Label>
                   <Textarea
-                    id=\"description\"
+                    id="description"
                     value={formData.description}
                     onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
-                    placeholder=\"Describe el problema con el mayor detalle posible:&#10;- ¿Qué estabas intentando hacer?&#10;- ¿Qué esperabas que pasara?&#10;- ¿Qué pasó en realidad?&#10;- ¿Tienes algún mensaje de error?\"
+                    placeholder="Describe el problema con el mayor detalle posible:&#10;- ¿Qué estabas intentando hacer?&#10;- ¿Qué esperabas que pasara?&#10;- ¿Qué pasó en realidad?&#10;- ¿Tienes algún mensaje de error?"
                     rows={8}
                     className={errors.description ? 'border-destructive' : ''}
                   />
                   {errors.description && (
-                    <p className=\"text-sm text-destructive mt-1\">{errors.description}</p>
+                    <p className="text-sm text-destructive mt-1">{errors.description}</p>
                   )}
-                  <p className=\"text-xs text-muted-foreground mt-1\">
+                  <p className="text-xs text-muted-foreground mt-1">
                     {formData.description.length}/5000 caracteres
                   </p>
                 </div>
@@ -261,16 +261,16 @@ export default function NewTicketPage() {
                     onValueChange={(value: 'P1' | 'P2' | 'P3') => setFormData(prev => ({ ...prev, severity: value }))}
                   >
                     <SelectTrigger className={errors.severity ? 'border-destructive' : ''}>
-                      <SelectValue placeholder=\"Selecciona la severidad\" />
+                      <SelectValue placeholder="Selecciona la severidad" />
                     </SelectTrigger>
                     <SelectContent>
                       {Object.entries(severityConfig).map(([severity, config]) => (
                         <SelectItem key={severity} value={severity}>
-                          <div className=\"flex items-center gap-2\">
+                          <div className="flex items-center gap-2">
                             <span>{config.icon}</span>
                             <div>
-                              <div className=\"font-medium\">{config.label}</div>
-                              <div className=\"text-xs text-muted-foreground\">{config.description}</div>
+                              <div className="font-medium">{config.label}</div>
+                              <div className="text-xs text-muted-foreground">{config.description}</div>
                             </div>
                           </div>
                         </SelectItem>
@@ -278,11 +278,11 @@ export default function NewTicketPage() {
                     </SelectContent>
                   </Select>
                   {errors.severity && (
-                    <p className=\"text-sm text-destructive mt-1\">{errors.severity}</p>
+                    <p className="text-sm text-destructive mt-1">{errors.severity}</p>
                   )}
                   {formData.severity && (
-                    <Alert className=\"mt-2\">
-                      <Clock className=\"h-4 w-4\" />
+                    <Alert className="mt-2">
+                      <Clock className="h-4 w-4" />
                       <AlertDescription>
                         <strong>SLA:</strong> {severityConfig[formData.severity].sla}
                       </AlertDescription>
@@ -298,7 +298,7 @@ export default function NewTicketPage() {
                     onValueChange={(value: 'email' | 'chat' | 'slack') => setFormData(prev => ({ ...prev, channel: value }))}
                   >
                     <SelectTrigger className={errors.channel ? 'border-destructive' : ''}>
-                      <SelectValue placeholder=\"¿Cómo prefieres recibir soporte?\" />
+                      <SelectValue placeholder="¿Cómo prefieres recibir soporte?" />
                     </SelectTrigger>
                     <SelectContent>
                       {Object.entries(channelConfig).map(([channel, config]) => (
@@ -307,14 +307,14 @@ export default function NewTicketPage() {
                           value={channel} 
                           disabled={!config.available}
                         >
-                          <div className=\"flex items-center gap-2\">
+                          <div className="flex items-center gap-2">
                             <span>{config.icon}</span>
                             <div>
                               <div className={`font-medium ${!config.available ? 'text-muted-foreground' : ''}`}>
                                 {config.label}
                                 {!config.available && ' (No disponible)'}
                               </div>
-                              <div className=\"text-xs text-muted-foreground\">{config.description}</div>
+                              <div className="text-xs text-muted-foreground">{config.description}</div>
                             </div>
                           </div>
                         </SelectItem>
@@ -322,26 +322,26 @@ export default function NewTicketPage() {
                     </SelectContent>
                   </Select>
                   {errors.channel && (
-                    <p className=\"text-sm text-destructive mt-1\">{errors.channel}</p>
+                    <p className="text-sm text-destructive mt-1">{errors.channel}</p>
                   )}
                 </div>
 
                 {/* Tags */}
                 <div>
                   <Label>Etiquetas (Opcional)</Label>
-                  <div className=\"space-y-3\">
+                  <div className="space-y-3">
                     {/* Tags seleccionados */}
                     {formData.tags.length > 0 && (
-                      <div className=\"flex flex-wrap gap-2\">
+                      <div className="flex flex-wrap gap-2">
                         {formData.tags.map((tag) => (
-                          <Badge key={tag} variant=\"secondary\" className=\"flex items-center gap-1\">
+                          <Badge key={tag} variant="secondary" className="flex items-center gap-1">
                             {tag}
                             <button
-                              type=\"button\"
+                              type="button"
                               onClick={() => handleRemoveTag(tag)}
-                              className=\"hover:bg-destructive hover:text-destructive-foreground rounded-full p-0.5\"
+                              className="hover:bg-destructive hover:text-destructive-foreground rounded-full p-0.5"
                             >
-                              <X className=\"h-3 w-3\" />
+                              <X className="h-3 w-3" />
                             </button>
                           </Badge>
                         ))}
@@ -350,19 +350,19 @@ export default function NewTicketPage() {
                     
                     {/* Tags comunes */}
                     <div>
-                      <p className=\"text-sm text-muted-foreground mb-2\">Tags frecuentes:</p>
-                      <div className=\"flex flex-wrap gap-2\">
+                      <p className="text-sm text-muted-foreground mb-2">Tags frecuentes:</p>
+                      <div className="flex flex-wrap gap-2">
                         {commonTags
                           .filter(tag => !formData.tags.includes(tag))
                           .slice(0, 10)
                           .map((tag) => (
                             <Button
                               key={tag}
-                              type=\"button\"
-                              variant=\"outline\"
-                              size=\"sm\"
+                              type="button"
+                              variant="outline"
+                              size="sm"
                               onClick={() => handleAddTag(tag)}
-                              className=\"h-7 text-xs\"
+                              className="h-7 text-xs"
                             >
                               + {tag}
                             </Button>
@@ -371,18 +371,18 @@ export default function NewTicketPage() {
                     </div>
 
                     {/* Agregar tag personalizado */}
-                    <div className=\"flex gap-2\">
+                    <div className="flex gap-2">
                       <Input
                         value={customTag}
                         onChange={(e) => setCustomTag(e.target.value)}
-                        placeholder=\"Agregar tag personalizado\"
-                        className=\"text-sm\"
+                        placeholder="Agregar tag personalizado"
+                        className="text-sm"
                         onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddCustomTag())}
                       />
                       <Button
-                        type=\"button\"
-                        variant=\"outline\"
-                        size=\"sm\"
+                        type="button"
+                        variant="outline"
+                        size="sm"
                         onClick={handleAddCustomTag}
                         disabled={!customTag.trim()}
                       >
@@ -394,18 +394,18 @@ export default function NewTicketPage() {
 
                 {/* Error de envío */}
                 {errors.submit && (
-                  <Alert variant=\"destructive\">
-                    <AlertTriangle className=\"h-4 w-4\" />
+                  <Alert variant="destructive">
+                    <AlertTriangle className="h-4 w-4" />
                     <AlertDescription>{errors.submit}</AlertDescription>
                   </Alert>
                 )}
 
                 {/* Botones */}
-                <div className=\"flex justify-end gap-3\">
-                  <Button type=\"button\" variant=\"outline\" asChild>
-                    <Link href=\"/support\">Cancelar</Link>
+                <div className="flex justify-end gap-3">
+                  <Button type="button" variant="outline" asChild>
+                    <Link href="/support">Cancelar</Link>
                   </Button>
-                  <Button type=\"submit\" disabled={isSubmitting}>
+                  <Button type="submit" disabled={isSubmitting}>
                     {isSubmitting ? 'Creando...' : 'Crear Ticket'}
                   </Button>
                 </div>
@@ -415,19 +415,19 @@ export default function NewTicketPage() {
         </div>
 
         {/* Sidebar con información */}
-        <div className=\"space-y-6\">
+        <div className="space-y-6">
           {/* Información de SLA */}
           <Card>
             <CardHeader>
-              <CardTitle className=\"text-base\">Tiempos de Respuesta</CardTitle>
+              <CardTitle className="text-base">Tiempos de Respuesta</CardTitle>
             </CardHeader>
-            <CardContent className=\"space-y-3\">
+            <CardContent className="space-y-3">
               {Object.entries(severityConfig).map(([severity, config]) => (
-                <div key={severity} className=\"flex items-start gap-2\">
-                  <span className=\"text-lg\">{config.icon}</span>
+                <div key={severity} className="flex items-start gap-2">
+                  <span className="text-lg">{config.icon}</span>
                   <div>
-                    <div className=\"font-medium text-sm\">{config.label}</div>
-                    <div className=\"text-xs text-muted-foreground\">{config.sla}</div>
+                    <div className="font-medium text-sm">{config.label}</div>
+                    <div className="text-xs text-muted-foreground">{config.sla}</div>
                   </div>
                 </div>
               ))}
@@ -437,13 +437,13 @@ export default function NewTicketPage() {
           {/* Consejos */}
           <Card>
             <CardHeader>
-              <CardTitle className=\"text-base flex items-center gap-2\">
-                <Info className=\"h-4 w-4\" />
+              <CardTitle className="text-base flex items-center gap-2">
+                <Info className="h-4 w-4" />
                 Consejos
               </CardTitle>
             </CardHeader>
-            <CardContent className=\"text-sm space-y-2\">
-              <ul className=\"space-y-2 text-muted-foreground\">
+            <CardContent className="text-sm space-y-2">
+              <ul className="space-y-2 text-muted-foreground">
                 <li>• Sé específico en el asunto y descripción</li>
                 <li>• Incluye pasos para reproducir el problema</li>
                 <li>• Adjunta capturas de pantalla si es relevante</li>
@@ -456,14 +456,14 @@ export default function NewTicketPage() {
           {/* Base de conocimiento */}
           <Card>
             <CardHeader>
-              <CardTitle className=\"text-base\">¿Necesitas ayuda inmediata?</CardTitle>
+              <CardTitle className="text-base">¿Necesitas ayuda inmediata?</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className=\"text-sm text-muted-foreground mb-3\">
+              <p className="text-sm text-muted-foreground mb-3">
                 Revisa nuestra base de conocimiento, tal vez encuentres la respuesta ahí.
               </p>
-              <Button variant=\"outline\" size=\"sm\" asChild className=\"w-full\">
-                <Link href=\"/support/kb\">Explorar KB</Link>
+              <Button variant="outline" size="sm" asChild className="w-full">
+                <Link href="/support/kb">Explorar KB</Link>
               </Button>
             </CardContent>
           </Card>
