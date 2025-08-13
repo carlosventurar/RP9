@@ -1,0 +1,336 @@
+# RP9 Orchestrator - Docker Compose Configuration
+# Este archivo configura el stack completo del orchestrator con Traefik, PostgreSQL, Redis y el servicio orchestrator
+
+version: '3.8'
+
+networks:
+  rp9-network:
+    driver: bridge
+    external: false
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+  traefik_data:
+    driver: local
+
+services:
+  # =============================================================================
+  # TRAEFIK - Reverse Proxy & Load Balancer
+  # =============================================================================
+  traefik:
+    image: traefik:v3.0
+    container_name: rp9-traefik
+    restart: unless-stopped
+    command:
+      # Global configuration
+      - "--global.checkNewVersion=false"
+      - "--global.sendAnonymousUsage=false"
+      
+      # API configuration
+      - "--api.dashboard=true"
+      - "--api.debug=false"
+      - "--api.insecure=false"
+      
+      # Entry points
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
+      
+      # Docker provider
+      - "--providers.docker=true"
+      - "--providers.docker.network=rp9-network"
+      - "--providers.docker.exposedByDefault=false"
+      
+      # Certificate resolver (Let's Encrypt)
+      - "--certificatesresolvers.letsencrypt.acme.tlschallenge=true"
+      - "--certificatesresolvers.letsencrypt.acme.email=${ACME_EMAIL}"
+      - "--certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json"
+      
+      # Metrics
+      - "--metrics.prometheus=true"
+      - "--metrics.prometheus.buckets=0.1,0.3,1.2,5.0"
+      
+      # Logging
+      - "--log.level=INFO"
+      - "--accesslog=true"
+      
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080" # Dashboard (solo para desarrollo)
+    
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - traefik_data:/letsencrypt
+      
+    networks:
+      - rp9-network
+      
+    labels:
+      # Dashboard configuration
+      - "traefik.enable=true"
+      - "traefik.http.routers.dashboard.rule=Host(`traefik.${TRAEFIK_DOMAIN}`)"
+      - "traefik.http.routers.dashboard.tls=true"
+      - "traefik.http.routers.dashboard.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.dashboard.service=api@internal"
+      - "traefik.http.routers.dashboard.middlewares=auth"
+      - "traefik.http.middlewares.auth.basicauth.users=${TRAEFIK_BASIC_AUTH}"
+      
+    environment:
+      - TRAEFIK_DOMAIN=${TRAEFIK_DOMAIN}
+      - ACME_EMAIL=${ACME_EMAIL}
+
+  # =============================================================================
+  # POSTGRESQL - Primary Database
+  # =============================================================================
+  postgres:
+    image: postgres:15-alpine
+    container_name: rp9-postgres
+    restart: unless-stopped
+    
+    environment:
+      POSTGRES_DB: rp9_platform
+      POSTGRES_USER: rp9
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_INITDB_ARGS: "--auth-host=scram-sha-256"
+      
+    ports:
+      - "5432:5432"
+      
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./postgres/init:/docker-entrypoint-initdb.d:ro
+      
+    networks:
+      - rp9-network
+      
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U rp9 -d rp9_platform"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+      
+    labels:
+      - "traefik.enable=false"
+
+  # =============================================================================
+  # REDIS - Queue & Cache
+  # =============================================================================
+  redis:
+    image: redis:7-alpine
+    container_name: rp9-redis
+    restart: unless-stopped
+    
+    command: 
+      - redis-server
+      - --appendonly yes
+      - --maxmemory 256mb
+      - --maxmemory-policy allkeys-lru
+      - --requirepass ${REDIS_PASSWORD}
+      
+    ports:
+      - "6379:6379"
+      
+    volumes:
+      - redis_data:/data
+      
+    networks:
+      - rp9-network
+      
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 30s
+      
+    labels:
+      - "traefik.enable=false"
+
+  # =============================================================================
+  # RP9 ORCHESTRATOR - Main Service
+  # =============================================================================
+  orchestrator:
+    build:
+      context: ../orchestrator
+      dockerfile: Dockerfile
+    container_name: rp9-orchestrator
+    restart: unless-stopped
+    
+    environment:
+      # Server configuration
+      PORT: 8080
+      NODE_ENV: production
+      
+      # Authentication
+      JWT_SECRET: ${JWT_SECRET}
+      HMAC_SECRET: ${HMAC_SECRET}
+      
+      # Database
+      POSTGRES_URL: postgresql://rp9:${DB_PASSWORD}@postgres:5432/rp9_platform
+      
+      # Supabase
+      SUPABASE_URL: ${SUPABASE_URL}
+      SUPABASE_SERVICE_ROLE_KEY: ${SUPABASE_SERVICE_ROLE_KEY}
+      
+      # Stripe
+      STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY}
+      
+      # S3 / Backups
+      S3_ENDPOINT: ${S3_ENDPOINT}
+      S3_BUCKET: ${S3_BUCKET}
+      S3_ACCESS_KEY: ${S3_ACCESS_KEY}
+      S3_SECRET_KEY: ${S3_SECRET_KEY}
+      
+      # Traefik & Domains
+      TRAEFIK_DOMAIN: ${TRAEFIK_DOMAIN}
+      ACME_EMAIL: ${ACME_EMAIL}
+      
+      # n8n Configuration
+      N8N_IMAGE: ${N8N_IMAGE}
+      SHARED_N8N_BASE_URL: ${SHARED_N8N_BASE_URL}
+      SHARED_N8N_API_KEY: ${SHARED_N8N_API_KEY}
+      
+      # Redis
+      REDIS_URL: redis://:${REDIS_PASSWORD}@redis:6379/0
+      
+      # Docker
+      DOCKER_SOCKET_PATH: /var/run/docker.sock
+      
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      
+    networks:
+      - rp9-network
+      
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+        
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+      
+    labels:
+      # Traefik configuration
+      - "traefik.enable=true"
+      - "traefik.docker.network=rp9-network"
+      
+      # Router configuration
+      - "traefik.http.routers.orchestrator.rule=Host(`orchestrator.${TRAEFIK_DOMAIN}`)"
+      - "traefik.http.routers.orchestrator.tls=true"
+      - "traefik.http.routers.orchestrator.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.orchestrator.entrypoints=websecure"
+      
+      # Service configuration
+      - "traefik.http.services.orchestrator.loadbalancer.server.port=8080"
+      - "traefik.http.services.orchestrator.loadbalancer.healthcheck.path=/health"
+      - "traefik.http.services.orchestrator.loadbalancer.healthcheck.interval=30s"
+      
+      # Rate limiting middleware
+      - "traefik.http.middlewares.orchestrator-ratelimit.ratelimit.average=100"
+      - "traefik.http.middlewares.orchestrator-ratelimit.ratelimit.burst=50"
+      - "traefik.http.routers.orchestrator.middlewares=orchestrator-ratelimit"
+      
+      # RP9 metadata
+      - "rp9.service.name=orchestrator"
+      - "rp9.service.version=1.0.0"
+      - "rp9.service.type=core"
+
+  # =============================================================================
+  # PROMETHEUS - Metrics & Monitoring (Opcional)
+  # =============================================================================
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: rp9-prometheus
+    restart: unless-stopped
+    
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=90d'
+      - '--web.enable-lifecycle'
+      
+    ports:
+      - "9090:9090"
+      
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./prometheus/rules:/etc/prometheus/rules:ro
+      
+    networks:
+      - rp9-network
+      
+    depends_on:
+      - orchestrator
+      
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.prometheus.rule=Host(`prometheus.${TRAEFIK_DOMAIN}`)"
+      - "traefik.http.routers.prometheus.tls=true"
+      - "traefik.http.routers.prometheus.tls.certresolver=letsencrypt"
+      - "traefik.http.services.prometheus.loadbalancer.server.port=9090"
+
+  # =============================================================================
+  # GRAFANA - Dashboard & Visualization (Opcional)
+  # =============================================================================
+  grafana:
+    image: grafana/grafana:latest
+    container_name: rp9-grafana
+    restart: unless-stopped
+    
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD}
+      GF_SECURITY_ADMIN_USER: admin
+      GF_INSTALL_PLUGINS: grafana-piechart-panel
+      
+    ports:
+      - "3000:3000"
+      
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./grafana/dashboards:/var/lib/grafana/dashboards:ro
+      
+    networks:
+      - rp9-network
+      
+    depends_on:
+      - prometheus
+      
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.grafana.rule=Host(`grafana.${TRAEFIK_DOMAIN}`)"
+      - "traefik.http.routers.grafana.tls=true"
+      - "traefik.http.routers.grafana.tls.certresolver=letsencrypt"
+      - "traefik.http.services.grafana.loadbalancer.server.port=3000"
+
+# =============================================================================
+# CONFIGURATION NOTES
+# =============================================================================
+
+# Para usar este docker-compose:
+# 1. Copiar .env.example a .env y configurar variables
+# 2. Crear directorios necesarios: mkdir -p postgres/init prometheus grafana/{dashboards,provisioning}
+# 3. Ejecutar: docker-compose -f docker-compose.orchestrator.yml up -d
+# 4. Verificar logs: docker-compose -f docker-compose.orchestrator.yml logs -f
+
+# URLs de acceso (reemplazar TRAEFIK_DOMAIN por tu dominio):
+# - Orchestrator API: https://orchestrator.rp9.io
+# - Traefik Dashboard: https://traefik.rp9.io
+# - Prometheus: https://prometheus.rp9.io
+# - Grafana: https://grafana.rp9.io
+
+# Para desarrollo local, agregar a /etc/hosts:
+# 127.0.0.1 orchestrator.rp9.local traefik.rp9.local prometheus.rp9.local grafana.rp9.local
