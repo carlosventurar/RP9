@@ -4,6 +4,10 @@
 
 [build.environment]
   NODE_VERSION = "20"
+  # Fase 14: AI Assistant Environment Variables
+  AI_BACKEND_URL = "http://localhost:3001"
+  OPENAI_API_KEY = "sk-dummy-key-for-build"
+  ANTHROPIC_API_KEY = "sk-ant-dummy-key-for-build"
 
 
 [[plugins]]
