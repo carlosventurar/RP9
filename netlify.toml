@@ -4,7 +4,14 @@
 
 [build.environment]
   NODE_VERSION = "20"
-  # Fase 14: AI Assistant Environment Variables
+  # Fase 15: I18n Configuration
+  NEXT_PUBLIC_DEFAULT_LOCALE = "es-419"
+  NEXT_PUBLIC_SUPPORTED_LOCALES = "es-419,es-MX,es-CO,es-CL,es-PE,es-AR,es-DO,en-US"
+  ENABLE_FEATURE_FLAGS = "true"
+  ENABLE_MULTI_CURRENCY = "true"
+  ENABLE_I18N = "true"
+  
+  # Fase 14: AI Assistant Environment Variables  
   AI_BACKEND_URL = "http://localhost:3001"
   OPENAI_API_KEY = "sk-dummy-key-for-build"
   ANTHROPIC_API_KEY = "sk-ant-dummy-key-for-build"
@@ -77,6 +84,13 @@
 
 [functions.tenants-promote-scan]
   schedule = "0 */4 * * *"  # Every 4 hours at :00 - scan for promotion candidates
+
+# Scheduled Functions - Fase 15: I18n & Multi-Currency
+[functions.currency-rates-update]
+  schedule = "0 */6 * * *"  # Every 6 hours - update exchange rates
+
+[functions.i18n-export]
+  schedule = "0 3 * * 1"    # Weekly on Mondays at 03:00 UTC - export i18n messages
 
 # Fase 4: Security & SRE Functions
 [functions.backup-run]
