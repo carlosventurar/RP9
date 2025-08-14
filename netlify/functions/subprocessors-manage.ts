@@ -17,4 +17,213 @@ const subprocessorSchema = z.object({
     privacy_policy_url: z.string().url().optional()
   }).optional(),
   notification_type: z.enum(['addition', 'modification', 'removal']).optional()
-})\n\nconst supabase = createClient(\n  process.env.NEXT_PUBLIC_SUPABASE_URL!,\n  process.env.SUPABASE_SERVICE_ROLE_KEY!\n)\n\n// Send notification emails (placeholder)\nasync function sendSubprocessorNotification(\n  subscriberEmail: string,\n  notificationType: string,\n  subprocessorName: string,\n  changeDetails: string\n) {\n  // In production, integrate with email service (Resend, SendGrid, etc.)\n  console.log(`Email notification sent to ${subscriberEmail}:`);\n  console.log(`Subject: Cambio en Subprocesadores - ${subprocessorName}`);\n  console.log(`Type: ${notificationType}`);\n  console.log(`Details: ${changeDetails}`);\n  \n  return true; // Placeholder success\n}\n\n// Notify all subscribers about subprocessor changes\nasync function notifySubscribers(notificationType: string, subprocessorName: string, changeDetails: string) {\n  const { data: subscriptions, error } = await supabase\n    .from('subprocessor_subscriptions')\n    .select('email, tenant_id')\n    .is('unsubscribed_at', null)\n\n  if (error) {\n    throw new Error(`Failed to fetch subscriptions: ${error.message}`)\n  }\n\n  if (!subscriptions || subscriptions.length === 0) {\n    console.log('No active subscriptions found')\n    return 0\n  }\n\n  let notificationsSent = 0\n  for (const subscription of subscriptions) {\n    try {\n      await sendSubprocessorNotification(\n        subscription.email,\n        notificationType,\n        subprocessorName,\n        changeDetails\n      )\n      notificationsSent++\n    } catch (error) {\n      console.error(`Failed to send notification to ${subscription.email}:`, error)\n    }\n  }\n\n  return notificationsSent\n}\n\nexport const handler: Handler = async (event: HandlerEvent, context: HandlerContext) => {\n  const corsHeaders = {\n    'Access-Control-Allow-Origin': '*',\n    'Access-Control-Allow-Headers': 'Content-Type, Authorization',\n    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',\n    'Content-Type': 'application/json'\n  }\n\n  if (event.httpMethod === 'OPTIONS') {\n    return { statusCode: 200, headers: corsHeaders, body: '' }\n  }\n\n  try {\n    // Handle GET requests (list subprocessors)\n    if (event.httpMethod === 'GET') {\n      const { data: subprocessors, error } = await supabase\n        .from('subprocessors')\n        .select('*')\n        .eq('status', 'active')\n        .order('name')\n\n      if (error) {\n        throw new Error(`Failed to fetch subprocessors: ${error.message}`)\n      }\n\n      return {\n        statusCode: 200,\n        headers: corsHeaders,\n        body: JSON.stringify({\n          success: true,\n          subprocessors: subprocessors || []\n        })\n      }\n    }\n\n    // Handle POST/PUT/DELETE requests\n    if (!event.body) {\n      return {\n        statusCode: 400,\n        headers: corsHeaders,\n        body: JSON.stringify({ error: 'Request body required' })\n      }\n    }\n\n    const requestData = JSON.parse(event.body)\n    const validation = subprocessorSchema.safeParse(requestData)\n    \n    if (!validation.success) {\n      return {\n        statusCode: 400,\n        headers: corsHeaders,\n        body: JSON.stringify({\n          error: 'Validation failed',\n          details: validation.error.issues\n        })\n      }\n    }\n\n    const { action, id, data, notification_type } = validation.data\n\n    switch (action) {\n      case 'list':\n        const { data: subprocessors, error: listError } = await supabase\n          .from('subprocessors')\n          .select('*')\n          .eq('status', 'active')\n          .order('name')\n\n        if (listError) throw new Error(listError.message)\n\n        return {\n          statusCode: 200,\n          headers: corsHeaders,\n          body: JSON.stringify({ success: true, subprocessors })\n        }\n\n      case 'create':\n        if (!data) {\n          return {\n            statusCode: 400,\n            headers: corsHeaders,\n            body: JSON.stringify({ error: 'Subprocessor data required' })\n          }\n        }\n\n        const { data: newSubprocessor, error: createError } = await supabase\n          .from('subprocessors')\n          .insert({\n            ...data,\n            added_date: new Date().toISOString(),\n            last_reviewed: new Date().toISOString(),\n            status: 'active'\n          })\n          .select()\n          .single()\n\n        if (createError) throw new Error(createError.message)\n\n        // Notify subscribers\n        await notifySubscribers(\n          'addition',\n          data.name || 'Nuevo Subprocesador',\n          `Se ha añadido un nuevo subprocesador: ${data.name}. Propósito: ${data.purpose}`\n        )\n\n        return {\n          statusCode: 201,\n          headers: corsHeaders,\n          body: JSON.stringify({\n            success: true,\n            subprocessor: newSubprocessor\n          })\n        }\n\n      case 'notify':\n        // Manual notification trigger\n        const notificationCount = await notifySubscribers(\n          notification_type || 'modification',\n          'Actualización de Subprocesadores',\n          'Se han realizado cambios en nuestra lista de subprocesadores. Revise la lista actualizada.'\n        )\n\n        return {\n          statusCode: 200,\n          headers: corsHeaders,\n          body: JSON.stringify({\n            success: true,\n            notifications_sent: notificationCount\n          })\n        }\n\n      default:\n        return {\n          statusCode: 400,\n          headers: corsHeaders,\n          body: JSON.stringify({ error: 'Invalid action' })\n        }\n    }\n\n  } catch (error) {\n    console.error('Error in subprocessors-manage:', error)\n    return {\n      statusCode: 500,\n      headers: corsHeaders,\n      body: JSON.stringify({\n        error: 'Operation failed',\n        message: error instanceof Error ? error.message : 'Unknown error'\n      })\n    }\n  }\n}\n\nexport { subprocessorSchema, sendSubprocessorNotification }
+})
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+)
+
+// Send notification emails (placeholder)
+async function sendSubprocessorNotification(
+  subscriberEmail: string,
+  notificationType: string,
+  subprocessorName: string,
+  changeDetails: string
+) {
+  // In production, integrate with email service (Resend, SendGrid, etc.)
+  console.log(`Email notification sent to ${subscriberEmail}:`)
+  console.log(`Subject: Cambio en Subprocesadores - ${subprocessorName}`)
+  console.log(`Type: ${notificationType}`)
+  console.log(`Details: ${changeDetails}`)
+  
+  return true // Placeholder success
+}
+
+// Notify all subscribers about subprocessor changes
+async function notifySubscribers(notificationType: string, subprocessorName: string, changeDetails: string) {
+  const { data: subscriptions, error } = await supabase
+    .from('subprocessor_subscriptions')
+    .select('email, tenant_id')
+    .is('unsubscribed_at', null)
+
+  if (error) {
+    throw new Error(`Failed to fetch subscriptions: ${error.message}`)
+  }
+
+  if (!subscriptions || subscriptions.length === 0) {
+    console.log('No active subscriptions found')
+    return 0
+  }
+
+  let notificationsSent = 0
+  for (const subscription of subscriptions) {
+    try {
+      await sendSubprocessorNotification(
+        subscription.email,
+        notificationType,
+        subprocessorName,
+        changeDetails
+      )
+      notificationsSent++
+    } catch (error) {
+      console.error(`Failed to send notification to ${subscription.email}:`, error)
+    }
+  }
+
+  return notificationsSent
+}
+
+export const handler: Handler = async (event: HandlerEvent, context: HandlerContext) => {
+  const corsHeaders = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+    'Content-Type': 'application/json'
+  }
+
+  if (event.httpMethod === 'OPTIONS') {
+    return { statusCode: 200, headers: corsHeaders, body: '' }
+  }
+
+  try {
+    // Handle GET requests (list subprocessors)
+    if (event.httpMethod === 'GET') {
+      const { data: subprocessors, error } = await supabase
+        .from('subprocessors')
+        .select('*')
+        .eq('status', 'active')
+        .order('name')
+
+      if (error) {
+        throw new Error(`Failed to fetch subprocessors: ${error.message}`)
+      }
+
+      return {
+        statusCode: 200,
+        headers: corsHeaders,
+        body: JSON.stringify({
+          success: true,
+          subprocessors: subprocessors || []
+        })
+      }
+    }
+
+    // Handle POST/PUT/DELETE requests
+    if (!event.body) {
+      return {
+        statusCode: 400,
+        headers: corsHeaders,
+        body: JSON.stringify({ error: 'Request body required' })
+      }
+    }
+
+    const requestData = JSON.parse(event.body)
+    const validation = subprocessorSchema.safeParse(requestData)
+    
+    if (!validation.success) {
+      return {
+        statusCode: 400,
+        headers: corsHeaders,
+        body: JSON.stringify({
+          error: 'Validation failed',
+          details: validation.error.issues
+        })
+      }
+    }
+
+    const { action, id, data, notification_type } = validation.data
+
+    switch (action) {
+      case 'list':
+        const { data: subprocessors, error: listError } = await supabase
+          .from('subprocessors')
+          .select('*')
+          .eq('status', 'active')
+          .order('name')
+
+        if (listError) throw new Error(listError.message)
+
+        return {
+          statusCode: 200,
+          headers: corsHeaders,
+          body: JSON.stringify({ success: true, subprocessors })
+        }
+
+      case 'create':
+        if (!data) {
+          return {
+            statusCode: 400,
+            headers: corsHeaders,
+            body: JSON.stringify({ error: 'Subprocessor data required' })
+          }
+        }
+
+        const { data: newSubprocessor, error: createError } = await supabase
+          .from('subprocessors')
+          .insert({
+            ...data,
+            added_date: new Date().toISOString(),
+            last_reviewed: new Date().toISOString(),
+            status: 'active'
+          })
+          .select()
+          .single()
+
+        if (createError) throw new Error(createError.message)
+
+        // Notify subscribers
+        await notifySubscribers(
+          'addition',
+          data.name || 'Nuevo Subprocesador',
+          `Se ha añadido un nuevo subprocesador: ${data.name}. Propósito: ${data.purpose}`
+        )
+
+        return {
+          statusCode: 201,
+          headers: corsHeaders,
+          body: JSON.stringify({
+            success: true,
+            subprocessor: newSubprocessor
+          })
+        }
+
+      case 'notify':
+        // Manual notification trigger
+        const notificationCount = await notifySubscribers(
+          notification_type || 'modification',
+          'Actualización de Subprocesadores',
+          'Se han realizado cambios en nuestra lista de subprocesadores. Revise la lista actualizada.'
+        )
+
+        return {
+          statusCode: 200,
+          headers: corsHeaders,
+          body: JSON.stringify({
+            success: true,
+            notifications_sent: notificationCount
+          })
+        }
+
+      default:
+        return {
+          statusCode: 400,
+          headers: corsHeaders,
+          body: JSON.stringify({ error: 'Invalid action' })
+        }
+    }
+
+  } catch (error) {
+    console.error('Error in subprocessors-manage:', error)
+    return {
+      statusCode: 500,
+      headers: corsHeaders,
+      body: JSON.stringify({
+        error: 'Operation failed',
+        message: error instanceof Error ? error.message : 'Unknown error'
+      })
+    }
+  }
+}
+
+export { subprocessorSchema, sendSubprocessorNotification }
