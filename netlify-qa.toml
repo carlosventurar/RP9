@@ -1,0 +1,117 @@
+[build]
+  publish = ".next"
+  command = "npm install --legacy-peer-deps && npm run build"
+
+[build.environment]
+  NODE_VERSION = "20"
+  
+  # QA Environment Configuration
+  NODE_ENV = "staging"
+  NEXT_PUBLIC_ENVIRONMENT = "qa"
+  
+  # Fase 15: I18n Configuration
+  NEXT_PUBLIC_DEFAULT_LOCALE = "es-419"
+  NEXT_PUBLIC_SUPPORTED_LOCALES = "es-419,es-MX,es-CO,es-CL,es-PE,es-AR,es-DO,en-US"
+  ENABLE_FEATURE_FLAGS = "true"
+  ENABLE_MULTI_CURRENCY = "true"
+  ENABLE_I18N = "true"
+  
+  # Fase 14: AI Assistant Environment Variables (QA Keys)
+  AI_BACKEND_URL = "https://qa-ai.rp9portal.com"
+  OPENAI_API_KEY = "sk-dummy-qa-key-for-build"
+  ANTHROPIC_API_KEY = "sk-ant-dummy-qa-key-for-build"
+  
+  # QA Database Configuration
+  NEXT_PUBLIC_SUPABASE_URL = "https://qa-supabase-url.supabase.co"
+  SUPABASE_SERVICE_ROLE_KEY = "qa-service-role-key"
+  
+  # QA Stripe Configuration (Test Mode)
+  STRIPE_SECRET_KEY = "sk_test_qa_stripe_key"
+  NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY = "pk_test_qa_stripe_key"
+  STRIPE_WEBHOOK_SECRET = "whsec_qa_webhook_secret"
+  
+  # QA Analytics & Monitoring
+  MIXPANEL_PROJECT_TOKEN = "qa_mixpanel_token"
+  SENTRY_DSN = "qa_sentry_dsn"
+  
+  # Feature Flags for QA
+  ENABLE_DEBUG_MODE = "true"
+  ENABLE_VERBOSE_LOGGING = "true"
+  DISABLE_RATE_LIMITING = "true"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+
+# QA-specific function configurations (more frequent schedules for testing)
+[functions.usage-collector]
+  schedule = "*/5 * * * *"  # Every 5 minutes for faster testing
+
+[functions.billing-enforcement]
+  schedule = "*/30 * * * *"  # Every 30 minutes for testing
+
+[functions.billing-dunning]
+  schedule = "*/2 * * * *"  # Every 2 hours for testing
+
+# Reduced schedules for QA testing
+[functions.analytics-collector]
+  schedule = "*/5 * * * *"  # Every 5 minutes for testing
+
+[functions.analytics-aggregate]
+  schedule = "*/30 * * * *"  # Every 30 minutes for testing
+
+[functions.cs-healthscore]
+  schedule = "*/30 * * * *"  # Every 30 minutes for testing
+
+# QA Security headers (relaxed for testing)
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Strict-Transport-Security = "max-age=86400; includeSubDomains"  # 1 day for QA
+    Content-Security-Policy = "default-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' data: https:; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://*.up.railway.app https://api.netlify.com https://qa-*.com; frame-ancestors 'none';"
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "SAMEORIGIN"  # Less restrictive for QA
+    X-XSS-Protection = "1; mode=block"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Cross-Origin-Opener-Policy = "same-origin"
+    Cross-Origin-Resource-Policy = "cross-origin"  # Less restrictive for QA
+    X-Environment = "QA"  # Custom header to identify QA environment
+
+# Cache static assets (shorter cache for QA)
+[[headers]]
+  for = "/_next/static/*"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"  # 1 hour cache for QA vs 1 year for prod
+
+# QA-specific redirects and rewrites
+[[redirects]]
+  from = "/qa-admin/*"
+  to = "/admin/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/debug/*"
+  to = "/.netlify/functions/debug/:splat"
+  status = 200
+  force = true
+
+# Environment-specific context (branch deployment settings)
+[context.qa]
+  command = "npm install --legacy-peer-deps && npm run build"
+  
+[context.qa.environment]
+  NODE_ENV = "staging"
+  NEXT_PUBLIC_ENVIRONMENT = "qa"
+  ENABLE_DEBUG_MODE = "true"
+
+[context.deploy-preview]
+  command = "npm install --legacy-peer-deps && npm run build"
+  
+[context.deploy-preview.environment]
+  NODE_ENV = "development"
+  NEXT_PUBLIC_ENVIRONMENT = "preview"
+  ENABLE_DEBUG_MODE = "true"
