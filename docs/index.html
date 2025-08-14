@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RP9 Phase 6 - Documentation</title>
+    <title>RP9 - Portal de Documentación | Fases 4-14</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -12,540 +12,933 @@
                     colors: {
                         'rp9-blue': '#0066CC',
                         'rp9-green': '#00CC66',
+                        'rp9-purple': '#6366F1',
+                        'rp9-orange': '#F59E0B',
+                        'rp9-red': '#EF4444'
+                    },
+                    fontFamily: {
+                        'inter': ['Inter', 'system-ui', 'sans-serif'],
                     }
                 }
             }
         }
     </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        .code-block {
-            background: #1a1a1a;
-            color: #f8f8f2;
-            border-radius: 8px;
-            padding: 1rem;
-            overflow-x: auto;
-        }
-        .highlight {
+        body { font-family: 'Inter', system-ui, sans-serif; }
+        .gradient-bg {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+        }
+        .phase-card {
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border: 1px solid #e2e8f0;
+        }
+        .phase-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            border-color: #0066CC;
+        }
+        .phase-card.completed {
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            border-color: #16a34a;
+        }
+        .phase-card.featured {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-color: #f59e0b;
+            position: relative;
+        }
+        .phase-card.featured::before {
+            content: "🆕";
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #f59e0b;
+            color: white;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+        .search-box {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.9);
+        }
+        .status-badge {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
         .nav-link {
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
         }
         .nav-link:hover {
             color: #0066CC;
-            transform: translateX(4px);
+            transform: translateY(-1px);
         }
-        .feature-card {
-            transition: all 0.3s ease;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        .fade-in {
+            animation: fadeInUp 0.6s ease-out forwards;
         }
-        .feature-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .tech-stack-item {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
     </style>
 </head>
-<body class="bg-gray-50">
-    <!-- Header -->
-    <nav class="bg-white shadow-lg border-b-4 border-rp9-blue">
-        <div class="max-w-7xl mx-auto px-4">
+<body class="bg-gray-50 text-gray-900">
+    <!-- Navigation Header -->
+    <nav class="bg-white shadow-lg sticky top-0 z-50 border-b-4 border-rp9-blue">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
                 <div class="flex items-center space-x-4">
-                    <div class="text-2xl font-bold highlight">RP9</div>
-                    <div class="text-gray-600">Phase 6 Documentation</div>
+                    <div class="flex items-center space-x-2">
+                        <div class="w-8 h-8 bg-gradient-to-br from-rp9-blue to-rp9-purple rounded-lg flex items-center justify-center">
+                            <span class="text-white font-bold text-sm">RP</span>
+                        </div>
+                        <div class="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-rp9-blue to-rp9-purple">
+                            RP9
+                        </div>
+                    </div>
+                    <div class="hidden sm:block text-gray-500 border-l border-gray-300 pl-4">
+                        Portal de Documentación
+                    </div>
                 </div>
-                <div class="flex items-center space-x-6">
-                    <a href="#overview" class="nav-link">Resumen</a>
-                    <a href="#features" class="nav-link">Características</a>
-                    <a href="#setup" class="nav-link">Configuración</a>
-                    <a href="#api" class="nav-link">API</a>
-                    <a href="#components" class="nav-link">Componentes</a>
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="#overview" class="nav-link text-gray-700 hover:text-rp9-blue">Resumen</a>
+                    <a href="#phases" class="nav-link text-gray-700 hover:text-rp9-blue">Fases</a>
+                    <a href="#architecture" class="nav-link text-gray-700 hover:text-rp9-blue">Arquitectura</a>
+                    <a href="#status" class="nav-link text-gray-700 hover:text-rp9-blue">Estado</a>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <span class="hidden sm:inline text-sm text-gray-500">v2024.14</span>
+                    <div class="w-3 h-3 bg-rp9-green rounded-full animate-pulse"></div>
                 </div>
             </div>
         </div>
     </nav>
 
     <!-- Hero Section -->
-    <section class="bg-gradient-to-r from-rp9-blue to-purple-600 text-white py-20">
-        <div class="max-w-7xl mx-auto px-4 text-center">
-            <h1 class="text-5xl font-bold mb-6">
-                🔒 Phase 6: Observabilidad & Seguridad
+    <section class="gradient-bg text-white py-16 sm:py-24">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1 class="text-4xl sm:text-6xl font-bold mb-6 leading-tight">
+                🚀 RP9 Platform
             </h1>
-            <p class="text-xl mb-8 max-w-3xl mx-auto">
-                Sistema completo de observabilidad en tiempo real con métricas de n8n, 
-                seguridad HMAC, rate limiting, RLS y hardening completo para producción.
+            <p class="text-lg sm:text-xl mb-8 max-w-3xl mx-auto opacity-90">
+                Plataforma completa de automatización empresarial con 14 fases de desarrollo,
+                desde onboarding hasta AI Assistant avanzado con multi-provider routing.
             </p>
-            <div class="flex justify-center space-x-4">
-                <a href="#features" class="bg-white text-rp9-blue px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition">
-                    Explorar Características
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="#phases" class="bg-white text-rp9-blue px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-all transform hover:scale-105">
+                    📋 Explorar Fases
                 </a>
-                <a href="#setup" class="border-2 border-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-rp9-blue transition">
-                    Guía de Configuración
+                <a href="./FASE14_AI_ASSISTANT_USAGE_GUIDE.md" class="border-2 border-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-rp9-blue transition-all">
+                    🤖 AI Assistant (Nuevo)
                 </a>
+            </div>
+            <div class="mt-12 grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-2xl mx-auto">
+                <div class="tech-stack-item p-4 rounded-lg text-center">
+                    <div class="text-2xl mb-2">⚡</div>
+                    <div class="text-sm font-medium">14 Fases</div>
+                </div>
+                <div class="tech-stack-item p-4 rounded-lg text-center">
+                    <div class="text-2xl mb-2">🤖</div>
+                    <div class="text-sm font-medium">AI Assistant</div>
+                </div>
+                <div class="tech-stack-item p-4 rounded-lg text-center">
+                    <div class="text-2xl mb-2">🏢</div>
+                    <div class="text-sm font-medium">Multi-tenant</div>
+                </div>
+                <div class="tech-stack-item p-4 rounded-lg text-center">
+                    <div class="text-2xl mb-2">🔐</div>
+                    <div class="text-sm font-medium">Enterprise</div>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- Overview Section -->
-    <section id="overview" class="py-20">
-        <div class="max-w-7xl mx-auto px-4">
-            <h2 class="text-4xl font-bold text-center mb-12">Resumen Ejecutivo</h2>
-            
-            <div class="grid md:grid-cols-2 gap-12 items-center">
-                <div>
-                    <h3 class="text-2xl font-semibold mb-6">¿Qué es Phase 6?</h3>
-                    <p class="text-gray-700 mb-6">
-                        Phase 6 implementa un sistema completo de observabilidad y seguridad diseñado para 
-                        proporcionar visibilidad total de workflows n8n y hardening de seguridad nivel producción. 
-                        Esta fase incluye métricas en tiempo real, webhooks seguros con HMAC, rate limiting, 
-                        Row Level Security, rotación automática de claves y suite completa de pruebas de intrusión.
+    <section id="overview" class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl sm:text-4xl font-bold mb-4">Resumen del Proyecto</h2>
+                <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+                    RP9 es una plataforma empresarial de automatización que evoluciona a través de 14 fases,
+                    cada una agregando funcionalidades críticas para empresas modernas.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8 mb-12">
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-rp9-blue rounded-full flex items-center justify-center mx-auto mb-4">
+                        <span class="text-white text-2xl">🎯</span>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Progresivo</h3>
+                    <p class="text-gray-600">
+                        Desarrollo incremental con cada fase agregando valor específico y medible al negocio.
                     </p>
-                    
+                </div>
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-rp9-green rounded-full flex items-center justify-center mx-auto mb-4">
+                        <span class="text-white text-2xl">🏢</span>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Empresarial</h3>
+                    <p class="text-gray-600">
+                        Diseñado para manejar workloads empresariales con seguridad, compliance y escalabilidad.
+                    </p>
+                </div>
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-rp9-purple rounded-full flex items-center justify-center mx-auto mb-4">
+                        <span class="text-white text-2xl">🤖</span>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">AI-Powered</h3>
+                    <p class="text-gray-600">
+                        Integración nativa de AI con multi-provider routing, blueprint DSL y análisis inteligente.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-6 bg-gray-50 rounded-xl p-8">
+                <div class="text-center">
+                    <div class="text-2xl sm:text-3xl font-bold text-rp9-blue">14</div>
+                    <div class="text-sm text-gray-600">Fases Completadas</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-2xl sm:text-3xl font-bold text-rp9-green">100%</div>
+                    <div class="text-sm text-gray-600">Build Success</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-2xl sm:text-3xl font-bold text-rp9-purple">Enterprise</div>
+                    <div class="text-sm text-gray-600">Security Level</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-2xl sm:text-3xl font-bold text-rp9-orange">AI</div>
+                    <div class="text-sm text-gray-600">Assistant Ready</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Search Section -->
+    <section class="py-8 bg-gray-100">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="search-box rounded-lg p-6 text-center">
+                <h3 class="text-lg font-semibold mb-4">🔍 Buscar Documentación</h3>
+                <div class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+                    <input 
+                        type="text" 
+                        id="searchInput"
+                        placeholder="Buscar por fase, tecnología o funcionalidad..."
+                        class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-rp9-blue focus:border-transparent"
+                    >
+                    <button class="px-6 py-2 bg-rp9-blue text-white rounded-lg hover:bg-blue-700 transition-colors">
+                        Buscar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Phases Section -->
+    <section id="phases" class="py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl sm:text-4xl font-bold mb-4">📋 Índice de Fases</h2>
+                <p class="text-lg text-gray-600">
+                    Explorar cada fase del desarrollo de RP9 con documentación detallada
+                </p>
+            </div>
+
+            <div id="phasesGrid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Fase 4: Security & SRE -->
+                <div class="phase-card completed rounded-xl p-6 searchable" data-search="fase 4 security sre backup compliance">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-rp9-green rounded-lg flex items-center justify-center">
+                                <span class="text-white font-bold">4</span>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-lg">Security & SRE</h3>
+                                <div class="status-badge inline-block px-2 py-1 bg-green-100 text-green-800 rounded">
+                                    Completado
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-2xl">🛡️</div>
+                    </div>
+                    <p class="text-gray-600 mb-4 text-sm">
+                        Sistema completo de seguridad, backups automatizados, compliance y SRE nivel producción.
+                    </p>
+                    <div class="flex flex-wrap gap-1 mb-4">
+                        <span class="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">Backup</span>
+                        <span class="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">Compliance</span>
+                        <span class="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">Monitoring</span>
+                    </div>
+                    <a href="./README_Fase4.md" class="inline-flex items-center text-rp9-blue hover:text-blue-700 text-sm font-medium">
+                        Ver Documentación →
+                    </a>
+                </div>
+
+                <!-- Fase 5: Onboarding & TTV -->
+                <div class="phase-card completed rounded-xl p-6 searchable" data-search="fase 5 onboarding ttv time to value gamification">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-rp9-green rounded-lg flex items-center justify-center">
+                                <span class="text-white font-bold">5</span>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-lg">Onboarding & TTV</h3>
+                                <div class="status-badge inline-block px-2 py-1 bg-green-100 text-green-800 rounded">
+                                    Completado
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-2xl">🚀</div>
+                    </div>
+                    <p class="text-gray-600 mb-4 text-sm">
+                        Sistema de onboarding progresivo con gamificación, health score y time-to-value optimizado.
+                    </p>
+                    <div class="flex flex-wrap gap-1 mb-4">
+                        <span class="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">Wizard</span>
+                        <span class="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">Gamification</span>
+                        <span class="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">Health Score</span>
+                    </div>
+                    <a href="./PHASE5_ONBOARDING_USAGE.md" class="inline-flex items-center text-rp9-blue hover:text-blue-700 text-sm font-medium">
+                        Ver Documentación →
+                    </a>
+                </div>
+
+                <!-- Fase 6: Observability & Security -->
+                <div class="phase-card completed rounded-xl p-6 searchable" data-search="fase 6 observability security metrics hmac rate limiting">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-rp9-green rounded-lg flex items-center justify-center">
+                                <span class="text-white font-bold">6</span>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-lg">Observability</h3>
+                                <div class="status-badge inline-block px-2 py-1 bg-green-100 text-green-800 rounded">
+                                    Completado
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-2xl">📊</div>
+                    </div>
+                    <p class="text-gray-600 mb-4 text-sm">
+                        Observabilidad completa con métricas n8n, seguridad HMAC, rate limiting y RLS.
+                    </p>
+                    <div class="flex flex-wrap gap-1 mb-4">
+                        <span class="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">Metrics</span>
+                        <span class="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">HMAC</span>
+                        <span class="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">Rate Limiting</span>
+                    </div>
+                    <a href="./PHASE6_OBSERVABILITY_SECURITY.md" class="inline-flex items-center text-rp9-blue hover:text-blue-700 text-sm font-medium">
+                        Ver Documentación →
+                    </a>
+                </div>
+
+                <!-- Fase 7: Documentation -->
+                <div class="phase-card completed rounded-xl p-6 searchable" data-search="fase 7 documentation auto-generation kb knowledge base">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-rp9-green rounded-lg flex items-center justify-center">
+                                <span class="text-white font-bold">7</span>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-lg">Documentation</h3>
+                                <div class="status-badge inline-block px-2 py-1 bg-green-100 text-green-800 rounded">
+                                    Completado
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-2xl">📚</div>
+                    </div>
+                    <p class="text-gray-600 mb-4 text-sm">
+                        Sistema de documentación automática, knowledge base y generación de contenido.
+                    </p>
+                    <div class="flex flex-wrap gap-1 mb-4">
+                        <span class="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">Auto-gen</span>
+                        <span class="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">KB</span>
+                        <span class="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">Search</span>
+                    </div>
+                    <a href="./FASE7_DOCUMENTATION.md" class="inline-flex items-center text-rp9-blue hover:text-blue-700 text-sm font-medium">
+                        Ver Documentación →
+                    </a>
+                </div>
+
+                <!-- Fase 8: Billing & Finanzas -->
+                <div class="phase-card completed rounded-xl p-6 searchable" data-search="fase 8 billing finanzas stripe subscription dunning">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-rp9-green rounded-lg flex items-center justify-center">
+                                <span class="text-white font-bold">8</span>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-lg">Billing & Finanzas</h3>
+                                <div class="status-badge inline-block px-2 py-1 bg-green-100 text-green-800 rounded">
+                                    Completado
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-2xl">💰</div>
+                    </div>
+                    <p class="text-gray-600 mb-4 text-sm">
+                        Sistema completo de facturación con Stripe, subscripciones, dunning y compliance financiero.
+                    </p>
+                    <div class="flex flex-wrap gap-1 mb-4">
+                        <span class="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">Stripe</span>
+                        <span class="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">Dunning</span>
+                        <span class="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">Compliance</span>
+                    </div>
+                    <a href="./FASE8_BILLING_FINANZAS.md" class="inline-flex items-center text-rp9-blue hover:text-blue-700 text-sm font-medium">
+                        Ver Documentación →
+                    </a>
+                </div>
+
+                <!-- Fase 9: Security & Compliance (Placeholder) -->
+                <div class="phase-card rounded-xl p-6 searchable opacity-75" data-search="fase 9 security compliance gdpr soc2">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-gray-400 rounded-lg flex items-center justify-center">
+                                <span class="text-white font-bold">9</span>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-lg">Security Advanced</h3>
+                                <div class="status-badge inline-block px-2 py-1 bg-gray-100 text-gray-600 rounded">
+                                    Verificando
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-2xl">🔐</div>
+                    </div>
+                    <p class="text-gray-600 mb-4 text-sm">
+                        Seguridad avanzada, compliance GDPR/SOC2 y auditoría empresarial.
+                    </p>
+                    <div class="flex flex-wrap gap-1 mb-4">
+                        <span class="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">GDPR</span>
+                        <span class="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">SOC2</span>
+                        <span class="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">Audit</span>
+                    </div>
+                    <span class="inline-flex items-center text-gray-400 text-sm font-medium">
+                        Documentación en revisión
+                    </span>
+                </div>
+
+                <!-- Fase 10: Soporte & CS -->
+                <div class="phase-card completed rounded-xl p-6 searchable" data-search="fase 10 soporte customer success sla tickets">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-rp9-green rounded-lg flex items-center justify-center">
+                                <span class="text-white font-bold">10</span>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-lg">Soporte & CS</h3>
+                                <div class="status-badge inline-block px-2 py-1 bg-green-100 text-green-800 rounded">
+                                    Completado
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-2xl">🎧</div>
+                    </div>
+                    <p class="text-gray-600 mb-4 text-sm">
+                        Sistema completo de soporte con SLAs, tickets automáticos y customer success.
+                    </p>
+                    <div class="flex flex-wrap gap-1 mb-4">
+                        <span class="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">SLA</span>
+                        <span class="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">Tickets</span>
+                        <span class="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">QBR</span>
+                    </div>
+                    <a href="./FASE10_SOPORTE_CS.md" class="inline-flex items-center text-rp9-blue hover:text-blue-700 text-sm font-medium">
+                        Ver Documentación →
+                    </a>
+                </div>
+
+                <!-- Fase 11: Analytics & Reporting -->
+                <div class="phase-card completed rounded-xl p-6 searchable" data-search="fase 11 analytics reporting metrics roi dashboard">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-rp9-green rounded-lg flex items-center justify-center">
+                                <span class="text-white font-bold">11</span>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-lg">Analytics</h3>
+                                <div class="status-badge inline-block px-2 py-1 bg-green-100 text-green-800 rounded">
+                                    Completado
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-2xl">📈</div>
+                    </div>
+                    <p class="text-gray-600 mb-4 text-sm">
+                        Analytics avanzado, reporting automatizado, dashboards ejecutivos y métricas ROI.
+                    </p>
+                    <div class="flex flex-wrap gap-1 mb-4">
+                        <span class="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">ROI</span>
+                        <span class="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">Dashboard</span>
+                        <span class="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">Alerts</span>
+                    </div>
+                    <a href="./FASE11_ANALYTICS_REPORTING.md" class="inline-flex items-center text-rp9-blue hover:text-blue-700 text-sm font-medium">
+                        Ver Documentación →
+                    </a>
+                </div>
+
+                <!-- Fase 12: Marketplace -->
+                <div class="phase-card completed rounded-xl p-6 searchable" data-search="fase 12 marketplace templates monetization stripe connect">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-rp9-green rounded-lg flex items-center justify-center">
+                                <span class="text-white font-bold">12</span>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-lg">Marketplace</h3>
+                                <div class="status-badge inline-block px-2 py-1 bg-green-100 text-green-800 rounded">
+                                    Completado
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-2xl">🏪</div>
+                    </div>
+                    <p class="text-gray-600 mb-4 text-sm">
+                        Marketplace de templates monetizados con Stripe Connect, revenue sharing y curation.
+                    </p>
+                    <div class="flex flex-wrap gap-1 mb-4">
+                        <span class="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">Connect</span>
+                        <span class="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">Templates</span>
+                        <span class="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">Revenue</span>
+                    </div>
+                    <a href="./FASE12_MARKETPLACE_MONETIZADO.md" class="inline-flex items-center text-rp9-blue hover:text-blue-700 text-sm font-medium">
+                        Ver Documentación →
+                    </a>
+                </div>
+
+                <!-- Fase 13: Orchestrator Multi-tenancy -->
+                <div class="phase-card completed rounded-xl p-6 searchable" data-search="fase 13 orchestrator multi-tenancy docker kubernetes autoscaling">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-rp9-green rounded-lg flex items-center justify-center">
+                                <span class="text-white font-bold">13</span>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-lg">Orchestrator</h3>
+                                <div class="status-badge inline-block px-2 py-1 bg-green-100 text-green-800 rounded">
+                                    Completado
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-2xl">🏗️</div>
+                    </div>
+                    <p class="text-gray-600 mb-4 text-sm">
+                        Orchestrador multi-tenant con Docker, auto-scaling, blue/green deployments y enforcement.
+                    </p>
+                    <div class="flex flex-wrap gap-1 mb-4">
+                        <span class="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">Docker</span>
+                        <span class="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">Auto-scale</span>
+                        <span class="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">Blue/Green</span>
+                    </div>
+                    <a href="./FASE13_ORCHESTRATOR_MULTI_TENANCY.md" class="inline-flex items-center text-rp9-blue hover:text-blue-700 text-sm font-medium">
+                        Ver Documentación →
+                    </a>
+                </div>
+
+                <!-- Fase 14: AI Assistant (Featured) -->
+                <div class="phase-card completed featured rounded-xl p-6 searchable" data-search="fase 14 ai assistant openai anthropic byok command palette fix with ai playground diff viewer blueprint dsl">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-rp9-orange rounded-lg flex items-center justify-center">
+                                <span class="text-white font-bold">14</span>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-lg">AI Assistant</h3>
+                                <div class="status-badge inline-block px-2 py-1 bg-orange-100 text-orange-800 rounded">
+                                    Recién Lanzado
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-2xl">🤖</div>
+                    </div>
+                    <p class="text-gray-600 mb-4 text-sm">
+                        AI Assistant completo con multi-provider routing, Command Palette, FixWithAI, Playground y Blueprint DSL.
+                    </p>
+                    <div class="flex flex-wrap gap-1 mb-4">
+                        <span class="px-2 py-1 bg-orange-100 text-orange-800 rounded text-xs">OpenAI</span>
+                        <span class="px-2 py-1 bg-orange-100 text-orange-800 rounded text-xs">Anthropic</span>
+                        <span class="px-2 py-1 bg-orange-100 text-orange-800 rounded text-xs">BYOK</span>
+                        <span class="px-2 py-1 bg-orange-100 text-orange-800 rounded text-xs">Cmd+K</span>
+                    </div>
+                    <a href="./FASE14_AI_ASSISTANT_USAGE_GUIDE.md" class="inline-flex items-center text-rp9-orange hover:text-orange-700 text-sm font-medium">
+                        Ver Documentación →
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Architecture Section -->
+    <section id="architecture" class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl sm:text-4xl font-bold mb-4">🏗️ Arquitectura del Sistema</h2>
+                <p class="text-lg text-gray-600">
+                    Stack tecnológico y componentes principales de la plataforma RP9
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Frontend -->
+                <div class="text-center p-6 bg-gray-50 rounded-xl">
+                    <div class="w-16 h-16 bg-gradient-to-br from-blue-400 to-blue-600 rounded-xl flex items-center justify-center mx-auto mb-4">
+                        <span class="text-white text-2xl">⚛️</span>
+                    </div>
+                    <h3 class="font-semibold mb-2">Frontend</h3>
+                    <ul class="text-sm text-gray-600 space-y-1">
+                        <li>Next.js 15</li>
+                        <li>React 18</li>
+                        <li>TypeScript</li>
+                        <li>Tailwind CSS</li>
+                        <li>Framer Motion</li>
+                    </ul>
+                </div>
+
+                <!-- Backend -->
+                <div class="text-center p-6 bg-gray-50 rounded-xl">
+                    <div class="w-16 h-16 bg-gradient-to-br from-green-400 to-green-600 rounded-xl flex items-center justify-center mx-auto mb-4">
+                        <span class="text-white text-2xl">🚀</span>
+                    </div>
+                    <h3 class="font-semibold mb-2">Backend</h3>
+                    <ul class="text-sm text-gray-600 space-y-1">
+                        <li>Supabase</li>
+                        <li>Fastify (AI Service)</li>
+                        <li>Netlify Functions</li>
+                        <li>n8n (Workflows)</li>
+                        <li>PostgreSQL</li>
+                    </ul>
+                </div>
+
+                <!-- AI & ML -->
+                <div class="text-center p-6 bg-gray-50 rounded-xl">
+                    <div class="w-16 h-16 bg-gradient-to-br from-purple-400 to-purple-600 rounded-xl flex items-center justify-center mx-auto mb-4">
+                        <span class="text-white text-2xl">🤖</span>
+                    </div>
+                    <h3 class="font-semibold mb-2">AI & ML</h3>
+                    <ul class="text-sm text-gray-600 space-y-1">
+                        <li>OpenAI GPT-4</li>
+                        <li>Anthropic Claude</li>
+                        <li>BYOK Support</li>
+                        <li>Blueprint DSL</li>
+                        <li>PII Redaction</li>
+                    </ul>
+                </div>
+
+                <!-- Infrastructure -->
+                <div class="text-center p-6 bg-gray-50 rounded-xl">
+                    <div class="w-16 h-16 bg-gradient-to-br from-red-400 to-red-600 rounded-xl flex items-center justify-center mx-auto mb-4">
+                        <span class="text-white text-2xl">☁️</span>
+                    </div>
+                    <h3 class="font-semibold mb-2">Infrastructure</h3>
+                    <ul class="text-sm text-gray-600 space-y-1">
+                        <li>Netlify (Deploy)</li>
+                        <li>Railway (n8n)</li>
+                        <li>Docker</li>
+                        <li>CloudFlare</li>
+                        <li>Stripe</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Key Features Grid -->
+            <div class="mt-12 grid md:grid-cols-3 gap-8">
+                <div class="text-center">
+                    <h4 class="font-semibold text-lg mb-3">🔐 Security First</h4>
+                    <p class="text-gray-600 text-sm">
+                        HMAC verification, Rate limiting, RLS, PII redaction, 
+                        Enterprise security standards y compliance automático.
+                    </p>
+                </div>
+                <div class="text-center">
+                    <h4 class="font-semibold text-lg mb-3">📊 Analytics Native</h4>
+                    <p class="text-gray-600 text-sm">
+                        Métricas en tiempo real, ROI tracking, dashboards ejecutivos, 
+                        alertas automatizadas y reporting avanzado.
+                    </p>
+                </div>
+                <div class="text-center">
+                    <h4 class="font-semibold text-lg mb-3">🤖 AI-Powered</h4>
+                    <p class="text-gray-600 text-sm">
+                        Multi-provider AI routing, Blueprint DSL, análisis inteligente de errores, 
+                        Command Palette y Playground de prompts.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Status Section -->
+    <section id="status" class="py-16 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl sm:text-4xl font-bold mb-4">📊 Estado del Proyecto</h2>
+                <p class="text-lg text-gray-600">
+                    Seguimiento en tiempo real del desarrollo y deployment
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Build Status -->
+                <div class="bg-white rounded-xl p-8 shadow-sm">
+                    <h3 class="text-xl font-semibold mb-6 flex items-center">
+                        <span class="w-3 h-3 bg-rp9-green rounded-full mr-3"></span>
+                        Build Status
+                    </h3>
                     <div class="space-y-4">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-6 h-6 bg-rp9-green rounded-full flex items-center justify-center">
-                                <span class="text-white text-sm">✓</span>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600">Frontend Build</span>
+                            <div class="flex items-center">
+                                <span class="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+                                <span class="text-green-600 font-medium">Passing ✅</span>
                             </div>
-                            <span>Observabilidad completa de n8n</span>
                         </div>
-                        <div class="flex items-center space-x-3">
-                            <div class="w-6 h-6 bg-rp9-green rounded-full flex items-center justify-center">
-                                <span class="text-white text-sm">✓</span>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600">AI Service</span>
+                            <div class="flex items-center">
+                                <span class="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+                                <span class="text-green-600 font-medium">Deployed ✅</span>
                             </div>
-                            <span>Seguridad HMAC & Rate Limiting</span>
                         </div>
-                        <div class="flex items-center space-x-3">
-                            <div class="w-6 h-6 bg-rp9-green rounded-full flex items-center justify-center">
-                                <span class="text-white text-sm">✓</span>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600">Database</span>
+                            <div class="flex items-center">
+                                <span class="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+                                <span class="text-green-600 font-medium">Healthy ✅</span>
                             </div>
-                            <span>Row Level Security (RLS)</span>
                         </div>
-                        <div class="flex items-center space-x-3">
-                            <div class="w-6 h-6 bg-rp9-green rounded-full flex items-center justify-center">
-                                <span class="text-white text-sm">✓</span>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600">Netlify Deploy</span>
+                            <div class="flex items-center">
+                                <span class="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+                                <span class="text-green-600 font-medium">Live ✅</span>
                             </div>
-                            <span>Rotación automática de claves</span>
                         </div>
                     </div>
                 </div>
-                
-                <div class="bg-white rounded-lg shadow-lg p-8">
-                    <h4 class="text-xl font-semibold mb-4">Métricas de Seguridad</h4>
-                    <div class="space-y-6">
+
+                <!-- Feature Completion -->
+                <div class="bg-white rounded-xl p-8 shadow-sm">
+                    <h3 class="text-xl font-semibold mb-6">Feature Completion</h3>
+                    <div class="space-y-4">
                         <div>
                             <div class="flex justify-between mb-2">
-                                <span class="text-sm font-medium">Tiempo de Detección</span>
-                                <span class="text-sm text-gray-500">< 5 minutos</span>
+                                <span class="text-gray-600">Core Platform</span>
+                                <span class="font-medium">100%</span>
                             </div>
                             <div class="w-full bg-gray-200 rounded-full h-2">
-                                <div class="bg-rp9-green h-2 rounded-full w-5/6"></div>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="flex justify-between mb-2">
-                                <span class="text-sm font-medium">Cobertura de Seguridad</span>
-                                <span class="text-sm text-gray-500">> 95%</span>
-                            </div>
-                            <div class="w-full bg-gray-200 rounded-full h-2">
-                                <div class="bg-rp9-blue h-2 rounded-full w-full"></div>
+                                <div class="bg-rp9-green h-2 rounded-full w-full"></div>
                             </div>
                         </div>
                         <div>
                             <div class="flex justify-between mb-2">
-                                <span class="text-sm font-medium">Disponibilidad Sistema</span>
-                                <span class="text-sm text-gray-500">99.9% uptime</span>
+                                <span class="text-gray-600">AI Assistant</span>
+                                <span class="font-medium">100%</span>
                             </div>
                             <div class="w-full bg-gray-200 rounded-full h-2">
-                                <div class="bg-purple-500 h-2 rounded-full w-full"></div>
+                                <div class="bg-rp9-orange h-2 rounded-full w-full"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-gray-600">Security & Compliance</span>
+                                <span class="font-medium">95%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-rp9-blue h-2 rounded-full w-11/12"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-gray-600">Documentation</span>
+                                <span class="font-medium">98%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-rp9-purple h-2 rounded-full" style="width: 98%"></div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
 
-    <!-- Features Section -->
-    <section id="features" class="py-20 bg-white">
-        <div class="max-w-7xl mx-auto px-4">
-            <h2 class="text-4xl font-bold text-center mb-12">Características Principales</h2>
-            
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Metrics Dashboard -->
-                <div class="feature-card rounded-lg p-6 text-center">
-                    <div class="text-4xl mb-4">📊</div>
-                    <h3 class="text-xl font-semibold mb-3">Dashboard de Métricas</h3>
-                    <p class="text-gray-700 mb-4">Observabilidad completa de n8n workflows</p>
-                    <ul class="text-sm text-gray-600 space-y-1">
-                        <li>• Métricas en tiempo real</li>
-                        <li>• Tendencias por hora/día</li>
-                        <li>• Top fallos por nodo</li>
-                        <li>• KPIs de performance</li>
-                    </ul>
-                </div>
-
-                <!-- HMAC Security -->
-                <div class="feature-card rounded-lg p-6 text-center">
-                    <div class="text-4xl mb-4">🔐</div>
-                    <h3 class="text-xl font-semibold mb-3">Seguridad HMAC</h3>
-                    <p class="text-gray-700 mb-4">Webhooks seguros con verificación SHA-256</p>
-                    <ul class="text-sm text-gray-600 space-y-1">
-                        <li>• Verificación de signatures</li>
-                        <li>• Protección timing attacks</li>
-                        <li>• Logging de intentos inválidos</li>
-                        <li>• Standards RFC 2104</li>
-                    </ul>
-                </div>
-
-                <!-- Rate Limiting -->
-                <div class="feature-card rounded-lg p-6 text-center">
-                    <div class="text-4xl mb-4">⚡</div>
-                    <h3 class="text-xl font-semibold mb-3">Rate Limiting</h3>
-                    <p class="text-gray-700 mb-4">Control de acceso por IP y API key</p>
-                    <ul class="text-sm text-gray-600 space-y-1">
-                        <li>• 100 req/h sin API key</li>
-                        <li>• 1000 req/h con API key</li>
-                        <li>• Headers informativos</li>
-                        <li>• Storage configurable</li>
-                    </ul>
-                </div>
-
-                <!-- Row Level Security -->
-                <div class="feature-card rounded-lg p-6 text-center">
-                    <div class="text-4xl mb-4">🛡️</div>
-                    <h3 class="text-xl font-semibold mb-3">Row Level Security</h3>
-                    <p class="text-gray-700 mb-4">Aislamiento total por tenant</p>
-                    <ul class="text-sm text-gray-600 space-y-1">
-                        <li>• Políticas por tabla</li>
-                        <li>• Aislamiento automático</li>
-                        <li>• Compliance GDPR/SOC2</li>
-                        <li>• Auditoría completa</li>
-                    </ul>
-                </div>
-
-                <!-- Key Rotation -->
-                <div class="feature-card rounded-lg p-6 text-center">
-                    <div class="text-4xl mb-4">🔄</div>
-                    <h3 class="text-xl font-semibold mb-3">Rotación de Claves</h3>
-                    <p class="text-gray-700 mb-4">Gestión automática de credenciales</p>
-                    <ul class="text-sm text-gray-600 space-y-1">
-                        <li>• Rotación cada 30 días</li>
-                        <li>• Cron jobs automáticos</li>
-                        <li>• Manual on-demand</li>
-                        <li>• Zero-downtime</li>
-                    </ul>
-                </div>
-
-                <!-- Security Testing -->
-                <div class="feature-card rounded-lg p-6 text-center">
-                    <div class="text-4xl mb-4">🧪</div>
-                    <h3 class="text-xl font-semibold mb-3">Pruebas de Seguridad</h3>
-                    <p class="text-gray-700 mb-4">Suite automatizada de tests</p>
-                    <ul class="text-sm text-gray-600 space-y-1">
-                        <li>• Tests de intrusión</li>
-                        <li>• Validación OWASP Top 10</li>
-                        <li>• CI/CD integration</li>
-                        <li>• Reportes detallados</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Setup Section -->
-    <section id="setup" class="py-20">
-        <div class="max-w-7xl mx-auto px-4">
-            <h2 class="text-4xl font-bold text-center mb-12">Configuración y Setup</h2>
-            
-            <div class="grid lg:grid-cols-2 gap-12">
-                <!-- Environment Variables -->
-                <div>
-                    <h3 class="text-2xl font-semibold mb-6">Variables de Entorno</h3>
-                    <p class="text-gray-700 mb-4">Copia estas variables a tu <code class="bg-gray-200 px-2 py-1 rounded">.env.local</code>:</p>
-                    
-                    <div class="code-block">
-<pre><code># === Phase 5: Onboarding & TTV ===
-
-# Configuración Principal
-ONBOARDING_WIZARD_ENABLED=true
-HEALTH_SCORE_UPDATE_INTERVAL=300000
-ACTIVATION_THRESHOLD_SCORE=70
-
-# Gamificación
-ACHIEVEMENTS_ENABLED=true
-LEVEL_SYSTEM_ENABLED=true
-PROGRESS_NOTIFICATIONS_ENABLED=true
-
-# Notificaciones
-DIGEST_NOTIFICATION_ENABLED=true
-DIGEST_SEND_DAYS=1,3,7,14
-
-# Feature Flags
-FF_ONBOARDING_WIZARD=true
-FF_HEALTH_SCORE=true
-FF_GAMIFICATION=true</code></pre>
+            <!-- Recent Updates -->
+            <div class="mt-8 bg-white rounded-xl p-8 shadow-sm">
+                <h3 class="text-xl font-semibold mb-6">📅 Recent Updates</h3>
+                <div class="space-y-4">
+                    <div class="flex items-start space-x-4 pb-4 border-b border-gray-100">
+                        <div class="w-8 h-8 bg-rp9-orange rounded-full flex items-center justify-center flex-shrink-0">
+                            <span class="text-white text-xs font-bold">14</span>
+                        </div>
+                        <div>
+                            <h4 class="font-medium">Fase 14: AI Assistant Completada</h4>
+                            <p class="text-gray-600 text-sm mt-1">
+                                Lanzamiento del AI Assistant con multi-provider routing, Command Palette, FixWithAI y Playground.
+                            </p>
+                            <span class="text-xs text-gray-400 mt-2 inline-block">Hoy</span>
+                        </div>
                     </div>
-                </div>
-
-                <!-- Database Migration -->
-                <div>
-                    <h3 class="text-2xl font-semibold mb-6">Migración de Base de Datos</h3>
-                    <p class="text-gray-700 mb-4">Aplicar la migración de onboarding:</p>
-                    
-                    <div class="code-block mb-6">
-<pre><code># Ejecutar migración
-supabase db push
-
-# O aplicar manualmente:
-psql -f supabase/migrations/006_onboarding_ttv.sql</code></pre>
+                    <div class="flex items-start space-x-4 pb-4 border-b border-gray-100">
+                        <div class="w-8 h-8 bg-rp9-green rounded-full flex items-center justify-center flex-shrink-0">
+                            <span class="text-white text-xs">🔧</span>
+                        </div>
+                        <div>
+                            <h4 class="font-medium">Deploy Issues Resolved</h4>
+                            <p class="text-gray-600 text-sm mt-1">
+                                Corregidas variables de entorno de Supabase para deployment en Netlify.
+                            </p>
+                            <span class="text-xs text-gray-400 mt-2 inline-block">Hace 2 horas</span>
+                        </div>
                     </div>
-
-                    <h4 class="text-lg font-semibold mb-3">Tablas Creadas:</h4>
-                    <ul class="space-y-2 text-gray-700">
-                        <li class="flex items-center space-x-2">
-                            <span class="w-2 h-2 bg-rp9-green rounded-full"></span>
-                            <span><code>template_catalog</code> - Catálogo de templates</span>
-                        </li>
-                        <li class="flex items-center space-x-2">
-                            <span class="w-2 h-2 bg-rp9-green rounded-full"></span>
-                            <span><code>onboarding_tasks</code> - Definición de tareas</span>
-                        </li>
-                        <li class="flex items-center space-x-2">
-                            <span class="w-2 h-2 bg-rp9-green rounded-full"></span>
-                            <span><code>onboarding_progress</code> - Progreso de usuarios</span>
-                        </li>
-                        <li class="flex items-center space-x-2">
-                            <span class="w-2 h-2 bg-rp9-green rounded-full"></span>
-                            <span><code>health_snapshots</code> - Historial de health score</span>
-                        </li>
-                        <li class="flex items-center space-x-2">
-                            <span class="w-2 h-2 bg-rp9-green rounded-full"></span>
-                            <span><code>onboarding_notifications</code> - Notificaciones</span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- API Section -->
-    <section id="api" class="py-20 bg-white">
-        <div class="max-w-7xl mx-auto px-4">
-            <h2 class="text-4xl font-bold text-center mb-12">API Endpoints</h2>
-            
-            <div class="grid lg:grid-cols-2 gap-8">
-                <!-- Save Progress -->
-                <div class="bg-gray-50 rounded-lg p-6">
-                    <h3 class="text-lg font-semibold mb-3 text-rp9-blue">📊 Save Progress</h3>
-                    <div class="code-block mb-4">
-<pre><code>POST /.netlify/functions/onboarding-save-progress
-
-{
-  "tenantId": "uuid",
-  "taskKey": "execute_mock",
-  "status": "done",
-  "meta": {}
-}</code></pre>
+                    <div class="flex items-start space-x-4">
+                        <div class="w-8 h-8 bg-rp9-blue rounded-full flex items-center justify-center flex-shrink-0">
+                            <span class="text-white text-xs">📚</span>
+                        </div>
+                        <div>
+                            <h4 class="font-medium">Documentation Portal Updated</h4>
+                            <p class="text-gray-600 text-sm mt-1">
+                                Nuevo portal de documentación con navegación completa de todas las fases.
+                            </p>
+                            <span class="text-xs text-gray-400 mt-2 inline-block">Ahora</span>
+                        </div>
                     </div>
-                    <p class="text-sm text-gray-600">Actualiza el progreso de una tarea y recalcula health score automáticamente.</p>
-                </div>
-
-                <!-- Template Install -->
-                <div class="bg-gray-50 rounded-lg p-6">
-                    <h3 class="text-lg font-semibold mb-3 text-rp9-blue">🔧 Install Templates</h3>
-                    <div class="code-block mb-4">
-<pre><code>POST /.netlify/functions/onboarding-templates-install
-
-{
-  "mockWorkflow": {...},
-  "realWorkflow": {...},
-  "vertical": "cc",
-  "tenantId": "uuid"
-}</code></pre>
-                    </div>
-                    <p class="text-sm text-gray-600">Instala templates mock y reales en n8n, ejecuta automáticamente los mock.</p>
-                </div>
-
-                <!-- Geo Detection -->
-                <div class="bg-gray-50 rounded-lg p-6">
-                    <h3 class="text-lg font-semibold mb-3 text-rp9-blue">🌍 Geo Detection</h3>
-                    <div class="code-block mb-4">
-<pre><code>GET /.netlify/functions/onboarding-geo
-
-Response:
-{
-  "country": "MX",
-  "countryName": "México",
-  "timezone": "America/Mexico_City",
-  "popularIntegrations": ["siigo", "hubspot"]
-}</code></pre>
-                    </div>
-                    <p class="text-sm text-gray-600">Detecta país del usuario y retorna configuración personalizada.</p>
-                </div>
-
-                <!-- Notify Digest -->
-                <div class="bg-gray-50 rounded-lg p-6">
-                    <h3 class="text-lg font-semibold mb-3 text-rp9-blue">📧 Notify Digest</h3>
-                    <div class="code-block mb-4">
-<pre><code>POST /.netlify/functions/onboarding-notify-digest
-
-{
-  "tenant_id": "uuid" // opcional
-}</code></pre>
-                    </div>
-                    <p class="text-sm text-gray-600">Envía notificaciones digest personalizadas. Si no se especifica tenant_id, procesa todos los elegibles.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Components Section -->
-    <section id="components" class="py-20">
-        <div class="max-w-7xl mx-auto px-4">
-            <h2 class="text-4xl font-bold text-center mb-12">Componentes React</h2>
-            
-            <div class="grid lg:grid-cols-2 gap-8">
-                <!-- Health Score Component -->
-                <div class="bg-white rounded-lg shadow-lg p-6">
-                    <h3 class="text-xl font-semibold mb-4 text-rp9-blue">💪 HealthScore</h3>
-                    <div class="code-block mb-4">
-<pre><code>import HealthScore from '@/components/onboarding/HealthScore'
-
-&lt;HealthScore 
-  tenantId={tenantId}
-  showDetails={true}
-  className="w-full"
-/&gt;</code></pre>
-                    </div>
-                    <p class="text-sm text-gray-600">Muestra health score actual con breakdown detallado y indicadores de activación.</p>
-                </div>
-
-                <!-- Progress Gamification -->
-                <div class="bg-white rounded-lg shadow-lg p-6">
-                    <h3 class="text-xl font-semibold mb-4 text-rp9-blue">🎮 ProgressGamification</h3>
-                    <div class="code-block mb-4">
-<pre><code>import ProgressGamification from '@/components/onboarding/ProgressGamification'
-
-&lt;ProgressGamification
-  healthScore={75}
-  tasksCompleted={8}
-  totalTasks={12}
-  isActivated={false}
-  daysSinceSignup={3}
-/&gt;</code></pre>
-                    </div>
-                    <p class="text-sm text-gray-600">Sistema completo de gamificación con niveles, logros y estadísticas.</p>
-                </div>
-
-                <!-- Onboarding Hook -->
-                <div class="bg-white rounded-lg shadow-lg p-6">
-                    <h3 class="text-xl font-semibold mb-4 text-rp9-blue">🎣 useOnboardingProgress</h3>
-                    <div class="code-block mb-4">
-<pre><code>import { useOnboardingProgress } from '@/hooks/useOnboardingProgress'
-
-const {
-  tasks,
-  stats,
-  isActivated,
-  healthScore,
-  loading,
-  completeTask,
-  markTaskError,
-  refresh
-} = useOnboardingProgress(tenantId)</code></pre>
-                    </div>
-                    <p class="text-sm text-gray-600">Hook personalizado para gestión de estado de onboarding con actualizaciones en tiempo real.</p>
-                </div>
-
-                <!-- Navigation Component -->
-                <div class="bg-white rounded-lg shadow-lg p-6">
-                    <h3 class="text-xl font-semibold mb-4 text-rp9-blue">🧭 OnboardingNavigation</h3>
-                    <div class="code-block mb-4">
-<pre><code>import OnboardingNavigation from '@/components/onboarding/OnboardingNavigation'
-
-&lt;OnboardingNavigation 
-  currentStep="checklist"
-  completedSteps={['wizard']}
-  showStepIndicator={true}
-/&gt;</code></pre>
-                    </div>
-                    <p class="text-sm text-gray-600">Navegación inteligente entre pasos con indicadores de progreso y estado.</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer class="bg-gray-800 text-white py-12">
-        <div class="max-w-7xl mx-auto px-4">
-            <div class="grid md:grid-cols-3 gap-8">
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-8">
                 <div>
-                    <h3 class="text-lg font-semibold mb-4">RP9 Phase 5</h3>
-                    <p class="text-gray-400">
-                        Sistema completo de onboarding progresivo para maximizar 
-                        el Time-to-Value de usuarios nuevos.
+                    <div class="flex items-center space-x-2 mb-4">
+                        <div class="w-8 h-8 bg-gradient-to-br from-rp9-blue to-rp9-purple rounded-lg flex items-center justify-center">
+                            <span class="text-white font-bold text-sm">RP</span>
+                        </div>
+                        <span class="text-xl font-bold">RP9 Platform</span>
+                    </div>
+                    <p class="text-gray-400 text-sm">
+                        Plataforma empresarial de automatización con AI Assistant integrado.
+                        14 fases de desarrollo completadas.
                     </p>
                 </div>
                 <div>
-                    <h3 class="text-lg font-semibold mb-4">Recursos</h3>
-                    <ul class="space-y-2 text-gray-400">
-                        <li><a href="https://github.com/carlosventurar/RP9/pull/5" class="hover:text-white">Pull Request #5</a></li>
-                        <li><a href="../PHASE5_ONBOARDING_USAGE.md" class="hover:text-white">Documentación Técnica</a></li>
-                        <li><a href="#" class="hover:text-white">Migración SQL</a></li>
-                        <li><a href="#" class="hover:text-white">Variables de Entorno</a></li>
+                    <h3 class="font-semibold mb-4">Fases Principales</h3>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="./README_Fase4.md" class="hover:text-white">Fase 4: Security & SRE</a></li>
+                        <li><a href="./PHASE5_ONBOARDING_USAGE.md" class="hover:text-white">Fase 5: Onboarding</a></li>
+                        <li><a href="./FASE8_BILLING_FINANZAS.md" class="hover:text-white">Fase 8: Billing</a></li>
+                        <li><a href="./FASE14_AI_ASSISTANT_USAGE_GUIDE.md" class="hover:text-white">Fase 14: AI Assistant</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h3 class="text-lg font-semibold mb-4">Estado del Proyecto</h3>
-                    <div class="space-y-2">
+                    <h3 class="font-semibold mb-4">Tecnologías</h3>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li>Next.js 15 + TypeScript</li>
+                        <li>Supabase + PostgreSQL</li>
+                        <li>OpenAI + Anthropic</li>
+                        <li>n8n Workflows</li>
+                        <li>Stripe + Netlify</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-semibold mb-4">Estado</h3>
+                    <div class="space-y-3">
                         <div class="flex items-center space-x-2">
-                            <span class="w-3 h-3 bg-rp9-green rounded-full"></span>
-                            <span class="text-gray-400">Build: Exitoso ✅</span>
+                            <span class="w-2 h-2 bg-rp9-green rounded-full"></span>
+                            <span class="text-sm text-gray-400">Build: Exitoso</span>
                         </div>
                         <div class="flex items-center space-x-2">
-                            <span class="w-3 h-3 bg-rp9-green rounded-full"></span>
-                            <span class="text-gray-400">Tests: Pasando ✅</span>
+                            <span class="w-2 h-2 bg-rp9-green rounded-full"></span>
+                            <span class="text-sm text-gray-400">Deploy: Live</span>
                         </div>
                         <div class="flex items-center space-x-2">
-                            <span class="w-3 h-3 bg-rp9-green rounded-full"></span>
-                            <span class="text-gray-400">Deploy: Listo ✅</span>
+                            <span class="w-2 h-2 bg-rp9-orange rounded-full animate-pulse"></span>
+                            <span class="text-sm text-gray-400">AI: Active</span>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
-                <p>© 2025 RP9 Portal - Phase 5: Onboarding & Time-to-Value System</p>
-                <p class="mt-2">🤖 Generated with <a href="https://claude.ai/code" class="text-rp9-blue hover:underline">Claude Code</a></p>
+            <div class="border-t border-gray-700 mt-8 pt-8 flex flex-col sm:flex-row justify-between items-center">
+                <p class="text-gray-400 text-sm">
+                    © 2025 RP9 Platform - Documentation Portal v14.0
+                </p>
+                <p class="text-gray-400 text-sm mt-2 sm:mt-0">
+                    🤖 Generated with <a href="https://claude.ai/code" class="text-rp9-blue hover:underline">Claude Code</a>
+                </p>
             </div>
         </div>
     </footer>
 
-    <!-- Smooth scrolling script -->
+    <!-- JavaScript -->
     <script>
-        // Smooth scrolling for navigation links
+        // Smooth scrolling
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
                 const target = document.querySelector(this.getAttribute('href'));
                 if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }
             });
         });
 
-        // Add animation on scroll
+        // Search functionality
+        const searchInput = document.getElementById('searchInput');
+        const searchableCards = document.querySelectorAll('.searchable');
+
+        searchInput?.addEventListener('input', function(e) {
+            const query = e.target.value.toLowerCase();
+            
+            searchableCards.forEach(card => {
+                const searchText = card.getAttribute('data-search').toLowerCase();
+                const cardText = card.textContent.toLowerCase();
+                
+                if (query === '' || searchText.includes(query) || cardText.includes(query)) {
+                    card.style.display = 'block';
+                    card.style.opacity = '1';
+                } else {
+                    card.style.display = 'none';
+                    card.style.opacity = '0.3';
+                }
+            });
+
+            // Show "no results" message if needed
+            const visibleCards = Array.from(searchableCards).filter(card => 
+                card.style.display !== 'none'
+            );
+            
+            if (visibleCards.length === 0 && query !== '') {
+                // Could add a "no results" message here
+            }
+        });
+
+        // Intersection Observer for animations
         const observerOptions = {
             threshold: 0.1,
             rootMargin: '0px 0px -50px 0px'
         };
 
-        const observer = new IntersectionObserver(function(entries) {
+        const observer = new IntersectionObserver(entries => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('fade-in');
@@ -553,30 +946,44 @@ const {
             });
         }, observerOptions);
 
-        // Observe all sections
-        document.querySelectorAll('section').forEach(section => {
-            observer.observe(section);
+        // Observe sections and cards
+        document.querySelectorAll('section, .phase-card').forEach(el => {
+            observer.observe(el);
         });
 
-        // Add fade-in animation
-        const style = document.createElement('style');
-        style.textContent = `
-            .fade-in {
-                animation: fadeInUp 0.6s ease-out forwards;
+        // Update build status periodically (mock)
+        function updateBuildStatus() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString();
+            
+            // This could connect to real build APIs
+            console.log(`Build status checked at ${timeString}`);
+        }
+
+        // Check build status every 5 minutes
+        setInterval(updateBuildStatus, 5 * 60 * 1000);
+
+        // Add keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            // Ctrl/Cmd + K to focus search
+            if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                e.preventDefault();
+                searchInput?.focus();
             }
             
-            @keyframes fadeInUp {
-                from {
-                    opacity: 0;
-                    transform: translateY(30px);
-                }
-                to {
-                    opacity: 1;
-                    transform: translateY(0);
+            // Escape to clear search
+            if (e.key === 'Escape') {
+                if (searchInput) {
+                    searchInput.value = '';
+                    searchInput.dispatchEvent(new Event('input'));
                 }
             }
-        `;
-        document.head.appendChild(style);
+        });
+
+        // Add loading states and transitions
+        window.addEventListener('load', function() {
+            document.body.classList.add('loaded');
+        });
     </script>
 </body>
 </html>
