@@ -1,0 +1,561 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "lastUpdated": "2025-01-14",
+    "description": "Price book for RP9 Portal - LatAm psychological pricing",
+    "note": "These are template prices. Actual Stripe price IDs should be configured in production"
+  },
+  "exchangeRates": {
+    "note": "Approximate rates for USD conversion - updated periodically",
+    "base": "USD",
+    "rates": {
+      "MXN": 20.0,
+      "COP": 4000.0,
+      "CLP": 800.0,
+      "PEN": 3.8,
+      "ARS": 350.0,
+      "DOP": 58.0,
+      "USD": 1.0
+    }
+  },
+  "plans": {
+    "starter": {
+      "name": "Starter",
+      "description": "Perfect for small teams getting started",
+      "features": [
+        "5 active workflows",
+        "1,000 executions/month", 
+        "Email support",
+        "Basic templates"
+      ],
+      "pricing": {
+        "MX": {
+          "monthly": {
+            "stripe_price_id": "price_mx_starter_monthly",
+            "currency": "MXN",
+            "list_price": 999.00,
+            "psychological_price": 999.00,
+            "usd_equivalent": 49.95,
+            "discount_pct": 0
+          },
+          "yearly": {
+            "stripe_price_id": "price_mx_starter_yearly",
+            "currency": "MXN", 
+            "list_price": 7992.00,
+            "psychological_price": 7990.00,
+            "usd_equivalent": 399.50,
+            "discount_pct": 33.33,
+            "savings_message": "4 meses gratis"
+          }
+        },
+        "CO": {
+          "monthly": {
+            "stripe_price_id": "price_co_starter_monthly",
+            "currency": "COP",
+            "list_price": 199000.00,
+            "psychological_price": 199000.00,
+            "usd_equivalent": 49.75,
+            "discount_pct": 0
+          },
+          "yearly": {
+            "stripe_price_id": "price_co_starter_yearly",
+            "currency": "COP",
+            "list_price": 1592000.00,
+            "psychological_price": 1590000.00,
+            "usd_equivalent": 397.50,
+            "discount_pct": 33.33,
+            "savings_message": "4 meses gratis"
+          }
+        },
+        "CL": {
+          "monthly": {
+            "stripe_price_id": "price_cl_starter_monthly",
+            "currency": "CLP",
+            "list_price": 39900.00,
+            "psychological_price": 39900.00,
+            "usd_equivalent": 49.88,
+            "discount_pct": 0
+          },
+          "yearly": {
+            "stripe_price_id": "price_cl_starter_yearly",
+            "currency": "CLP",
+            "list_price": 319200.00,
+            "psychological_price": 319000.00,
+            "usd_equivalent": 398.75,
+            "discount_pct": 33.33,
+            "savings_message": "4 meses gratis"
+          }
+        },
+        "PE": {
+          "monthly": {
+            "stripe_price_id": "price_pe_starter_monthly",
+            "currency": "PEN",
+            "list_price": 189.00,
+            "psychological_price": 189.00,
+            "usd_equivalent": 49.74,
+            "discount_pct": 0
+          },
+          "yearly": {
+            "stripe_price_id": "price_pe_starter_yearly",
+            "currency": "PEN",
+            "list_price": 1512.00,
+            "psychological_price": 1510.00,
+            "usd_equivalent": 397.37,
+            "discount_pct": 33.33,
+            "savings_message": "4 meses gratis"
+          }
+        },
+        "AR": {
+          "monthly": {
+            "stripe_price_id": "price_ar_starter_monthly",
+            "currency": "ARS",
+            "list_price": 17500.00,
+            "psychological_price": 17490.00,
+            "usd_equivalent": 49.97,
+            "discount_pct": 0
+          },
+          "yearly": {
+            "stripe_price_id": "price_ar_starter_yearly",
+            "currency": "ARS",
+            "list_price": 140000.00,
+            "psychological_price": 139900.00,
+            "usd_equivalent": 399.71,
+            "discount_pct": 33.33,
+            "savings_message": "4 meses gratis"
+          }
+        },
+        "DO": {
+          "monthly": {
+            "stripe_price_id": "price_do_starter_monthly",
+            "currency": "DOP",
+            "list_price": 2900.00,
+            "psychological_price": 2899.00,
+            "usd_equivalent": 49.98,
+            "discount_pct": 0
+          },
+          "yearly": {
+            "stripe_price_id": "price_do_starter_yearly",
+            "currency": "DOP",
+            "list_price": 23200.00,
+            "psychological_price": 23190.00,
+            "usd_equivalent": 399.83,
+            "discount_pct": 33.33,
+            "savings_message": "4 meses gratis"
+          }
+        },
+        "US": {
+          "monthly": {
+            "stripe_price_id": "price_us_starter_monthly",
+            "currency": "USD",
+            "list_price": 49.00,
+            "psychological_price": 49.00,
+            "usd_equivalent": 49.00,
+            "discount_pct": 0
+          },
+          "yearly": {
+            "stripe_price_id": "price_us_starter_yearly",
+            "currency": "USD",
+            "list_price": 392.00,
+            "psychological_price": 390.00,
+            "usd_equivalent": 390.00,
+            "discount_pct": 33.33,
+            "savings_message": "4 months free"
+          }
+        }
+      }
+    },
+    "pro": {
+      "name": "Pro", 
+      "description": "For growing businesses with advanced automation needs",
+      "features": [
+        "25 active workflows",
+        "10,000 executions/month",
+        "Priority support",
+        "Advanced templates",
+        "Custom integrations",
+        "Team collaboration"
+      ],
+      "pricing": {
+        "MX": {
+          "monthly": {
+            "stripe_price_id": "price_mx_pro_monthly",
+            "currency": "MXN",
+            "list_price": 1999.00,
+            "psychological_price": 1999.00,
+            "usd_equivalent": 99.95,
+            "discount_pct": 0
+          },
+          "yearly": {
+            "stripe_price_id": "price_mx_pro_yearly",
+            "currency": "MXN",
+            "list_price": 15992.00,
+            "psychological_price": 15990.00,
+            "usd_equivalent": 799.50,
+            "discount_pct": 33.33,
+            "savings_message": "4 meses gratis"
+          }
+        },
+        "CO": {
+          "monthly": {
+            "stripe_price_id": "price_co_pro_monthly",
+            "currency": "COP",
+            "list_price": 399000.00,
+            "psychological_price": 399000.00,
+            "usd_equivalent": 99.75,
+            "discount_pct": 0
+          },
+          "yearly": {
+            "stripe_price_id": "price_co_pro_yearly",
+            "currency": "COP",
+            "list_price": 3192000.00,
+            "psychological_price": 3190000.00,
+            "usd_equivalent": 797.50,
+            "discount_pct": 33.33,
+            "savings_message": "4 meses gratis"
+          }
+        },
+        "CL": {
+          "monthly": {
+            "stripe_price_id": "price_cl_pro_monthly",
+            "currency": "CLP",
+            "list_price": 79900.00,
+            "psychological_price": 79900.00,
+            "usd_equivalent": 99.88,
+            "discount_pct": 0
+          },
+          "yearly": {
+            "stripe_price_id": "price_cl_pro_yearly", 
+            "currency": "CLP",
+            "list_price": 639200.00,
+            "psychological_price": 639000.00,
+            "usd_equivalent": 798.75,
+            "discount_pct": 33.33,
+            "savings_message": "4 meses gratis"
+          }
+        },
+        "PE": {
+          "monthly": {
+            "stripe_price_id": "price_pe_pro_monthly",
+            "currency": "PEN",
+            "list_price": 379.00,
+            "psychological_price": 379.00,
+            "usd_equivalent": 99.74,
+            "discount_pct": 0
+          },
+          "yearly": {
+            "stripe_price_id": "price_pe_pro_yearly",
+            "currency": "PEN",
+            "list_price": 3032.00,
+            "psychological_price": 3030.00,
+            "usd_equivalent": 797.37,
+            "discount_pct": 33.33,
+            "savings_message": "4 meses gratis"
+          }
+        },
+        "AR": {
+          "monthly": {
+            "stripe_price_id": "price_ar_pro_monthly",
+            "currency": "ARS",
+            "list_price": 34990.00,
+            "psychological_price": 34990.00,
+            "usd_equivalent": 99.97,
+            "discount_pct": 0
+          },
+          "yearly": {
+            "stripe_price_id": "price_ar_pro_yearly",
+            "currency": "ARS",
+            "list_price": 279920.00,
+            "psychological_price": 279900.00,
+            "usd_equivalent": 799.71,
+            "discount_pct": 33.33,
+            "savings_message": "4 meses gratis"
+          }
+        },
+        "DO": {
+          "monthly": {
+            "stripe_price_id": "price_do_pro_monthly",
+            "currency": "DOP",
+            "list_price": 5800.00,
+            "psychological_price": 5799.00,
+            "usd_equivalent": 99.98,
+            "discount_pct": 0
+          },
+          "yearly": {
+            "stripe_price_id": "price_do_pro_yearly",
+            "currency": "DOP",
+            "list_price": 46400.00,
+            "psychological_price": 46390.00,
+            "usd_equivalent": 799.83,
+            "discount_pct": 33.33,
+            "savings_message": "4 meses gratis"
+          }
+        },
+        "US": {
+          "monthly": {
+            "stripe_price_id": "price_us_pro_monthly",
+            "currency": "USD",
+            "list_price": 99.00,
+            "psychological_price": 99.00,
+            "usd_equivalent": 99.00,
+            "discount_pct": 0
+          },
+          "yearly": {
+            "stripe_price_id": "price_us_pro_yearly",
+            "currency": "USD",
+            "list_price": 792.00,
+            "psychological_price": 790.00,
+            "usd_equivalent": 790.00,
+            "discount_pct": 33.33,
+            "savings_message": "4 months free"
+          }
+        }
+      }
+    },
+    "enterprise": {
+      "name": "Enterprise",
+      "description": "For large organizations with custom requirements",
+      "features": [
+        "Unlimited workflows",
+        "Unlimited executions", 
+        "Dedicated support",
+        "Custom integrations",
+        "SLA guarantees",
+        "Advanced security",
+        "Custom onboarding"
+      ],
+      "pricing": {
+        "MX": {
+          "monthly": {
+            "stripe_price_id": "price_mx_enterprise_monthly",
+            "currency": "MXN",
+            "list_price": 4999.00,
+            "psychological_price": 4999.00,
+            "usd_equivalent": 249.95,
+            "discount_pct": 0
+          },
+          "yearly": {
+            "stripe_price_id": "price_mx_enterprise_yearly",
+            "currency": "MXN",
+            "list_price": 39992.00,
+            "psychological_price": 39990.00,
+            "usd_equivalent": 1999.50,
+            "discount_pct": 33.33,
+            "savings_message": "4 meses gratis"
+          }
+        },
+        "CO": {
+          "monthly": {
+            "stripe_price_id": "price_co_enterprise_monthly",
+            "currency": "COP",
+            "list_price": 999000.00,
+            "psychological_price": 999000.00,
+            "usd_equivalent": 249.75,
+            "discount_pct": 0
+          },
+          "yearly": {
+            "stripe_price_id": "price_co_enterprise_yearly",
+            "currency": "COP",
+            "list_price": 7992000.00,
+            "psychological_price": 7990000.00,
+            "usd_equivalent": 1997.50,
+            "discount_pct": 33.33,
+            "savings_message": "4 meses gratis"
+          }
+        },
+        "CL": {
+          "monthly": {
+            "stripe_price_id": "price_cl_enterprise_monthly",
+            "currency": "CLP",
+            "list_price": 199900.00,
+            "psychological_price": 199900.00,
+            "usd_equivalent": 249.88,
+            "discount_pct": 0
+          },
+          "yearly": {
+            "stripe_price_id": "price_cl_enterprise_yearly",
+            "currency": "CLP",
+            "list_price": 1599200.00,
+            "psychological_price": 1599000.00,
+            "usd_equivalent": 1998.75,
+            "discount_pct": 33.33,
+            "savings_message": "4 meses gratis"
+          }
+        },
+        "PE": {
+          "monthly": {
+            "stripe_price_id": "price_pe_enterprise_monthly",
+            "currency": "PEN",
+            "list_price": 949.00,
+            "psychological_price": 949.00,
+            "usd_equivalent": 249.74,
+            "discount_pct": 0
+          },
+          "yearly": {
+            "stripe_price_id": "price_pe_enterprise_yearly",
+            "currency": "PEN",
+            "list_price": 7592.00,
+            "psychological_price": 7590.00,
+            "usd_equivalent": 1997.37,
+            "discount_pct": 33.33,
+            "savings_message": "4 meses gratis"
+          }
+        },
+        "AR": {
+          "monthly": {
+            "stripe_price_id": "price_ar_enterprise_monthly",
+            "currency": "ARS",
+            "list_price": 87490.00,
+            "psychological_price": 87490.00,
+            "usd_equivalent": 249.97,
+            "discount_pct": 0
+          },
+          "yearly": {
+            "stripe_price_id": "price_ar_enterprise_yearly",
+            "currency": "ARS",
+            "list_price": 699920.00,
+            "psychological_price": 699900.00,
+            "usd_equivalent": 1999.71,
+            "discount_pct": 33.33,
+            "savings_message": "4 meses gratis"
+          }
+        },
+        "DO": {
+          "monthly": {
+            "stripe_price_id": "price_do_enterprise_monthly",
+            "currency": "DOP",
+            "list_price": 14500.00,
+            "psychological_price": 14499.00,
+            "usd_equivalent": 249.98,
+            "discount_pct": 0
+          },
+          "yearly": {
+            "stripe_price_id": "price_do_enterprise_yearly",
+            "currency": "DOP",
+            "list_price": 116000.00,
+            "psychological_price": 115990.00,
+            "usd_equivalent": 1999.83,
+            "discount_pct": 33.33,
+            "savings_message": "4 meses gratis"
+          }
+        },
+        "US": {
+          "monthly": {
+            "stripe_price_id": "price_us_enterprise_monthly",
+            "currency": "USD",
+            "list_price": 249.00,
+            "psychological_price": 249.00,
+            "usd_equivalent": 249.00,
+            "discount_pct": 0
+          },
+          "yearly": {
+            "stripe_price_id": "price_us_enterprise_yearly",
+            "currency": "USD",
+            "list_price": 1992.00,
+            "psychological_price": 1990.00,
+            "usd_equivalent": 1990.00,
+            "discount_pct": 33.33,
+            "savings_message": "4 months free"
+          }
+        }
+      }
+    }
+  },
+  "addons": {
+    "extra_executions": {
+      "name": "Additional Executions",
+      "description": "1,000 additional workflow executions per month",
+      "pricing": {
+        "MX": {
+          "stripe_price_id": "price_mx_executions_addon",
+          "currency": "MXN",
+          "price": 199.00,
+          "usd_equivalent": 9.95
+        },
+        "CO": {
+          "stripe_price_id": "price_co_executions_addon", 
+          "currency": "COP",
+          "price": 39900.00,
+          "usd_equivalent": 9.98
+        },
+        "CL": {
+          "stripe_price_id": "price_cl_executions_addon",
+          "currency": "CLP",
+          "price": 7990.00,
+          "usd_equivalent": 9.99
+        },
+        "PE": {
+          "stripe_price_id": "price_pe_executions_addon",
+          "currency": "PEN",
+          "price": 37.90,
+          "usd_equivalent": 9.97
+        },
+        "AR": {
+          "stripe_price_id": "price_ar_executions_addon",
+          "currency": "ARS",
+          "price": 3490.00,
+          "usd_equivalent": 9.97
+        },
+        "DO": {
+          "stripe_price_id": "price_do_executions_addon",
+          "currency": "DOP",
+          "price": 579.00,
+          "usd_equivalent": 9.98
+        },
+        "US": {
+          "stripe_price_id": "price_us_executions_addon",
+          "currency": "USD",
+          "price": 9.99,
+          "usd_equivalent": 9.99
+        }
+      }
+    },
+    "priority_support": {
+      "name": "Priority Support",
+      "description": "24/7 priority support with dedicated success manager",
+      "pricing": {
+        "MX": {
+          "stripe_price_id": "price_mx_support_addon",
+          "currency": "MXN",
+          "price": 999.00,
+          "usd_equivalent": 49.95
+        },
+        "CO": {
+          "stripe_price_id": "price_co_support_addon",
+          "currency": "COP",
+          "price": 199000.00,
+          "usd_equivalent": 49.75
+        },
+        "CL": {
+          "stripe_price_id": "price_cl_support_addon",
+          "currency": "CLP",
+          "price": 39900.00,
+          "usd_equivalent": 49.88
+        },
+        "PE": {
+          "stripe_price_id": "price_pe_support_addon",
+          "currency": "PEN",
+          "price": 189.00,
+          "usd_equivalent": 49.74
+        },
+        "AR": {
+          "stripe_price_id": "price_ar_support_addon",
+          "currency": "ARS",
+          "price": 17490.00,
+          "usd_equivalent": 49.97
+        },
+        "DO": {
+          "stripe_price_id": "price_do_support_addon",
+          "currency": "DOP",
+          "price": 2899.00,
+          "usd_equivalent": 49.98
+        },
+        "US": {
+          "stripe_price_id": "price_us_support_addon",
+          "currency": "USD",
+          "price": 49.00,
+          "usd_equivalent": 49.00
+        }
+      }
+    }
+  }
+}

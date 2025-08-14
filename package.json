@@ -16,7 +16,9 @@
     "populate-templates": "node scripts/populate-templates.js",
     "migrate-templates": "node scripts/run-migration.js",
     "docs": "node docs/server.js",
-    "docs:dev": "node docs/server.js"
+    "docs:dev": "node docs/server.js",
+    "export-i18n": "tsx scripts/export-i18n.ts",
+    "export-i18n:locale": "tsx scripts/export-i18n.ts"
   },
   "dependencies": {
     "@netlify/functions": "^4.2.1",

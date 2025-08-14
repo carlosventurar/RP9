@@ -2,13 +2,72 @@
 // Supports 6 countries in Latin America
 
 export const i18nConfig = {
-  defaultLocale: 'es',
-  locales: ['es', 'es-MX', 'es-CO', 'es-CL', 'es-PE', 'es-AR', 'es-DO', 'en'],
-  fallbackLocale: 'es'
+  defaultLocale: 'es-419', // Spanish Latin America como estándar ISO
+  locales: ['es-419', 'es-MX', 'es-CO', 'es-CL', 'es-PE', 'es-AR', 'es-DO', 'en-US'],
+  fallbackLocale: 'es-419',
+  countryAliases: {
+    '/mx': 'es-MX',
+    '/co': 'es-CO', 
+    '/cl': 'es-CL',
+    '/pe': 'es-PE',
+    '/ar': 'es-AR',
+    '/do': 'es-DO',
+    '/us': 'en-US'
+  }
 }
 
 // Country-specific configurations
 export const countryConfigs = {
+  'es-419': {
+    country: 'LATAM',
+    countryName: 'América Latina',
+    currency: 'USD', // Fallback a USD para neutralidad
+    currencySymbol: '$',
+    timezone: 'America/Mexico_City', // Central timezone para LatAm
+    phoneCode: '+',
+    businessHours: '9:00 - 18:00',
+    regulations: ['General'],
+    languages: ['Español'],
+    region: 'Latin America',
+    vatRate: 0.0, // Neutro
+    domains: ['rp9.io'],
+    paymentMethods: ['stripe'],
+    bankingPartners: [],
+    localPartners: [],
+    marketSize: 'region',
+    gdpPerCapita: 8000,
+    businessCulture: {
+      formalityLevel: 'medium',
+      decisionMakingSpeed: 'medium',
+      hierarchical: true,
+      relationshipImportance: 'high'
+    }
+  },
+  'en-US': {
+    country: 'US',
+    countryName: 'United States',
+    currency: 'USD',
+    currencySymbol: '$',
+    timezone: 'America/New_York',
+    phoneCode: '+1',
+    businessHours: '9:00 - 17:00 EST',
+    regulations: ['SEC', 'SOX', 'GDPR'],
+    languages: ['English'],
+    region: 'North America', 
+    vatRate: 0.0, // Sales tax varies by state
+    domains: ['rp9.com', 'rp9portal.com'],
+    paymentMethods: ['stripe', 'paypal'],
+    bankingPartners: ['JPMorgan Chase', 'Bank of America', 'Wells Fargo'],
+    localPartners: ['Salesforce', 'HubSpot', 'Zapier'],
+    marketSize: 'large',
+    gdpPerCapita: 65000,
+    businessCulture: {
+      formalityLevel: 'low',
+      decisionMakingSpeed: 'fast',
+      hierarchical: false,
+      relationshipImportance: 'medium'
+    }
+  },
   'es-MX': {
     country: 'MX',
     countryName: 'México',
