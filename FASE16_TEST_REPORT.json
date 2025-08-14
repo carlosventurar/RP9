@@ -1,0 +1,72 @@
+{
+  "timestamp": "2025-08-14T21:39:05.835Z",
+  "summary": {
+    "passed": 0,
+    "failed": 14,
+    "total": 14
+  },
+  "results": [
+    {
+      "name": "Legal ToS Page Load",
+      "success": false
+    },
+    {
+      "name": "Legal Privacy Page Load",
+      "success": false
+    },
+    {
+      "name": "Legal Status Page Load",
+      "success": false
+    },
+    {
+      "name": "Legal Accept ToS - Valid Request",
+      "success": false
+    },
+    {
+      "name": "Legal Accept Privacy - Valid Request",
+      "success": false
+    },
+    {
+      "name": "Legal Accept - Invalid Data",
+      "success": false
+    },
+    {
+      "name": "Legal Generate ToS - Spanish",
+      "success": false
+    },
+    {
+      "name": "Legal Generate Privacy - English",
+      "success": false
+    },
+    {
+      "name": "Contract Create MSA - Enterprise",
+      "success": false
+    },
+    {
+      "name": "Contract Create DPA - Enterprise",
+      "success": false
+    },
+    {
+      "name": "Subprocessors List - Public",
+      "success": false
+    },
+    {
+      "name": "Subprocessors Notify - Test",
+      "success": false
+    },
+    {
+      "name": "SLA Credit Calculation - Manual Trigger",
+      "success": false
+    },
+    {
+      "name": "Contract Sign Webhook - Simulation",
+      "success": false
+    }
+  ],
+  "config": {
+    "baseUrl": "https://rp9portal.netlify.app",
+    "testUserId": "test-user-1755207537174",
+    "testTenantId": "test-tenant-1755207537174",
+    "timeout": 10000
+  }
+}
