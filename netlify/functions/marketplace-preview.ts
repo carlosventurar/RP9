@@ -1,7 +1,7 @@
 import { Handler, HandlerEvent } from '@netlify/functions'
 import { createClient } from '@supabase/supabase-js'
-import { verifySignature } from '../lib/security/hmac'
-import { checkRateLimit } from '../lib/security/rateLimit'
+import { verifySignature } from '../../src/lib/security/hmac'
+import { checkRateLimit } from '../../src/lib/security/rate-limit'
 
 const supabase = createClient(
   process.env.SUPABASE_URL!,

@@ -1,6 +1,6 @@
 import { Handler, HandlerEvent } from '@netlify/functions'
 import { createClient } from '@supabase/supabase-js'
-import { verifySignature } from '../lib/security/hmac'
+import { verifySignature } from '../../src/lib/security/hmac'
 
 const supabase = createClient(
   process.env.SUPABASE_URL!,

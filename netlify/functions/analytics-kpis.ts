@@ -5,7 +5,7 @@
  */
 import { Handler } from '@netlify/functions';
 import { createClient } from '@supabase/supabase-js';
-import { verifyApiKey } from '../../lib/security/apiKeys';
+import { verifyApiKey } from '../../src/lib/security/apiKeys';
 import { checkRateLimit } from '../../src/lib/security/rate-limit';
 
 const supabase = createClient(
