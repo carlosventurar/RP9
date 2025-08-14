@@ -419,3 +419,13 @@ export async function cleanupRateLimitsPhase9(supabase: any, olderThanHours: num
     console.error('Error cleaning up rate limits:', error)
   }
 }
+
+/**
+ * Simple rate limit check function for backward compatibility
+ * This is a simplified version that uses in-memory rate limiting
+ */
+export async function checkRateLimit(identifier: string, maxPerMin: number = 60): Promise<boolean> {
+  const config = { windowMs: 60000, maxRequests: maxPerMin }
+  const result = rateLimit(identifier, config)
+  return result.allowed
+}

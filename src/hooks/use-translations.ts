@@ -1,5 +1,8 @@
 import { useTranslations } from 'next-intl'
 
+// Re-export useTranslations for backward compatibility
+export { useTranslations }
+
 export function useCommonTranslations() {
   return useTranslations('common')
 }

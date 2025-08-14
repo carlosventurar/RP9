@@ -5,7 +5,7 @@
  */
 import { Handler } from '@netlify/functions';
 import { createClient } from '@supabase/supabase-js';
-import { checkRateLimit } from '../../lib/security/rate-limit';
+import { checkRateLimit } from '../../src/lib/security/rate-limit';
 
 const supabase = createClient(
   process.env.SUPABASE_URL!,
