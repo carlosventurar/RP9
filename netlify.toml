@@ -92,6 +92,10 @@
 [functions.i18n-export]
   schedule = "0 3 * * 1"    # Weekly on Mondays at 03:00 UTC - export i18n messages
 
+# Scheduled Functions - Fase 16: Legal & Compliance
+[functions.sla-credit-calc]
+  schedule = "0 6 1 * *"    # Monthly on 1st at 06:00 UTC - calculate SLA credits for previous month
+
 # Fase 4: Security & SRE Functions
 [functions.backup-run]
   schedule = "0 2 * * *"  # Daily at 2:00 AM UTC
