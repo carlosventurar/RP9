@@ -125,8 +125,17 @@ export default function WorkflowsPage() {
         const response = await fetch('/api/workflows-direct')
         if (response.ok) {
           const data = await response.json()
-          setWorkflows(data.data || [])
-          setAvailableTags(data.tags || [])
+          
+          // Check if we got fallback data (API was unavailable)
+          if (data.fallback) {
+            console.warn('N8N API temporarily unavailable, using fallback data')
+            setWorkflows(mockWorkflows)
+            setAvailableTags(['finance', 'automation', 'email', 'marketing', 'crm', 'leads', 'campaigns', 'onboarding', 'customers', 'accounting', 'welcome'])
+          } else {
+            // Use real data from n8n
+            setWorkflows(data.data || [])
+            setAvailableTags(data.tags || [])
+          }
         } else {
           console.error('Failed to fetch workflows from n8n:', response.statusText)
           // Fallback to mock data if API fails

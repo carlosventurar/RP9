@@ -13,19 +13,55 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    // Fetch workflows directly from n8n
-    const response = await fetch(`${n8nUrl}/api/v1/workflows`, {
-      headers: {
-        'X-N8N-API-KEY': n8nApiKey,
-        'Accept': 'application/json'
+    // Fetch workflows directly from n8n with timeout and retry logic
+    let response
+    let workflows
+    let attempts = 0
+    const maxAttempts = 2
+    
+    while (attempts < maxAttempts) {
+      try {
+        const controller = new AbortController()
+        const timeoutId = setTimeout(() => controller.abort(), 10000) // 10 second timeout
+        
+        response = await fetch(`${n8nUrl}/api/v1/workflows`, {
+          headers: {
+            'X-N8N-API-KEY': n8nApiKey,
+            'Accept': 'application/json'
+          },
+          signal: controller.signal
+        })
+        
+        clearTimeout(timeoutId)
+        
+        if (!response.ok) {
+          throw new Error(`N8N API error: ${response.status} ${response.statusText}`)
+        }
+
+        workflows = await response.json()
+        break // Success, exit retry loop
+        
+      } catch (error) {
+        attempts++
+        console.error(`N8N API attempt ${attempts} failed:`, error)
+        
+        if (attempts >= maxAttempts) {
+          // Return fallback data if all attempts fail
+          console.warn('N8N API unavailable, returning fallback data')
+          return NextResponse.json({
+            success: true,
+            data: [], // Empty array as fallback
+            total: 0,
+            tags: [],
+            fallback: true,
+            error: 'N8N API temporarily unavailable'
+          })
+        }
+        
+        // Wait before retry
+        await new Promise(resolve => setTimeout(resolve, 1000))
       }
-    })
-
-    if (!response.ok) {
-      throw new Error(`N8N API error: ${response.status}`)
     }
-
-    const workflows = await response.json()
 
     // Transform workflows to match our interface and add smart tags based on workflow names
     const transformedWorkflows = workflows.data.map((workflow: any) => {
