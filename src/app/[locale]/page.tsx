@@ -10,7 +10,7 @@ export default function LocalizedHomePage() {
 
   useEffect(() => {
     // Redirect to dashboard for authenticated users or login for non-authenticated
-    router.replace(`/${locale}/app/dashboard`)
+    router.replace(`/app/dashboard`)
   }, [router, locale])
 
   return (

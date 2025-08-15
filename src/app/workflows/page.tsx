@@ -16,7 +16,8 @@ import {
   Clock,
   CheckCircle,
   XCircle,
-  Loader2
+  Loader2,
+  X
 } from "lucide-react"
 import { N8nWorkflow } from '@/lib/n8n'
 import { useWorkflowTranslations } from '@/hooks/use-translations'
@@ -25,14 +26,17 @@ interface WorkflowWithStats extends N8nWorkflow {
   lastExecution?: string
   executionCount?: number
   successRate?: number
+  tags?: string[]
 }
 
 export default function WorkflowsPage() {
   const [workflows, setWorkflows] = useState<WorkflowWithStats[]>([])
   const [filteredWorkflows, setFilteredWorkflows] = useState<WorkflowWithStats[]>([])
+  const [availableTags, setAvailableTags] = useState<string[]>([])
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
   const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'inactive'>('all')
+  const [tagFilter, setTagFilter] = useState<string>('all')
   const [actionLoading, setActionLoading] = useState<string | null>(null)
   
   // Use translations with error handling
@@ -72,7 +76,8 @@ export default function WorkflowsPage() {
       updatedAt: '2024-01-20T14:22:00Z',
       lastExecution: '2 min ago',
       executionCount: 1247,
-      successRate: 98.5
+      successRate: 98.5,
+      tags: ['marketing', 'leads', 'crm']
     },
     {
       id: '2', 
@@ -83,7 +88,8 @@ export default function WorkflowsPage() {
       updatedAt: '2024-01-22T16:45:00Z',
       lastExecution: '5 min ago',
       executionCount: 892,
-      successRate: 99.1
+      successRate: 99.1,
+      tags: ['email', 'marketing', 'campaigns']
     },
     {
       id: '3',
@@ -94,7 +100,8 @@ export default function WorkflowsPage() {
       updatedAt: '2024-01-18T13:30:00Z',
       lastExecution: '2 days ago',
       executionCount: 156,
-      successRate: 95.2
+      successRate: 95.2,
+      tags: ['onboarding', 'customers', 'welcome']
     },
     {
       id: '4',
@@ -105,7 +112,8 @@ export default function WorkflowsPage() {
       updatedAt: '2024-01-21T10:15:00Z',
       lastExecution: '1 hour ago',
       executionCount: 2341,
-      successRate: 97.8
+      successRate: 97.8,
+      tags: ['finance', 'automation', 'accounting']
     },
   ]
 
@@ -113,19 +121,23 @@ export default function WorkflowsPage() {
     const fetchWorkflows = async () => {
       setLoading(true)
       try {
-        const response = await fetch('/api/workflows')
+        // Try direct n8n API first
+        const response = await fetch('/api/workflows-direct')
         if (response.ok) {
           const data = await response.json()
           setWorkflows(data.data || [])
+          setAvailableTags(data.tags || [])
         } else {
-          console.error('Failed to fetch workflows:', response.statusText)
+          console.error('Failed to fetch workflows from n8n:', response.statusText)
           // Fallback to mock data if API fails
           setWorkflows(mockWorkflows)
+          setAvailableTags(['finance', 'automation', 'email', 'marketing', 'crm', 'leads', 'campaigns', 'onboarding', 'customers', 'accounting', 'welcome'])
         }
       } catch (error) {
         console.error('Failed to fetch workflows:', error)
         // Fallback to mock data if API fails
         setWorkflows(mockWorkflows)
+        setAvailableTags(['finance', 'automation', 'email', 'marketing', 'crm', 'leads', 'campaigns', 'onboarding', 'customers', 'accounting', 'welcome'])
       } finally {
         setLoading(false)
       }
@@ -151,14 +163,21 @@ export default function WorkflowsPage() {
       )
     }
 
+    // Filter by tag
+    if (tagFilter !== 'all') {
+      filtered = filtered.filter(workflow =>
+        workflow.tags && workflow.tags.includes(tagFilter)
+      )
+    }
+
     setFilteredWorkflows(filtered)
-  }, [workflows, searchTerm, statusFilter])
+  }, [workflows, searchTerm, statusFilter, tagFilter])
 
   const handleToggleWorkflow = async (workflow: WorkflowWithStats) => {
     setActionLoading(workflow.id!)
     try {
       const endpoint = workflow.active ? 'deactivate' : 'activate'
-      const response = await fetch(`/api/workflows/${workflow.id}/${endpoint}`, {
+      const response = await fetch(`/api/workflows-direct/${workflow.id}/${endpoint}`, {
         method: 'POST'
       })
       
@@ -169,6 +188,8 @@ export default function WorkflowsPage() {
             w.id === workflow.id ? { ...w, active: !w.active } : w
           )
         )
+      } else {
+        console.error('Failed to toggle workflow:', response.statusText)
       }
     } catch (error) {
       console.error('Failed to toggle workflow:', error)
@@ -180,7 +201,7 @@ export default function WorkflowsPage() {
   const handleRunWorkflow = async (workflowId: string) => {
     setActionLoading(workflowId)
     try {
-      const response = await fetch(`/api/workflows/${workflowId}/run`, {
+      const response = await fetch(`/api/workflows-direct/${workflowId}/run`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({})
@@ -189,12 +210,23 @@ export default function WorkflowsPage() {
       if (response.ok) {
         // Show success message or update UI
         console.log('Workflow executed successfully')
+        
+        // Optionally refresh workflows to get updated execution count
+        // fetchWorkflows()
+      } else {
+        console.error('Failed to run workflow:', response.statusText)
       }
     } catch (error) {
       console.error('Failed to run workflow:', error)
     } finally {
       setActionLoading(null)
     }
+  }
+
+  const clearAllFilters = () => {
+    setSearchTerm('')
+    setStatusFilter('all')
+    setTagFilter('all')
   }
 
   if (loading) {
@@ -226,7 +258,7 @@ export default function WorkflowsPage() {
       </div>
 
       {/* Filters */}
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-4 flex-wrap">
         <div className="relative flex-1 max-w-sm">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
           <Input
@@ -236,16 +268,51 @@ export default function WorkflowsPage() {
             className="pl-10"
           />
         </div>
+        
         <Select value={statusFilter} onValueChange={(value: any) => setStatusFilter(value)}>
           <SelectTrigger className="w-[140px]">
-            <SelectValue placeholder={t('status')} />
+            <SelectValue placeholder="Estado" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">{t('all')}</SelectItem>
-            <SelectItem value="active">{t('active')}</SelectItem>
-            <SelectItem value="inactive">{t('inactive')}</SelectItem>
+            <SelectItem value="all">Todos</SelectItem>
+            <SelectItem value="active">Activos</SelectItem>
+            <SelectItem value="inactive">Inactivos</SelectItem>
           </SelectContent>
         </Select>
+
+        <Select value={tagFilter} onValueChange={setTagFilter}>
+          <SelectTrigger className="w-[160px]">
+            <SelectValue placeholder="Filtrar por tag" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">Todos los tags</SelectItem>
+            {availableTags.map(tag => (
+              <SelectItem key={tag} value={tag}>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 rounded-full bg-primary"></div>
+                  {tag}
+                </div>
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+
+        {(searchTerm || statusFilter !== 'all' || tagFilter !== 'all') && (
+          <div className="flex items-center gap-2">
+            <div className="text-sm text-muted-foreground">
+              {filteredWorkflows.length} de {workflows.length} workflows
+            </div>
+            <Button 
+              variant="ghost" 
+              size="sm"
+              onClick={clearAllFilters}
+              className="h-8 px-2"
+            >
+              <X className="h-3 w-3 mr-1" />
+              Limpiar filtros
+            </Button>
+          </div>
+        )}
       </div>
 
       {/* Workflows Grid */}
@@ -256,7 +323,7 @@ export default function WorkflowsPage() {
               <div className="flex items-start justify-between">
                 <div className="space-y-1 flex-1">
                   <CardTitle className="text-lg leading-tight">{workflow.name}</CardTitle>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 flex-wrap">
                     <Badge variant={workflow.active ? "default" : "secondary"}>
                       {workflow.active ? t('active') : t('inactive')}
                     </Badge>
@@ -266,6 +333,20 @@ export default function WorkflowsPage() {
                       </Badge>
                     )}
                   </div>
+                  {workflow.tags && workflow.tags.length > 0 && (
+                    <div className="flex items-center gap-1 mt-2 flex-wrap">
+                      {workflow.tags.slice(0, 3).map(tag => (
+                        <Badge key={tag} variant="secondary" className="text-xs px-2 py-0">
+                          {tag}
+                        </Badge>
+                      ))}
+                      {workflow.tags.length > 3 && (
+                        <Badge variant="outline" className="text-xs px-2 py-0">
+                          +{workflow.tags.length - 3}
+                        </Badge>
+                      )}
+                    </div>
+                  )}
                 </div>
                 <Button 
                   variant="ghost" 
