@@ -6,7 +6,7 @@ import { MetricsDashboard } from "@/components/dashboard/MetricsDashboard"
 import { Skeleton } from "@/components/ui/skeleton"
 
 export const metadata: Metadata = {
-  title: "Métricas | RP9 Portal",
+  title: "Métricas | Agente Virtual IA",
   description: "Dashboard de métricas y observabilidad de n8n workflows",
 }
 

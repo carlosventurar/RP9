@@ -189,7 +189,7 @@ export default function StatusPage() {
 
         {/* Footer */}
         <div className="text-center mt-8 text-sm text-gray-600 dark:text-gray-400">
-          <p>¿Experimentas problemas? Contacta soporte en support@rp9.com</p>
+          <p>¿Experimentas problemas? Contacta soporte en support@agentevirtualia.com</p>
         </div>
       </div>
     </div>

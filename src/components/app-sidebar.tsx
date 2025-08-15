@@ -132,7 +132,7 @@ export function AppSidebar() {
                   <User2 />
                   <div className="grid flex-1 text-left text-sm leading-tight">
                     <span className="truncate font-semibold">{authT('demoUser')}</span>
-                    <span className="truncate text-xs">demo@rp9.com</span>
+                    <span className="truncate text-xs">admin@agentevirtualia.com</span>
                   </div>
                   <ChevronUp className="ml-auto size-4" />
                 </SidebarMenuButton>

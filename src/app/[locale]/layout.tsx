@@ -19,8 +19,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "RP9 Portal - No-Code Enterprise Automation",
-  description: "Transform manual processes into automated workflows. Save time, reduce errors, and scale your operation with RP9 Portal.",
+  title: "Agente Virtual IA - Plataforma de Automatización Inteligente",
+  description: "Transforma procesos manuales en workflows automatizados con IA. Ahorra tiempo, reduce errores y escala tu operación con Agente Virtual IA.",
 };
 
 interface LocaleLayoutProps {

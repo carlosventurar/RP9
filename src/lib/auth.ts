@@ -18,7 +18,7 @@ const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key'
 export function signToken(user: AuthUser): string {
   return jwt.sign(user, JWT_SECRET, { 
     expiresIn: '7d',
-    issuer: 'rp9-portal'
+    issuer: 'agente-virtual-ia'
   })
 }
 
@@ -52,7 +52,7 @@ export function getAuthUser(request: NextRequest): AuthUser | null {
 export function createMockUser(): AuthUser {
   return {
     id: '1',
-    email: 'demo@rp9.com',
+    email: 'admin@agentevirtualia.com',
     tenantId: 'demo-tenant',
     role: 'owner'
   }

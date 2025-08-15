@@ -171,7 +171,7 @@ src/
 
 ### Tema y Colores
 
-El tema RP9 está configurado en `src/app/globals.css`:
+El tema Agente Virtual IA está configurado en `src/app/globals.css`:
 
 ```css
 :root {

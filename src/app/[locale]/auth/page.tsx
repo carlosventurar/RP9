@@ -231,7 +231,7 @@ export default function AuthPage() {
             <div className="text-center space-y-2">
               <p className="text-xs font-medium text-slate-400">{t('adminCredentials')}</p>
               <div className="text-xs text-slate-300 space-y-1">
-                <p>Email: admin@rp9portal.com</p>
+                <p>Email: admin@agentevirtualia.com</p>
                 <p>Password: RP9Admin2024!</p>
               </div>
             </div>
