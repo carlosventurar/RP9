@@ -23,55 +23,59 @@ export default function LocalizedHomePage() {
   const features = [
     {
       icon: Bot,
-      title: 'Contact Center',
-      description: 'Automatiza respuestas y gestión de clientes'
+      title: t('features.contactCenter.title'),
+      description: t('features.contactCenter.description')
     },
     {
       icon: Calculator, 
-      title: 'Finanzas',
-      description: 'Procesa facturas y pagos automáticamente'
+      title: t('features.finance.title'),
+      description: t('features.finance.description')
     },
     {
       icon: Globe,
-      title: 'Integraciones',
-      description: 'Conecta todas tus herramientas favoritas'
+      title: t('features.integrations.title'),
+      description: t('features.integrations.description')
     }
   ]
 
   const pricingPlans = [
     {
-      name: 'Starter',
-      price: 'Gratis',
-      description: 'Perfecto para equipos pequeños',
+      name: t('pricing.plans.starter.name'),
+      price: t('pricing.plans.starter.price'),
+      description: t('pricing.plans.starter.description'),
       features: [
-        'Hasta 5 usuarios',
-        '1,000 ejecuciones/mes',
-        '10 workflows activos',
-        'Soporte estándar'
-      ]
-    },
-    {
-      name: 'Pro',
-      price: `$29 USD`,
-      description: 'Para empresas en crecimiento',
-      features: [
-        'Usuarios ilimitados',
-        '10,000 ejecuciones/mes', 
-        '100 workflows activos',
-        'Soporte prioritario'
+        t('pricing.plans.starter.features.users'),
+        t('pricing.plans.starter.features.executions'),
+        t('pricing.plans.starter.features.workflows'),
+        t('pricing.plans.starter.features.support')
       ],
-      popular: true
+      button: t('pricing.plans.starter.button')
     },
     {
-      name: 'Enterprise',
-      price: `$99 USD`,
-      description: 'Para grandes organizaciones',
+      name: t('pricing.plans.pro.name'),
+      price: t('pricing.plans.pro.price'),
+      description: t('pricing.plans.pro.description'),
       features: [
-        'Todo ilimitado',
-        'Soporte dedicado 24/7',
-        'SLA garantizado',
-        'Personalización completa'
-      ]
+        t('pricing.plans.pro.features.users'),
+        t('pricing.plans.pro.features.executions'), 
+        t('pricing.plans.pro.features.workflows'),
+        t('pricing.plans.pro.features.support')
+      ],
+      popular: true,
+      popularText: t('pricing.plans.pro.popular'),
+      button: t('pricing.plans.pro.button')
+    },
+    {
+      name: t('pricing.plans.enterprise.name'),
+      price: t('pricing.plans.enterprise.price'),
+      description: t('pricing.plans.enterprise.description'),
+      features: [
+        t('pricing.plans.enterprise.features.unlimited'),
+        t('pricing.plans.enterprise.features.support'),
+        t('pricing.plans.enterprise.features.sla'),
+        t('pricing.plans.enterprise.features.customization')
+      ],
+      button: t('pricing.plans.enterprise.button')
     }
   ]
 
@@ -81,25 +85,25 @@ export default function LocalizedHomePage() {
       <section className="text-center space-y-8">
         <div className="space-y-4">
           <Badge variant="outline" className="px-4 py-2">
-            Confiado por 150+ empresas en {countryConfig.countryName}
+            {t('hero.badge')} {countryConfig.countryName}
           </Badge>
           
           <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
-            Automatización Empresarial Sin Código
+            {t('hero.title')}
           </h1>
           
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Transforma procesos manuales en workflows automatizados. Ahorra tiempo, reduce errores y escala tu operación.
+            {t('hero.subtitle')}
           </p>
         </div>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Button size="lg" className="gap-2">
-            Comenzar Gratis
+            {t('hero.startFree')}
             <ArrowRight size={16} />
           </Button>
           <Button size="lg" variant="outline">
-            Ver Demo
+            {t('hero.viewDemo')}
           </Button>
         </div>
       </section>
@@ -108,10 +112,10 @@ export default function LocalizedHomePage() {
       <section className="space-y-8">
         <div className="text-center space-y-4">
           <h2 className="text-3xl font-bold">
-            Todo lo que Necesitas para Automatizar
+            {t('features.title')}
           </h2>
           <p className="text-xl text-muted-foreground">
-            Herramientas poderosas y fáciles de usar para transformar tu operación
+            {t('features.subtitle')}
           </p>
         </div>
 
@@ -140,12 +144,12 @@ export default function LocalizedHomePage() {
       {/* Pricing Section */}
       <section className="space-y-8">
         <div className="text-center space-y-4">
-          <h2 className="text-3xl font-bold">Precios Transparentes</h2>
+          <h2 className="text-3xl font-bold">{t('pricing.title')}</h2>
           <p className="text-xl text-muted-foreground">
-            Planes que crecen contigo. Sin costos ocultos.
+            {t('pricing.subtitle')}
           </p>
           <p className="text-sm text-muted-foreground">
-            Precios en {countryConfig.currency} • {countryConfig.vatRate * 100}% impuestos incluidos
+            {t('pricing.taxNote', { currency: countryConfig.currency, taxRate: countryConfig.vatRate * 100 })}
           </p>
         </div>
 
@@ -154,7 +158,7 @@ export default function LocalizedHomePage() {
             <Card key={index} className={`relative ${plan.popular ? 'border-primary shadow-lg scale-105' : ''}`}>
               {plan.popular && (
                 <Badge className="absolute -top-2 left-1/2 transform -translate-x-1/2">
-                  Más Popular
+                  {plan.popularText}
                 </Badge>
               )}
               <CardHeader className="text-center">
@@ -175,7 +179,7 @@ export default function LocalizedHomePage() {
                   ))}
                 </ul>
                 <Button className="w-full" variant={plan.popular ? 'default' : 'outline'}>
-                  {plan.price === 'Gratis' ? 'Comenzar Ahora' : 'Elegir Plan'}
+                  {plan.button}
                 </Button>
               </CardContent>
             </Card>
@@ -187,7 +191,7 @@ export default function LocalizedHomePage() {
       <section className="bg-muted/50 rounded-lg p-8 space-y-6">
         <div className="text-center">
           <h3 className="text-2xl font-bold mb-4">
-            RP9 Portal en {countryConfig.countryName}
+            {t('localMarket.title', { country: countryConfig.countryName })}
           </h3>
           <div className="grid md:grid-cols-3 gap-6">
             <div className="space-y-2">
@@ -195,7 +199,7 @@ export default function LocalizedHomePage() {
                 {countryConfig.currency}
               </div>
               <div className="text-sm text-muted-foreground">
-                Facturación local
+                {t('localMarket.currency')}
               </div>
             </div>
             <div className="space-y-2">
@@ -203,7 +207,7 @@ export default function LocalizedHomePage() {
                 {countryConfig.businessHours}
               </div>
               <div className="text-sm text-muted-foreground">
-                Horario de soporte
+                {t('localMarket.support')}
               </div>
             </div>
             <div className="space-y-2">
@@ -211,7 +215,7 @@ export default function LocalizedHomePage() {
                 {countryConfig.regulations.length}
               </div>
               <div className="text-sm text-muted-foreground">
-                Regulaciones soportadas
+                {t('localMarket.regulations')}
               </div>
             </div>
           </div>
@@ -219,11 +223,11 @@ export default function LocalizedHomePage() {
 
         <div className="text-center">
           <p className="text-muted-foreground mb-4">
-            Cumplimos con: {countryConfig.regulations.join(', ')}
+            {t('localMarket.compliance', { regulations: countryConfig.regulations.join(', ') })}
           </p>
           <Button asChild>
             <Link href="/contacto">
-              Contactar Equipo Local
+              {t('localMarket.contactTeam')}
             </Link>
           </Button>
         </div>
@@ -232,18 +236,21 @@ export default function LocalizedHomePage() {
       {/* CTA Section */}
       <section className="text-center space-y-8 bg-primary/5 rounded-lg p-12">
         <h2 className="text-3xl font-bold">
-          ¿Listo para Automatizar tu Operación?
+          {t('cta.title')}
         </h2>
         <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-          Únete a las {countryConfig.marketSize === 'large' ? '150+' : '50+'} empresas en {countryConfig.countryName} que ya confían en RP9 Portal.
+          {t('cta.subtitle', { 
+            count: countryConfig.marketSize === 'large' ? '150+' : '50+',
+            country: countryConfig.countryName 
+          })}
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Button size="lg" className="gap-2">
             <Zap size={16} />
-            Comenzar Prueba Gratuita
+            {t('cta.startTrial')}
           </Button>
           <Button size="lg" variant="outline">
-            Agendar Demo
+            {t('cta.scheduleDemo')}
           </Button>
         </div>
       </section>

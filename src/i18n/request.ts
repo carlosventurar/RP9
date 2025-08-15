@@ -29,7 +29,7 @@ export default getRequestConfig(async () => {
       // Final fallback to English if even the fallback fails
       console.error('Fallback locale also failed, using English')
       return {
-        locale: 'en',
+        locale: 'en-US',
         messages: (await import(`./messages/en.json`)).default
       }
     }
