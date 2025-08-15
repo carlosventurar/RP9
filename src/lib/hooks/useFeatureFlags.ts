@@ -3,12 +3,9 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useLocale } from 'next-intl'
 import { getCountryConfig } from '@/lib/i18n/config'
-import { createClient } from '@supabase/supabase-js'
+import { createClient } from '@/lib/supabase/client'
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-)
+const supabase = createClient()
 
 interface FeatureFlags {
   // Payment-related flags

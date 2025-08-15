@@ -1,11 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
+import { createClient } from '@/lib/supabase/server'
 import { z } from 'zod'
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
+// const supabase = createClient() // Moved inside handlers
 
 // Request schema
 const optimizeSchema = z.object({
@@ -23,6 +20,7 @@ const optimizeSchema = z.object({
 
 export async function POST(request: NextRequest) {
   try {
+    const supabase = createClient()
     // Parse and validate request
     const body = await request.json()
     const { workflowId, tenantId, workflowData, executionHistory } = optimizeSchema.parse(body)
