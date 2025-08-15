@@ -80,7 +80,7 @@ export default function LocalizedHomePage() {
   ]
 
   return (
-    <div className="space-y-16">
+    <div className="space-y-16 py-8 px-4 max-w-7xl mx-auto">
       {/* Hero Section */}
       <section className="text-center space-y-8">
         <div className="space-y-4">
@@ -98,12 +98,16 @@ export default function LocalizedHomePage() {
         </div>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Button size="lg" className="gap-2">
-            {t('hero.startFree')}
-            <ArrowRight size={16} />
+          <Button size="lg" className="gap-2" asChild>
+            <Link href="/login">
+              {t('hero.startFree')}
+              <ArrowRight size={16} />
+            </Link>
           </Button>
-          <Button size="lg" variant="outline">
-            {t('hero.viewDemo')}
+          <Button size="lg" variant="outline" asChild>
+            <Link href="/contacto">
+              {t('hero.viewDemo')}
+            </Link>
           </Button>
         </div>
       </section>
@@ -245,12 +249,16 @@ export default function LocalizedHomePage() {
           })}
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Button size="lg" className="gap-2">
-            <Zap size={16} />
-            {t('cta.startTrial')}
+          <Button size="lg" className="gap-2" asChild>
+            <Link href="/login">
+              <Zap size={16} />
+              {t('cta.startTrial')}
+            </Link>
           </Button>
-          <Button size="lg" variant="outline">
-            {t('cta.scheduleDemo')}
+          <Button size="lg" variant="outline" asChild>
+            <Link href="/contacto">
+              {t('cta.scheduleDemo')}
+            </Link>
           </Button>
         </div>
       </section>

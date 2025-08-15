@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -19,16 +19,20 @@ export default function AuthPage() {
   const [error, setError] = useState('')
   
   const router = useRouter()
+  const searchParams = useSearchParams()
   const locale = useLocale()
   const supabase = createClient()
   const t = useTranslations('auth')
+  
+  // Get redirect URL from search params
+  const redirectUrl = searchParams.get('redirect') || `/app/dashboard`
 
   useEffect(() => {
     // Check if user is already logged in
     const checkUser = async () => {
       const { data: { user } } = await supabase.auth.getUser()
       if (user) {
-        router.replace(`/${locale}/dashboard`)
+        router.replace(`/${locale}${redirectUrl}`)
       }
     }
     checkUser()
@@ -51,7 +55,7 @@ export default function AuthPage() {
 
         if (data.user) {
           setMessage(t('loginSuccessful'))
-          router.replace(`/${locale}/dashboard`)
+          router.replace(`/${locale}${redirectUrl}`)
         }
       } else {
         const { data, error } = await supabase.auth.signUp({
@@ -87,7 +91,7 @@ export default function AuthPage() {
       const { error } = await supabase.auth.signInWithOtp({
         email,
         options: {
-          emailRedirectTo: `${window.location.origin}/${locale}/dashboard`
+          emailRedirectTo: `${window.location.origin}/${locale}${redirectUrl}`
         }
       })
 

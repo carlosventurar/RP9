@@ -20,6 +20,11 @@
   },
   "navigation": {
     "platform": "Platform",
+    "home": "Home",
+    "pricing": "Pricing", 
+    "contact": "Contact",
+    "login": "Login",
+    "getStarted": "Get Started",
     "dashboard": "Dashboard",
     "workflows": "Workflows", 
     "templates": "Templates",

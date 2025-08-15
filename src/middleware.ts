@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { i18nConfig, detectLocaleFromDomain, isValidLocale } from '@/lib/i18n/config'
+import { createClient } from '@/lib/supabase/middleware-client'
 
 // Middleware for internationalization (Fase 15)
 // Implements UTM > IP-geo > Accept-Language > Cookie negotiation
 // Supports country aliases (/mx -> /es-MX)
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const { pathname, searchParams } = request.nextUrl
   const hostname = request.headers.get('host') || ''
 
@@ -18,6 +19,23 @@ export function middleware(request: NextRequest) {
     pathname.startsWith('/assets/')
   ) {
     return NextResponse.next()
+  }
+
+  // Check if this is a protected app route
+  const isAppRoute = pathname.includes('/app/')
+  let response = NextResponse.next()
+
+  if (isAppRoute) {
+    // Check authentication for /app/* routes
+    const supabase = createClient(request, response)
+    const { data: { user } } = await supabase.auth.getUser()
+
+    if (!user) {
+      // User not authenticated, redirect to login
+      const loginUrl = new URL('/login', request.url)
+      loginUrl.searchParams.set('redirect', pathname)
+      return NextResponse.redirect(loginUrl)
+    }
   }
 
   // Handle country aliases first (/mx -> /es-MX)

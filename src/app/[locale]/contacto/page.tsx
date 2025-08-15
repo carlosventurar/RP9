@@ -18,10 +18,12 @@ import {
   CheckCircle,
   Building2,
   Users,
-  MessageSquare
+  MessageSquare,
+  ArrowRight
 } from 'lucide-react'
 import { getCountryConfig } from '@/lib/i18n/config'
 import { toast } from 'sonner'
+import Link from 'next/link'
 
 export default function ContactPage() {
   const t = useTranslations('contact')
@@ -99,7 +101,7 @@ export default function ContactPage() {
   }
 
   return (
-    <div className="max-w-6xl mx-auto space-y-8">
+    <div className="max-w-6xl mx-auto space-y-8 py-8 px-4">
       {/* Header */}
       <div className="text-center space-y-4">
         <Badge variant="outline" className="px-4 py-2">
@@ -336,6 +338,20 @@ export default function ContactPage() {
               {t('whyChoose.proven.description')}
             </p>
           </div>
+        </div>
+        
+        {/* CTA to Login */}
+        <div className="text-center mt-8 p-6 bg-primary/5 rounded-lg border border-primary/20">
+          <h4 className="text-lg font-semibold mb-2">¿Ya tienes cuenta?</h4>
+          <p className="text-sm text-muted-foreground mb-4">
+            Accede a tu portal de automatización y comienza a optimizar tus procesos.
+          </p>
+          <Button asChild className="gap-2">
+            <Link href="/login">
+              Iniciar Sesión
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </Button>
         </div>
       </div>
     </div>

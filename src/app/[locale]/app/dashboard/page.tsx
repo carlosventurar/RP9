@@ -1,0 +1,262 @@
+'use client'
+
+import { useState, useEffect } from 'react'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { Activity, Workflow, TrendingUp, Clock, Loader2 } from "lucide-react"
+import { useTranslations } from 'next-intl'
+import { createClient } from '@/lib/supabase/client'
+import CCKPIs from '@/components/kpi/CCKPIs'
+import FinKPIs from '@/components/kpi/FinKPIs'
+
+interface DashboardMetrics {
+  total_executions: number
+  successful_executions: number
+  failed_executions: number
+  success_rate: number
+  avg_duration_seconds: number
+  p95_duration_seconds: number
+  active_workflows: number
+}
+
+interface Execution {
+  id: string
+  workflow_name: string
+  status: 'success' | 'error' | 'running' | 'waiting' | 'canceled'
+  started_at: string
+  stopped_at: string | null
+  duration_ms: number | null
+}
+
+interface DashboardData {
+  metrics: DashboardMetrics
+  recentExecutions: Execution[]
+  topWorkflows: { name: string; count: number }[]
+  period: string
+}
+
+export default function Dashboard() {
+  const [data, setData] = useState<DashboardData | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const t = useTranslations('dashboard')
+  const supabase = createClient()
+
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      setLoading(true)
+      try {
+        // Get user session and token
+        const { data: { session }, error: sessionError } = await supabase.auth.getSession()
+        
+        if (sessionError || !session) {
+          throw new Error('No valid session found')
+        }
+
+        const response = await fetch('/.netlify/functions/dashboard', {
+          headers: {
+            'Authorization': `Bearer ${session.access_token}`,
+            'Content-Type': 'application/json'
+          }
+        })
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`)
+        }
+        const result = await response.json()
+        if (result.success) {
+          setData(result.data)
+        } else {
+          throw new Error(result.error || 'Failed to fetch dashboard data')
+        }
+      } catch (err) {
+        console.error('Failed to fetch dashboard data:', err)
+        setError(err instanceof Error ? err.message : 'Unknown error')
+        // Set default data for development
+        setData({
+          metrics: {
+            total_executions: 0,
+            successful_executions: 0,
+            failed_executions: 0,
+            success_rate: 0,
+            avg_duration_seconds: 0,
+            p95_duration_seconds: 0,
+            active_workflows: 0
+          },
+          recentExecutions: [],
+          topWorkflows: [],
+          period: '24h'
+        })
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchDashboardData()
+  }, [supabase])
+
+  const formatDuration = (ms: number | null) => {
+    if (!ms) return '0s'
+    if (ms < 1000) return `${ms}ms`
+    return `${(ms / 1000).toFixed(1)}s`
+  }
+
+  const formatTimeAgo = (dateString: string) => {
+    const date = new Date(dateString)
+    const now = new Date()
+    const diffMs = now.getTime() - date.getTime()
+    const diffMins = Math.floor(diffMs / 60000)
+    
+    if (diffMins < 1) return t('timeJustNow')
+    if (diffMins < 60) return t('timeMinAgo', { minutes: diffMins })
+    if (diffMins < 1440) return t('timeHoursAgo', { hours: Math.floor(diffMins / 60) })
+    return t('timeDaysAgo', { days: Math.floor(diffMins / 1440) })
+  }
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <Loader2 className="h-8 w-8 animate-spin" />
+      </div>
+    )
+  }
+
+  return (
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
+        <p className="text-muted-foreground">
+          {t('subtitle')}
+        </p>
+      </div>
+
+      {/* KPI Cards */}
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">
+              {t('executionsToday')}
+            </CardTitle>
+            <Activity className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{data?.metrics.total_executions.toLocaleString() || '0'}</div>
+            <p className="text-xs text-muted-foreground">
+              {t('lastPeriod', { period: data?.period || '24h' })}
+            </p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">
+              {t('activeWorkflows')}
+            </CardTitle>
+            <Workflow className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{data?.metrics.active_workflows || '0'}</div>
+            <p className="text-xs text-muted-foreground">
+              {t('currentlyRunning')}
+            </p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">{t('successRate')}</CardTitle>
+            <TrendingUp className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{data?.metrics.success_rate ? `${data.metrics.success_rate}%` : '0%'}</div>
+            <p className="text-xs text-muted-foreground">
+              {t('successfulExecutions', { successful: data?.metrics.successful_executions || 0, total: data?.metrics.total_executions || 0 })}
+            </p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">{t('avgResponseTime')}</CardTitle>
+            <Clock className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">
+              {data?.metrics.avg_duration_seconds ? `${data.metrics.avg_duration_seconds}s` : '0s'}
+            </div>
+            <p className="text-xs text-muted-foreground">
+              P95: {data?.metrics.p95_duration_seconds ? `${data.metrics.p95_duration_seconds}s` : '0s'}
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Contact Center KPIs */}
+      <CCKPIs />
+
+      {/* Finance KPIs */}
+      <FinKPIs />
+
+      {/* Recent Activity */}
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+        <Card className="col-span-4">
+          <CardHeader>
+            <CardTitle>{t('recentWorkflowExecutions')}</CardTitle>
+            <CardDescription>
+              {t('latestAutomationRuns')}
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {data?.recentExecutions && data.recentExecutions.length > 0 ? (
+              data.recentExecutions.map((execution) => (
+                <div key={execution.id} className="flex items-center space-x-4">
+                  <div className="flex-1 space-y-1">
+                    <p className="text-sm font-medium leading-none">
+                      {execution.workflow_name || t('unknownWorkflow')}
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      {formatTimeAgo(execution.started_at)} • {t('duration')}: {formatDuration(execution.duration_ms)}
+                    </p>
+                  </div>
+                  <Badge variant={
+                    execution.status === "success" ? "default" :
+                    execution.status === "running" ? "secondary" : 
+                    "destructive"
+                  }>
+                    {t(`status.${execution.status}`)}
+                  </Badge>
+                </div>
+              ))
+            ) : (
+              <div className="text-center py-8 text-muted-foreground">
+                <Activity className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                <p>{t('noRecentExecutions')}</p>
+                <p className="text-xs">{t('workflowExecutionsWillAppear')}</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+        <Card className="col-span-3">
+          <CardHeader>
+            <CardTitle>{t('systemStatus')}</CardTitle>
+            <CardDescription>
+              {t('currentStatusOfServices')}
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {[
+              { service: "n8n API", status: "operational" },
+              { service: "Webhook Service", status: "operational" },
+              { service: "Database", status: "operational" },
+              { service: "Authentication", status: "operational" },
+            ].map((service, i) => (
+              <div key={i} className="flex items-center justify-between">
+                <span className="text-sm">{service.service}</span>
+                <Badge variant="default" className="bg-green-500">
+                  {t('operational')}
+                </Badge>
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  )
+}
