@@ -21,6 +21,20 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next()
   }
 
+  // Redirect marketing pages to landing site
+  const marketingPages = ['/pricing', '/contacto', '/contact', '/webinars', '/partners', '/lighthouse', '/roi']
+  const isMarketingPage = marketingPages.some(page => 
+    pathname === page || 
+    pathname.includes(page) || 
+    pathname.split('/').slice(2).join('/').startsWith(page.slice(1))
+  )
+  
+  if (isMarketingPage) {
+    const landingUrl = new URL(pathname, 'https://agentevirtualia.com')
+    landingUrl.search = request.nextUrl.search
+    return NextResponse.redirect(landingUrl)
+  }
+
   // Check if this is a protected app route
   const isAppRoute = pathname.includes('/app/')
   const response = NextResponse.next()

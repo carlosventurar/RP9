@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "../globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
-import { MarketingHeader } from "@/components/marketing-header";
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
@@ -54,11 +53,8 @@ export default async function LocaleLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <div className="min-h-screen flex flex-col">
-              <MarketingHeader />
-              <main className="flex-1">
-                {children}
-              </main>
+            <div className="min-h-screen">
+              {children}
             </div>
           </ThemeProvider>
         </NextIntlClientProvider>

@@ -103,18 +103,43 @@
 [functions.restore-sandbox]
   schedule = "0 6 1 * *"  # Monthly on 1st day at 6:00 AM UTC
 
+# Cross-domain redirects for landing integration
+[[redirects]]
+  from = "/login"
+  to = "https://agentevirtualia.com/"
+  status = 302
+  force = true
+
+[[redirects]]
+  from = "/register" 
+  to = "https://agentevirtualia.com/"
+  status = 302
+  force = true
+
+[[redirects]]
+  from = "/pricing"
+  to = "https://agentevirtualia.com/pricing"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/contact"
+  to = "https://agentevirtualia.com/contact"
+  status = 301
+  force = true
+
 # Enhanced Security headers - Fase 4
 [[headers]]
   for = "/*"
   [headers.values]
     Strict-Transport-Security = "max-age=63072000; includeSubDomains; preload"
-    Content-Security-Policy = "default-src 'self'; img-src 'self' data: https:; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://*.up.railway.app https://api.netlify.com; frame-ancestors 'none';"
+    Content-Security-Policy = "default-src 'self'; img-src 'self' data: https:; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://*.up.railway.app https://api.netlify.com https://*.agentevirtualia.com; frame-ancestors 'none';"
     X-Content-Type-Options = "nosniff"
     X-Frame-Options = "DENY"
     X-XSS-Protection = "1; mode=block"
     Referrer-Policy = "strict-origin-when-cross-origin"
     Cross-Origin-Opener-Policy = "same-origin"
-    Cross-Origin-Resource-Policy = "same-site"
+    Cross-Origin-Resource-Policy = "cross-site"
     Permissions-Policy = "camera=(), microphone=(), geolocation=()"
 
 # Cache static assets
