@@ -1,6 +1,6 @@
-# RP9 Portal 🚀
+# Agente Virtual IA 🤖
 
-Portal white-label moderno y profesional para automatización n8n con Next.js 15, TypeScript y Tailwind CSS.
+Plataforma de automatización inteligente con IA para empresas modernas. Construida con Next.js 15, TypeScript y Tailwind CSS.
 
 [![Next.js](https://img.shields.io/badge/Next.js-15.4.6-black?logo=next.js)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue?logo=typescript)](https://www.typescriptlang.org/)
@@ -51,8 +51,8 @@ Portal white-label moderno y profesional para automatización n8n con Next.js 15
 
 ```bash
 # Clonar el repositorio
-git clone https://github.com/tu-usuario/rp9-portal.git
-cd rp9-portal
+git clone https://github.com/tu-usuario/agente-virtual-ia.git
+cd agente-virtual-ia
 
 # Instalar dependencias
 npm install
@@ -77,7 +77,7 @@ N8N_API_KEY=tu_clave_api_n8n
 JWT_SECRET=tu-super-secreto-jwt-cambiar-en-produccion
 
 # App Configuration
-NEXT_PUBLIC_APP_NAME=RP9 Portal
+NEXT_PUBLIC_APP_NAME=Agente Virtual IA
 NEXT_PUBLIC_APP_VERSION=1.0.0
 ```
 
@@ -103,13 +103,13 @@ Abre [http://localhost:3000](http://localhost:3000) en tu navegador.
 
 Para probar la aplicación usa estas credenciales:
 
-- **Email**: demo@rp9.com
+- **Email**: demo@agentevirtualia.com
 - **Password**: demo123
 
 ## 🏗️ Arquitectura
 
 ```
-RP9 Portal
+Agente Virtual IA
 ├── Frontend (Next.js 15)
 │   ├── React Server Components
 │   ├── shadcn/ui + Tailwind CSS
@@ -175,7 +175,7 @@ El tema RP9 está configurado en `src/app/globals.css`:
 
 ```css
 :root {
-  --primary: oklch(0.5 0.25 264); /* Azul RP9 */
+  --primary: oklch(0.5 0.25 264); /* Azul Agente Virtual IA */
 }
 ```
 
@@ -242,4 +242,4 @@ Este proyecto está bajo la Licencia MIT.
 
 ---
 
-Desarrollado con ❤️ para automatización empresarial moderna.
+Desarrollado con ❤️ para la nueva era de la automatización inteligente con IA.

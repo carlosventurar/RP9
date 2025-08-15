@@ -17,7 +17,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 13. La aplicacion es primario en español. Si no se puede traducir, no se puede usar, por default en español y secundario ingles.
 ## Project Overview
 
-This is a new repository (RP9) that is currently empty. The project structure and architecture will be defined as development progresses.
+Este es el repositorio de "Agente Virtual IA" - una plataforma de automatización inteligente con IA para empresas modernas. La estructura del proyecto y arquitectura están completamente definidas y funcionales.
 
 ## Development Commands
 
@@ -75,8 +75,8 @@ This is a new repository (RP9) that is currently empty. The project structure an
 - **USAR** labels: `qa-ready`, `prod-ready`, `hotfix`, `qa-testing`
 
 ### Ambientes:
-- **QA**: https://qa-rp9portal.netlify.app (rama `qa`)
-- **Producción**: https://rp9portal.com (rama `main`)
+- **QA**: https://qa-agentevirtualia.netlify.app (rama `qa`)
+- **Producción**: https://agentevirtualia.com (rama `main`)
 
 ### Hotfixes Críticos:
 Para bugs críticos que requieren deploy inmediato:

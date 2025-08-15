@@ -22,7 +22,7 @@ export function Header() {
       <SidebarTrigger className="-ml-1" />
       <div className="flex flex-1 items-center justify-between">
         <div className="flex items-center gap-2">
-          <h1 className="text-lg font-semibold">RP9 Portal</h1>
+          <h1 className="text-lg font-semibold">Agente Virtual IA</h1>
         </div>
         <div className="flex items-center gap-2">
           <Button

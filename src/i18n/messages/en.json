@@ -35,17 +35,17 @@
     "accountSettings": "Account Settings"
   },
   "auth": {
-    "title": "RP9 Portal",
+    "title": "Virtual AI Agent",
     "subtitle": "Automation Hub",
     "welcomeBack": "Welcome back",
     "createAccount": "Create account", 
     "signIn": "Sign In",
     "signUp": "Sign Up",
     "signInSubtitle": "Sign in to your automation hub",
-    "signUpSubtitle": "Start automating with RP9 Portal",
+    "signUpSubtitle": "Start automating with Virtual AI Agent",
     "email": "Email",
     "password": "Password",
-    "emailPlaceholder": "admin@rp9portal.com",
+    "emailPlaceholder": "admin@agentevirtualia.com",
     "passwordPlaceholder": "••••••••",
     "sendMagicLink": "Send Magic Link",
     "magicLinkSent": "Check your email for a magic link to sign in!",
@@ -73,7 +73,7 @@
     "recentExecutions": "Recent Workflow Executions",
     "recentExecutionsDesc": "Latest automation runs and their status",
     "systemStatus": "System Status",
-    "systemStatusDesc": "Current status of RP9 platform services",
+    "systemStatusDesc": "Current status of Virtual AI Agent services",
     "noRecentExecutions": "No recent executions",
     "executionsWillAppear": "Workflow executions will appear here",
     "lastPeriod": "Last {period}",
@@ -81,7 +81,7 @@
     "recentWorkflowExecutions": "Recent Workflow Executions",
     "latestAutomationRuns": "Latest automation runs and their status",
     "workflowExecutionsWillAppear": "Workflow executions will appear here",
-    "currentStatusOfServices": "Current status of RP9 platform services",
+    "currentStatusOfServices": "Current status of Virtual AI Agent services",
     "unknownWorkflow": "Unknown Workflow",
     "duration": "Duration",
     "timeJustNow": "Just now",
@@ -168,7 +168,7 @@
   },
   "settings": {
     "title": "Settings",
-    "subtitle": "Configure your RP9 Portal preferences",
+    "subtitle": "Configure your Virtual AI Agent preferences",
     "general": "General",
     "security": "Security",
     "integrations": "Integrations",
@@ -282,7 +282,7 @@
       }
     },
     "localMarket": {
-      "title": "RP9 Portal in {country}",
+      "title": "Virtual AI Agent in {country}",
       "currency": "Local billing",
       "support": "Support hours", 
       "regulations": "Supported regulations",
@@ -291,7 +291,7 @@
     },
     "cta": {
       "title": "Ready to Automate Your Operation?",
-      "subtitle": "Join the {count}+ companies in {country} that already trust RP9 Portal.",
+      "subtitle": "Join the {count}+ companies in {country} that already trust Virtual AI Agent.",
       "startTrial": "Start Free Trial",
       "scheduleDemo": "Schedule Demo"
     }
@@ -300,7 +300,7 @@
     "header": {
       "badge": "Contact our team in",
       "title": "Ready to Transform Your Business?",
-      "subtitle": "Get in touch with our local experts and discover how RP9 Portal can revolutionize your operations."
+      "subtitle": "Get in touch with our local experts and discover how Virtual AI Agent can revolutionize your operations."
     },
     "info": {
       "office": {
@@ -370,7 +370,7 @@
       "nextSteps": "Next steps: Our automation specialists will review your request and schedule a personalized consultation to discuss your specific needs."
     },
     "whyChoose": {
-      "title": "Why Choose RP9 Portal?",
+      "title": "Why Choose Virtual AI Agent?",
       "subtitle": "Join hundreds of companies that trust our automation platform.",
       "local": {
         "title": "Local Expertise",

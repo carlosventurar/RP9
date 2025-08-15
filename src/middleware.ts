@@ -23,7 +23,7 @@ export async function middleware(request: NextRequest) {
 
   // Check if this is a protected app route
   const isAppRoute = pathname.includes('/app/')
-  let response = NextResponse.next()
+  const response = NextResponse.next()
 
   if (isAppRoute) {
     // Check authentication for /app/* routes
