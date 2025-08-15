@@ -5,7 +5,7 @@ import { i18nConfig } from '@/lib/i18n/config'
 export default getRequestConfig(async () => {
   // Get locale from cookies or default to es (primary language)
   const cookieStore = await cookies()
-  let locale = cookieStore.get('rp9-locale')?.value || i18nConfig.defaultLocale
+  let locale = cookieStore.get('agentevirtualia-locale')?.value || i18nConfig.defaultLocale
   
   // Ensure locale is valid, fallback if not
   if (!i18nConfig.locales.includes(locale)) {
@@ -29,7 +29,7 @@ export default getRequestConfig(async () => {
       // Final fallback to English if even the fallback fails
       console.error('Fallback locale also failed, using English')
       return {
-        locale: 'en',
+        locale: 'en-US',
         messages: (await import(`./messages/en.json`)).default
       }
     }

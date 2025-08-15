@@ -1,4 +1,4 @@
-// RP9 Orchestrator - Configuration Management
+// Agente Virtual IA Orchestrator - Configuration Management
 import { OrchestratorConfig } from '@/types'
 
 export function loadConfig(): OrchestratorConfig {

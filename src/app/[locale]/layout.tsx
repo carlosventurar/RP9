@@ -2,9 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "../globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
-import { SidebarProvider } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/app-sidebar";
-import { Header } from "@/components/header";
+import { MarketingHeader } from "@/components/marketing-header";
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
@@ -21,8 +19,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "RP9 Portal - Automation Hub",
-  description: "White-label n8n automation platform",
+  title: "Agente Virtual IA - Plataforma de Automatización Inteligente",
+  description: "Transforma procesos manuales en workflows automatizados con IA. Ahorra tiempo, reduce errores y escala tu operación con Agente Virtual IA.",
 };
 
 interface LocaleLayoutProps {
@@ -32,8 +30,10 @@ interface LocaleLayoutProps {
 
 export default async function LocaleLayout({
   children,
-  params: { locale }
+  params
 }: LocaleLayoutProps) {
+  const { locale } = await params;
+  
   // Validate that the incoming locale is valid
   if (!i18nConfig.locales.includes(locale)) {
     notFound();
@@ -50,19 +50,16 @@ export default async function LocaleLayout({
         <NextIntlClientProvider messages={messages}>
           <ThemeProvider
             attribute="class"
-            defaultTheme="dark"
+            defaultTheme="light"
             enableSystem
             disableTransitionOnChange
           >
-            <SidebarProvider>
-              <AppSidebar />
-              <main className="flex flex-1 flex-col">
-                <Header />
-                <div className="flex-1 p-6">
-                  {children}
-                </div>
+            <div className="min-h-screen flex flex-col">
+              <MarketingHeader />
+              <main className="flex-1">
+                {children}
               </main>
-            </SidebarProvider>
+            </div>
           </ThemeProvider>
         </NextIntlClientProvider>
       </body>

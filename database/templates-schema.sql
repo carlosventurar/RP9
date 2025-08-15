@@ -1,4 +1,4 @@
--- RP9 Portal - Templates Database Schema
+-- Agente Virtual IA - Templates Database Schema
 -- Run this in your Supabase SQL editor
 
 -- ===================================================

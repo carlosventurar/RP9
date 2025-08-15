@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { i18nConfig, detectLocaleFromDomain, isValidLocale } from '@/lib/i18n/config'
+import { createClient } from '@/lib/supabase/middleware-client'
 
 // Middleware for internationalization (Fase 15)
 // Implements UTM > IP-geo > Accept-Language > Cookie negotiation
 // Supports country aliases (/mx -> /es-MX)
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const { pathname, searchParams } = request.nextUrl
   const hostname = request.headers.get('host') || ''
 
@@ -20,6 +21,23 @@ export function middleware(request: NextRequest) {
     return NextResponse.next()
   }
 
+  // Check if this is a protected app route
+  const isAppRoute = pathname.includes('/app/')
+  const response = NextResponse.next()
+
+  if (isAppRoute) {
+    // Check authentication for /app/* routes
+    const supabase = createClient(request, response)
+    const { data: { user } } = await supabase.auth.getUser()
+
+    if (!user) {
+      // User not authenticated, redirect to login
+      const loginUrl = new URL('/login', request.url)
+      loginUrl.searchParams.set('redirect', pathname)
+      return NextResponse.redirect(loginUrl)
+    }
+  }
+
   // Handle country aliases first (/mx -> /es-MX)
   const pathSegment = pathname.split('/')[1]
   const aliasPath = `/${pathSegment}`
@@ -31,7 +49,7 @@ export function middleware(request: NextRequest) {
     redirectUrl.search = request.nextUrl.search
     
     const response = NextResponse.redirect(redirectUrl)
-    response.cookies.set('rp9-locale', targetLocale, {
+    response.cookies.set('agentevirtualia-locale', targetLocale, {
       maxAge: 60 * 60 * 24 * 365,
       httpOnly: false,
       secure: process.env.NODE_ENV === 'production',
@@ -117,7 +135,7 @@ export function middleware(request: NextRequest) {
     }
 
     // PRIORITY 5: Saved cookie preference (lower priority than geo/utm)
-    const localeCookie = request.cookies.get('rp9-locale')
+    const localeCookie = request.cookies.get('agentevirtualia-locale')
     if (!utmLocale && !countryCode && localeCookie?.value && isValidLocale(localeCookie.value)) {
       locale = localeCookie.value
     }
@@ -129,7 +147,7 @@ export function middleware(request: NextRequest) {
     const response = NextResponse.redirect(redirectUrl)
     
     // Set/update locale cookie
-    response.cookies.set('rp9-locale', locale, {
+    response.cookies.set('agentevirtualia-locale', locale, {
       maxAge: 60 * 60 * 24 * 365, // 1 year
       httpOnly: false,
       secure: process.env.NODE_ENV === 'production',
@@ -147,10 +165,10 @@ export function middleware(request: NextRequest) {
   }
 
   // Update cookie if different from current locale
-  const localeCookie = request.cookies.get('rp9-locale')
+  const localeCookie = request.cookies.get('agentevirtualia-locale')
   if (!localeCookie || localeCookie.value !== currentLocale) {
     const response = NextResponse.next()
-    response.cookies.set('rp9-locale', currentLocale, {
+    response.cookies.set('agentevirtualia-locale', currentLocale, {
       maxAge: 60 * 60 * 24 * 365,
       httpOnly: false,
       secure: process.env.NODE_ENV === 'production',

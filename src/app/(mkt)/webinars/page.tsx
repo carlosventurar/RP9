@@ -520,13 +520,13 @@ export default function WebinarsPage() {
               <Calendar className="w-4 h-4 ml-2" />
             </Button>
             <Button variant="outline" size="lg" className="flex-1 border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/10">
-              Explorar RP9
+              Explorar Agente Virtual IA
               <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
           </div>
 
           <div className="mt-8 text-sm text-primary-foreground/70">
-            <p>¿No eres usuario de RP9 aún? <span className="underline cursor-pointer">Empieza gratis aquí</span></p>
+            <p>¿No eres usuario de Agente Virtual IA aún? <span className="underline cursor-pointer">Empieza gratis aquí</span></p>
           </div>
         </div>
       </section>

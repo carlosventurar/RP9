@@ -54,9 +54,9 @@
 - [ ] Verificar: Próxima ejecución 1 sept 2025 06:00 UTC
 
 #### 🔍 Production Verification
-- [ ] Status page: https://rp9portal.netlify.app/es-MX/legal/status
-- [ ] ToS page: https://rp9portal.netlify.app/es-MX/legal/tos
-- [ ] Privacy page: https://rp9portal.netlify.app/es-MX/legal/privacy
+- [ ] Status page: https://agentevirtualia.netlify.app/es-MX/legal/status
+- [ ] ToS page: https://agentevirtualia.netlify.app/es-MX/legal/tos
+- [ ] Privacy page: https://agentevirtualia.netlify.app/es-MX/legal/privacy
 - [ ] Functions health check: /.netlify/functions/subprocessors-manage
 
 ## 🚨 PASOS CRÍTICOS - EJECUTAR EN ORDEN
@@ -202,4 +202,4 @@ git push origin main
 **⏱️ Tiempo Total Estimado:** 60-90 minutos  
 **🎯 Resultado:** Sistema legal Enterprise-ready operational
 
-**🎉 Al completar este checklist, RP9 Portal tendrá un sistema legal y compliance completamente automático, cumpliendo con regulaciones internacionales y listo para expansión Enterprise en LatAm.**
+**🎉 Al completar este checklist, Agente Virtual IA tendrá un sistema legal y compliance completamente automático, cumpliendo con regulaciones internacionales y listo para expansión Enterprise en LatAm.**

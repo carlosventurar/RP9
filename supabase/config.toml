@@ -1,5 +1,5 @@
 # A string used to distinguish different Supabase projects on the same host. Defaults to the working directory name.
-project_id = "rp9-portal"
+project_id = "agente-virtual-ia"
 
 [api]
 enabled = true

@@ -1,4 +1,4 @@
--- RP9 Fase 15: Datos semilla para configuración de países LatAm
+-- Agente Virtual IA Fase 15: Datos semilla para configuración de países LatAm
 -- Insert inicial de configuraciones por país
 
 -- Configuración de países LatAm + fallback US

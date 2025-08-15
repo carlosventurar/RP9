@@ -1,4 +1,4 @@
-// Internationalization Configuration for RP9 Portal
+// Internationalization Configuration for Agente Virtual IA
 // Supports 6 countries in Latin America
 
 export const i18nConfig = {
@@ -55,7 +55,7 @@ export const countryConfigs = {
     languages: ['English'],
     region: 'North America', 
     vatRate: 0.0, // Sales tax varies by state
-    domains: ['rp9.com', 'rp9portal.com'],
+    domains: ['agentevirtualia.com'],
     paymentMethods: ['stripe', 'paypal'],
     bankingPartners: ['JPMorgan Chase', 'Bank of America', 'Wells Fargo'],
     localPartners: ['Salesforce', 'HubSpot', 'Zapier'],
@@ -80,7 +80,7 @@ export const countryConfigs = {
     languages: ['Español'],
     region: 'North America',
     vatRate: 0.16, // IVA 16%
-    domains: ['rp9.mx', 'rp9portal.mx'],
+    domains: ['agentevirtualia.mx'],
     paymentMethods: ['stripe', 'conekta', 'mercadopago'],
     bankingPartners: ['Banorte', 'BBVA México', 'Santander México'],
     localPartners: ['Konfío', 'Clip', 'Bitso'],
@@ -105,7 +105,7 @@ export const countryConfigs = {
     languages: ['Español'],
     region: 'South America',
     vatRate: 0.19, // IVA 19%
-    domains: ['rp9.com.co', 'rp9portal.co'],
+    domains: ['agentevirtualia.com.co'],
     paymentMethods: ['stripe', 'mercadopago', 'payu'],
     bankingPartners: ['Bancolombia', 'Banco de Bogotá', 'Davivienda'],
     localPartners: ['Rappi', 'Platzi', 'Mesfix'],
@@ -130,7 +130,7 @@ export const countryConfigs = {
     languages: ['Español'],
     region: 'South America',
     vatRate: 0.19, // IVA 19%
-    domains: ['rp9.cl', 'rp9portal.cl'],
+    domains: ['agentevirtualia.cl'],
     paymentMethods: ['stripe', 'mercadopago', 'webpay'],
     bankingPartners: ['Banco de Chile', 'Santander Chile', 'BCI'],
     localPartners: ['NotCo', 'Cornershop', 'Buk'],
@@ -155,7 +155,7 @@ export const countryConfigs = {
     languages: ['Español', 'Quechua'],
     region: 'South America',
     vatRate: 0.18, // IGV 18%
-    domains: ['rp9.pe', 'rp9portal.pe'],
+    domains: ['agentevirtualia.pe'],
     paymentMethods: ['stripe', 'mercadopago', 'culqi'],
     bankingPartners: ['BCP', 'Interbank', 'BBVA Perú'],
     localPartners: ['Rappi', 'Platanitos', 'Crehana'],
@@ -180,7 +180,7 @@ export const countryConfigs = {
     languages: ['Español'],
     region: 'South America',
     vatRate: 0.21, // IVA 21%
-    domains: ['rp9.com.ar', 'rp9portal.ar'],
+    domains: ['agentevirtualia.com.ar'],
     paymentMethods: ['stripe', 'mercadopago', 'decidir'],
     bankingPartners: ['Banco Nación', 'Santander Argentina', 'BBVA Argentina'],
     localPartners: ['MercadoLibre', 'Globant', 'Auth0'],
@@ -205,7 +205,7 @@ export const countryConfigs = {
     languages: ['Español'],
     region: 'Caribbean',
     vatRate: 0.18, // ITBIS 18%
-    domains: ['rp9.com.do', 'rp9portal.do'],
+    domains: ['agentevirtualia.com.do'],
     paymentMethods: ['stripe', 'mercadopago', 'azul'],
     bankingPartners: ['Banco Popular', 'Banreservas', 'Scotiabank'],
     localPartners: ['Claro', 'Altice', 'Grupo SID'],
@@ -441,37 +441,37 @@ export function getSupportedCountries(): string[] {
 // SEO and content configurations
 export const seoConfigs = {
   'es-MX': {
-    titleSuffix: '- RP9 Portal México',
+    titleSuffix: '- Agente Virtual IA México',
     defaultDescription: 'Automatización empresarial sin código. Ahorra tiempo y reduce errores con workflows inteligentes.',
     keywords: ['automatización', 'workflows', 'productividad', 'México', 'enterprise'],
     hreflangCode: 'es-MX'
   },
   'es-CO': {
-    titleSuffix: '- RP9 Portal Colombia',
+    titleSuffix: '- Agente Virtual IA Colombia',
     defaultDescription: 'Automatización empresarial para Colombia. Mejora la eficiencia de tu empresa con procesos automatizados.',
     keywords: ['automatización', 'procesos', 'eficiencia', 'Colombia', 'empresa'],
     hreflangCode: 'es-CO'
   },
   'es-CL': {
-    titleSuffix: '- RP9 Portal Chile',
+    titleSuffix: '- Agente Virtual IA Chile',
     defaultDescription: 'Lidera la transformación digital en Chile. Automatización empresarial de clase mundial.',
     keywords: ['transformación digital', 'automatización', 'innovación', 'Chile', 'empresa'],
     hreflangCode: 'es-CL'
   },
   'es-PE': {
-    titleSuffix: '- RP9 Portal Perú',
+    titleSuffix: '- Agente Virtual IA Perú',
     defaultDescription: 'Automatización empresarial para Perú. Cumple con regulaciones locales mientras optimizas procesos.',
     keywords: ['automatización', 'compliance', 'procesos', 'Perú', 'empresa'],
     hreflangCode: 'es-PE'
   },
   'es-AR': {
-    titleSuffix: '- RP9 Portal Argentina',
+    titleSuffix: '- Agente Virtual IA Argentina',
     defaultDescription: 'Transformación digital para Argentina. Automatiza procesos y mejora la productividad empresarial.',
     keywords: ['transformación digital', 'automatización', 'Argentina', 'productividad'],
     hreflangCode: 'es-AR'
   },
   'es-DO': {
-    titleSuffix: '- RP9 Portal República Dominicana',
+    titleSuffix: '- Agente Virtual IA República Dominicana',
     defaultDescription: 'Automatización empresarial en República Dominicana. Optimiza procesos y mejora la eficiencia.',
     keywords: ['automatización', 'eficiencia', 'República Dominicana', 'procesos'],
     hreflangCode: 'es-DO'

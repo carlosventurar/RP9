@@ -1,4 +1,4 @@
-# 🛠️ RP9 Portal - Build Fix Applied
+# 🛠️ Agente Virtual IA - Build Fix Applied
 
 ## ❌ **Error Original:**
 ```
@@ -15,7 +15,7 @@ Module not found: Can't resolve '@/components/ui/alert'
 - ✅ Compatible con Tailwind CSS styling
 
 ### 2. **Credenciales Actualizadas:**
-- ✅ Placeholder actualizado a `admin@rp9portal.com`
+- ✅ Placeholder actualizado a `admin@agentevirtualia.com`
 - ✅ Demo credentials actualizadas en español
 - ✅ Credenciales reales de administrador mostradas
 
@@ -55,7 +55,7 @@ fix: Add missing Alert component and update credentials
 ## 🔐 **Post-Deploy:**
 Una vez deployado exitosamente:
 - **URL**: https://tu-sitio.netlify.app
-- **Login**: admin@rp9portal.com / RP9Admin2024!
+- **Login**: admin@agentevirtualia.com / RP9Admin2024!
 - **Configurar Site URL** en Supabase Auth
 
 ---

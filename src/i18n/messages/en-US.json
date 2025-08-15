@@ -1,0 +1,389 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success", 
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "view": "View",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "search": "Search",
+    "filter": "Filter",
+    "export": "Export",
+    "import": "Import",
+    "refresh": "Refresh",
+    "close": "Close"
+  },
+  "navigation": {
+    "platform": "Platform",
+    "home": "Home",
+    "pricing": "Pricing", 
+    "contact": "Contact",
+    "login": "Login",
+    "getStarted": "Get Started",
+    "dashboard": "Dashboard",
+    "workflows": "Workflows", 
+    "templates": "Templates",
+    "analytics": "Analytics",
+    "settings": "Settings",
+    "billing": "Billing",
+    "logout": "Logout",
+    "accountSettings": "Account Settings"
+  },
+  "auth": {
+    "title": "Virtual AI Agent",
+    "subtitle": "Automation Hub",
+    "welcomeBack": "Welcome back",
+    "createAccount": "Create account", 
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "signInSubtitle": "Sign in to your automation hub",
+    "signUpSubtitle": "Start automating with Virtual AI Agent",
+    "email": "Email",
+    "password": "Password",
+    "emailPlaceholder": "admin@agentevirtualia.com",
+    "passwordPlaceholder": "••••••••",
+    "sendMagicLink": "Send Magic Link",
+    "magicLinkSent": "Check your email for a magic link to sign in!",
+    "or": "Or",
+    "noAccount": "Don't have an account? Sign up",
+    "hasAccount": "Already have an account? Sign in",
+    "adminCredentials": "Admin Credentials:",
+    "loginSuccessful": "Login successful! Redirecting...",
+    "accountCreated": "Account created successfully! Please check your email to verify your account.",
+    "enterEmail": "Please enter your email address",
+    "magicLinkFailed": "Failed to send magic link",
+    "authError": "An error occurred during authentication",
+    "demoUser": "Demo User",
+    "signOut": "Sign out"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "subtitle": "Overview of your automation workflows and system performance.",
+    "executionsToday": "Executions Today",
+    "activeWorkflows": "Active Workflows", 
+    "successRate": "Success Rate",
+    "avgResponseTime": "Avg. Response Time",
+    "currentlyRunning": "Currently running",
+    "successful": "successful",
+    "recentExecutions": "Recent Workflow Executions",
+    "recentExecutionsDesc": "Latest automation runs and their status",
+    "systemStatus": "System Status",
+    "systemStatusDesc": "Current status of Virtual AI Agent services",
+    "noRecentExecutions": "No recent executions",
+    "executionsWillAppear": "Workflow executions will appear here",
+    "lastPeriod": "Last {period}",
+    "successfulExecutions": "{successful} of {total} successful",
+    "recentWorkflowExecutions": "Recent Workflow Executions",
+    "latestAutomationRuns": "Latest automation runs and their status",
+    "workflowExecutionsWillAppear": "Workflow executions will appear here",
+    "currentStatusOfServices": "Current status of Virtual AI Agent services",
+    "unknownWorkflow": "Unknown Workflow",
+    "duration": "Duration",
+    "timeJustNow": "Just now",
+    "timeMinAgo": "{minutes} min ago",
+    "timeHoursAgo": "{hours} hours ago",
+    "timeDaysAgo": "{days} days ago",
+    "status": {
+      "success": "success",
+      "error": "error", 
+      "running": "running",
+      "waiting": "waiting",
+      "canceled": "canceled"
+    },
+    "services": {
+      "n8nApi": "n8n API",
+      "webhookService": "Webhook Service", 
+      "database": "Database",
+      "authentication": "Authentication"
+    },
+    "operational": "operational"
+  },
+  "workflows": {
+    "title": "Workflows",
+    "subtitle": "Manage and monitor your automation workflows",
+    "newWorkflow": "New Workflow",
+    "createNew": "Create New Workflow", 
+    "import": "Import Workflow",
+    "noWorkflows": "No workflows found",
+    "noWorkflowsMatchFilters": "No workflows match your filters",
+    "noWorkflowsFound": "No workflows found",
+    "createFirstWorkflow": "Create First Workflow",
+    "workflowsWillAppear": "Your n8n workflows will appear here",
+    "searchWorkflows": "Search workflows...",
+    "lastRun": "Last Run",
+    "executions": "Executions",
+    "run": "Run",
+    "never": "Never",
+    "all": "All",
+    "active": "Active",
+    "inactive": "Inactive",
+    "success": "Success",
+    "crossnetFilterActive": "Crossnet Filter Active",
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive",
+      "success": "Success", 
+      "error": "Error",
+      "running": "Running"
+    }
+  },
+  "templates": {
+    "title": "Templates Marketplace",
+    "subtitle": "Discover and install pre-built workflow templates",
+    "featured": "Featured Templates",
+    "allCategories": "All Categories",
+    "difficulty": {
+      "beginner": "Beginner",
+      "intermediate": "Intermediate", 
+      "advanced": "Advanced"
+    },
+    "categories": {
+      "notifications": "Notifications",
+      "integrations": "Integrations",
+      "data": "Data Processing",
+      "forms": "Forms", 
+      "monitoring": "Monitoring",
+      "crm": "CRM"
+    },
+    "install": "Install",
+    "installed": "Installed",
+    "rating": "Rating",
+    "installs": "Installs",
+    "estimatedTime": "Estimated time",
+    "minutes": "minutes",
+    "free": "Free"
+  },
+  "analytics": {
+    "title": "Analytics",
+    "subtitle": "Deep insights into your automation performance",
+    "executionTrends": "Execution Trends", 
+    "performanceMetrics": "Performance Metrics",
+    "errorAnalysis": "Error Analysis",
+    "usageStatistics": "Usage Statistics"
+  },
+  "settings": {
+    "title": "Settings",
+    "subtitle": "Configure your Virtual AI Agent preferences",
+    "general": "General",
+    "security": "Security",
+    "integrations": "Integrations",
+    "notifications": "Notifications",
+    "language": "Language",
+    "theme": "Theme",
+    "timezone": "Timezone",
+    "n8nConfiguration": "n8n Configuration",
+    "apiUrl": "API URL", 
+    "apiKey": "API Key",
+    "connectionStatus": "Connection Status",
+    "testConnection": "Test Connection",
+    "connected": "Connected",
+    "disconnected": "Disconnected"
+  },
+  "billing": {
+    "title": "Billing",
+    "subtitle": "Manage your subscription and usage",
+    "currentPlan": "Current Plan",
+    "usage": "Usage",
+    "invoices": "Invoices", 
+    "paymentMethod": "Payment Method"
+  },
+  "plans": {
+    "starter": {
+      "name": "Starter Plan",
+      "description": "Perfect for small teams getting started"
+    },
+    "professional": {
+      "name": "Professional Plan", 
+      "description": "For growing businesses with advanced needs"
+    },
+    "enterprise": {
+      "name": "Enterprise Plan",
+      "description": "For large organizations with custom requirements"
+    }
+  },
+  "errors": {
+    "generic": "Something went wrong",
+    "network": "Network error occurred",
+    "unauthorized": "You are not authorized to perform this action",
+    "notFound": "The requested resource was not found",
+    "serverError": "Internal server error"
+  },
+  "home": {
+    "hero": {
+      "badge": "Trusted by 150+ companies in",
+      "title": "No-Code Enterprise Automation",
+      "subtitle": "Transform manual processes into automated workflows. Save time, reduce errors, and scale your operation.",
+      "startFree": "Start Free",
+      "viewDemo": "View Demo"
+    },
+    "features": {
+      "title": "Everything You Need to Automate",
+      "subtitle": "Powerful and easy-to-use tools to transform your operation",
+      "contactCenter": {
+        "title": "Contact Center",
+        "description": "Automate responses and customer management"
+      },
+      "finance": {
+        "title": "Finance",
+        "description": "Process invoices and payments automatically"
+      },
+      "integrations": {
+        "title": "Integrations", 
+        "description": "Connect all your favorite tools"
+      }
+    },
+    "pricing": {
+      "title": "Transparent Pricing",
+      "subtitle": "Plans that grow with you. No hidden costs.",
+      "taxNote": "Prices in {currency} • {taxRate}% taxes included",
+      "plans": {
+        "starter": {
+          "name": "Starter",
+          "price": "Free",
+          "description": "Perfect for small teams",
+          "features": {
+            "users": "Up to 5 users",
+            "executions": "1,000 executions/month", 
+            "workflows": "10 active workflows",
+            "support": "Standard support"
+          },
+          "button": "Start Now"
+        },
+        "pro": {
+          "name": "Pro",
+          "price": "$29 USD",
+          "description": "For growing businesses",
+          "popular": "Most Popular",
+          "features": {
+            "users": "Unlimited users",
+            "executions": "10,000 executions/month",
+            "workflows": "100 active workflows", 
+            "support": "Priority support"
+          },
+          "button": "Choose Plan"
+        },
+        "enterprise": {
+          "name": "Enterprise",
+          "price": "$99 USD", 
+          "description": "For large organizations",
+          "features": {
+            "unlimited": "Everything unlimited",
+            "support": "Dedicated 24/7 support",
+            "sla": "Guaranteed SLA",
+            "customization": "Complete customization"
+          },
+          "button": "Choose Plan"
+        }
+      }
+    },
+    "localMarket": {
+      "title": "Virtual AI Agent in {country}",
+      "currency": "Local billing",
+      "support": "Support hours", 
+      "regulations": "Supported regulations",
+      "compliance": "We comply with: {regulations}",
+      "contactTeam": "Contact Local Team"
+    },
+    "cta": {
+      "title": "Ready to Automate Your Operation?",
+      "subtitle": "Join the {count}+ companies in {country} that already trust Virtual AI Agent.",
+      "startTrial": "Start Free Trial",
+      "scheduleDemo": "Schedule Demo"
+    }
+  },
+  "contact": {
+    "header": {
+      "badge": "Contact our team in",
+      "title": "Ready to Transform Your Business?",
+      "subtitle": "Get in touch with our local experts and discover how Virtual AI Agent can revolutionize your operations."
+    },
+    "info": {
+      "office": {
+        "title": "Local Office",
+        "address": "Business District, Professional Building"
+      },
+      "compliance": {
+        "title": "Regulatory Compliance",
+        "description": "We ensure full compliance with local regulations and standards."
+      }
+    },
+    "form": {
+      "title": "Contact Our Team",
+      "description": "Fill out the form below and we'll get back to you within 24 hours.",
+      "fields": {
+        "name": {
+          "label": "Full Name",
+          "placeholder": "Your full name"
+        },
+        "email": {
+          "label": "Email Address",
+          "placeholder": "your.email@company.com"
+        },
+        "company": {
+          "label": "Company",
+          "placeholder": "Your company name"
+        },
+        "phone": {
+          "label": "Phone Number",
+          "placeholder": "Your phone number"
+        },
+        "employees": {
+          "label": "Company Size",
+          "placeholder": "Select company size",
+          "options": {
+            "small": "1-10 employees",
+            "medium": "11-50 employees", 
+            "large": "51-200 employees",
+            "enterprise": "201+ employees"
+          }
+        },
+        "subject": {
+          "label": "Inquiry Type",
+          "placeholder": "Select inquiry type",
+          "options": {
+            "demo": "Request a Demo",
+            "pricing": "Pricing Information",
+            "support": "Technical Support",
+            "partnership": "Partnership Opportunities",
+            "other": "Other"
+          }
+        },
+        "message": {
+          "label": "Message",
+          "placeholder": "Tell us about your automation needs and challenges..."
+        }
+      },
+      "submit": "Send Message",
+      "sending": "Sending...",
+      "privacy": "Your information is protected and will never be shared.",
+      "success": "Message sent successfully!",
+      "error": "Failed to send message. Please try again."
+    },
+    "success": {
+      "title": "Thank You for Contacting Us!",
+      "message": "We've received your inquiry and our team will get back to you within 24 hours.",
+      "nextSteps": "Next steps: Our automation specialists will review your request and schedule a personalized consultation to discuss your specific needs."
+    },
+    "whyChoose": {
+      "title": "Why Choose Virtual AI Agent?",
+      "subtitle": "Join hundreds of companies that trust our automation platform.",
+      "local": {
+        "title": "Local Expertise",
+        "description": "Our team understands your market and business culture."
+      },
+      "compliance": {
+        "title": "Full Compliance",
+        "description": "We ensure your automation meets all regulatory requirements."
+      },
+      "proven": {
+        "title": "Proven Results",
+        "description": "Track record of successful implementations and ROI."
+      }
+    }
+  }
+}

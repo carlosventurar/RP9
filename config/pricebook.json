@@ -2,7 +2,7 @@
   "metadata": {
     "version": "1.0.0",
     "lastUpdated": "2025-01-14",
-    "description": "Price book for RP9 Portal - LatAm psychological pricing",
+    "description": "Price book for Agente Virtual IA - LatAm psychological pricing",
     "note": "These are template prices. Actual Stripe price IDs should be configured in production"
   },
   "exchangeRates": {

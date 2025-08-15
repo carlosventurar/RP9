@@ -3,7 +3,7 @@
 ## ⚠️ CONFIGURAR EN NETLIFY PRODUCCIÓN
 
 ### Acceso a Configuración
-1. Ir a: https://app.netlify.com/sites/rp9portal/settings/deploys
+1. Ir a: https://app.netlify.com/sites/agentevirtualia/settings/deploys
 2. Navegar a **Environment variables**
 3. Agregar las siguientes variables nuevas para Fase 16
 
@@ -18,7 +18,7 @@ HMAC_SECRET="fase16_legal_hmac_256bit_secret_key_2025"
 SIGN_WEBHOOK_SECRET="docusign_webhook_secret_fase16_rp9_2025"
 
 # Base URL para documentos generados
-DOCS_BASE_URL="https://documents.rp9portal.com"
+DOCS_BASE_URL="https://documents.agentevirtualia.com"
 ```
 
 ### 2. Email Service (Notificaciones Subprocesadores)
@@ -63,7 +63,7 @@ STRIPE_WEBHOOK_SECRET="whsec_..."
 
    **Variable 3:**
    - Key: `DOCS_BASE_URL`
-   - Value: `https://documents.rp9portal.com`
+   - Value: `https://documents.agentevirtualia.com`
    - Scopes: ✅ Builds ✅ Functions
 
    **Variable 4:**
@@ -117,7 +117,7 @@ Verificar en deploy logs que no hay errores de variables faltantes.
 ### Método 3: Function Test
 ```bash
 # Test endpoint legal básico:
-curl https://rp9portal.netlify.app/.netlify/functions/legal-accept \
+curl https://agentevirtualia.netlify.app/.netlify/functions/legal-accept \
   -X POST \
   -H "Content-Type: application/json" \
   -d '{}'
@@ -129,7 +129,7 @@ curl https://rp9portal.netlify.app/.netlify/functions/legal-accept \
 
 ### Opción A: Resend (Recomendado)
 1. Crear cuenta en https://resend.com
-2. Verificar dominio `rp9portal.com`
+2. Verificar dominio `agentevirtualia.com`
 3. Generar API key de producción
 4. Configurar `RESEND_API_KEY`
 

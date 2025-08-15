@@ -1,8 +1,8 @@
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Onboarding | RP9 Portal',
-  description: 'Completa tu configuración inicial y obtén el máximo valor de RP9',
+  title: 'Onboarding | Agente Virtual IA',
+  description: 'Completa tu configuración inicial y obtén el máximo valor de Agente Virtual IA',
 }
 
 interface OnboardingLayoutProps {
@@ -18,7 +18,7 @@ export default function OnboardingLayout({ children }: OnboardingLayoutProps) {
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <h1 className="text-xl font-semibold text-gray-900">
-                RP9 Onboarding
+                Agente Virtual IA Onboarding
               </h1>
               <div className="flex items-center space-x-2 text-sm text-gray-500">
                 <span>Configura tu cuenta en minutos</span>
@@ -28,7 +28,7 @@ export default function OnboardingLayout({ children }: OnboardingLayoutProps) {
               <div className="text-xs text-gray-500">
                 ¿Necesitas ayuda?{' '}
                 <a 
-                  href="mailto:support@rp9.dev" 
+                  href="mailto:support@agentevirtualia.com" 
                   className="text-blue-600 hover:text-blue-700"
                 >
                   Contáctanos
@@ -49,7 +49,7 @@ export default function OnboardingLayout({ children }: OnboardingLayoutProps) {
         <div className="max-w-4xl mx-auto px-6 py-6">
           <div className="flex items-center justify-between text-sm text-gray-500">
             <div>
-              © 2025 RP9 Portal. Automatización empresarial para LATAM.
+              © 2025 Agente Virtual IA. Automatización empresarial para LATAM.
             </div>
             <div className="flex items-center space-x-4">
               <a href="/privacy" className="hover:text-gray-700">Privacidad</a>

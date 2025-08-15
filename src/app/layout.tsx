@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "RP9 Portal - Automation Hub",
-  description: "White-label n8n automation platform",
+  title: "Agente Virtual IA - Plataforma de Automatización",
+  description: "Plataforma de automatización inteligente con IA para empresas",
 };
 
 export default function RootLayout({

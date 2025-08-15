@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -19,16 +19,20 @@ export default function AuthPage() {
   const [error, setError] = useState('')
   
   const router = useRouter()
+  const searchParams = useSearchParams()
   const locale = useLocale()
   const supabase = createClient()
   const t = useTranslations('auth')
+  
+  // Get redirect URL from search params
+  const redirectUrl = searchParams.get('redirect') || `/app/dashboard`
 
   useEffect(() => {
     // Check if user is already logged in
     const checkUser = async () => {
       const { data: { user } } = await supabase.auth.getUser()
       if (user) {
-        router.replace(`/${locale}/dashboard`)
+        router.replace(`/${locale}${redirectUrl}`)
       }
     }
     checkUser()
@@ -51,7 +55,7 @@ export default function AuthPage() {
 
         if (data.user) {
           setMessage(t('loginSuccessful'))
-          router.replace(`/${locale}/dashboard`)
+          router.replace(`/${locale}${redirectUrl}`)
         }
       } else {
         const { data, error } = await supabase.auth.signUp({
@@ -87,7 +91,7 @@ export default function AuthPage() {
       const { error } = await supabase.auth.signInWithOtp({
         email,
         options: {
-          emailRedirectTo: `${window.location.origin}/${locale}/dashboard`
+          emailRedirectTo: `${window.location.origin}/${locale}${redirectUrl}`
         }
       })
 
@@ -109,7 +113,7 @@ export default function AuthPage() {
         <div className="text-center">
           <div className="inline-flex items-center gap-3 mb-2">
             <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-600 to-violet-600 flex items-center justify-center">
-              <span className="text-xl font-bold text-white">R9</span>
+              <span className="text-xl font-bold text-white">IA</span>
             </div>
             <div>
               <h1 className="text-2xl font-bold text-white">{t('title')}</h1>
@@ -227,8 +231,8 @@ export default function AuthPage() {
             <div className="text-center space-y-2">
               <p className="text-xs font-medium text-slate-400">{t('adminCredentials')}</p>
               <div className="text-xs text-slate-300 space-y-1">
-                <p>Email: admin@rp9portal.com</p>
-                <p>Password: RP9Admin2024!</p>
+                <p>Email: admin@agentevirtualia.com</p>
+                <p>Password: AgenteVirtualIA2024!</p>
               </div>
             </div>
           </CardContent>

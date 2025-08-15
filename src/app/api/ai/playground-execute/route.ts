@@ -1,11 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
+import { createClient } from '@/lib/supabase/server'
 import { z } from 'zod'
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
+// const supabase = createClient() // Moved inside handlers
 
 const executeSchema = z.object({
   tenantId: z.string().uuid(),
@@ -17,6 +14,7 @@ const executeSchema = z.object({
 
 export async function POST(request: NextRequest) {
   try {
+    const supabase = createClient()
     // Get auth token from headers
     const authHeader = request.headers.get('authorization')
     if (!authHeader || !authHeader.startsWith('Bearer ')) {

@@ -5,7 +5,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 
 export const metadata: Metadata = {
-  title: 'Casos de Éxito - RP9 Portal',
+  title: 'Casos de Éxito - Agente Virtual IA',
   description: 'Descubre cómo empresas están transformando sus operaciones con RP9. Casos reales, métricas verificadas.',
 }
 

@@ -42,42 +42,42 @@ export function AppSidebar() {
   const translatedItems = [
     {
       title: navT('dashboard'),
-      url: "/dashboard",
+      url: "/app/dashboard",
       icon: Home,
     },
     {
-      title: "Search Templates",
-      url: "/search",
+      title: navT('searchTemplates'),
+      url: "/app/search",
       icon: Search,
     },
     {
-      title: "Favorites",
-      url: "/favorites",
+      title: navT('favorites'),
+      url: "/app/favorites",
       icon: Heart,
     },
     {
       title: navT('workflows'),
-      url: "/workflows",
+      url: "/app/workflows",
       icon: Workflow,
     },
     {
-      title: "Flow Builder",
-      url: "/flows/new",
+      title: navT('flowBuilder'),
+      url: "/app/flows/new",
       icon: Plus,
     },
     {
       title: navT('analytics'),
-      url: "/analytics", 
+      url: "/app/analytics",
       icon: BarChart3,
     },
     {
       title: navT('billing'),
-      url: "/billing",
+      url: "/app/billing",
       icon: CreditCard,
     },
     {
       title: navT('settings'),
-      url: "/settings",
+      url: "/app/settings",
       icon: Settings,
     },
   ]
@@ -88,9 +88,9 @@ export function AppSidebar() {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <a href="/dashboard">
+              <a href="/app/dashboard">
                 <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500 to-violet-600 text-sidebar-primary-foreground">
-                  <span className="text-sm font-bold">R9</span>
+                  <span className="text-sm font-bold">IA</span>
                 </div>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-semibold">{authT('title')}</span>
@@ -132,7 +132,7 @@ export function AppSidebar() {
                   <User2 />
                   <div className="grid flex-1 text-left text-sm leading-tight">
                     <span className="truncate font-semibold">{authT('demoUser')}</span>
-                    <span className="truncate text-xs">demo@rp9.com</span>
+                    <span className="truncate text-xs">admin@agentevirtualia.com</span>
                   </div>
                   <ChevronUp className="ml-auto size-4" />
                 </SidebarMenuButton>

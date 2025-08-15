@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label"
 import { Loader2 } from "lucide-react"
 
 export default function LoginPage() {
-  const [email, setEmail] = useState('demo@rp9.com')
+  const [email, setEmail] = useState('admin@agentevirtualia.com')
   const [password, setPassword] = useState('demo123')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -48,12 +48,12 @@ export default function LoginPage() {
         <CardHeader className="space-y-1">
           <div className="flex items-center justify-center mb-4">
             <div className="flex aspect-square size-12 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-violet-600 text-white">
-              <span className="text-lg font-bold">R9</span>
+              <span className="text-lg font-bold">AI</span>
             </div>
           </div>
-          <CardTitle className="text-2xl font-bold text-center">RP9 Portal</CardTitle>
+          <CardTitle className="text-2xl font-bold text-center">Agente Virtual IA</CardTitle>
           <CardDescription className="text-center">
-            Enter your credentials to access your automation hub
+            Ingresa tus credenciales para acceder a tu plataforma de automatización
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -63,7 +63,7 @@ export default function LoginPage() {
               <Input
                 id="email"
                 type="email"
-                placeholder="demo@rp9.com"
+                placeholder="admin@agentevirtualia.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -98,7 +98,7 @@ export default function LoginPage() {
           <div className="mt-6 text-center text-sm text-muted-foreground">
             <div className="bg-muted p-3 rounded-lg">
               <strong>Demo Credentials:</strong>
-              <div>Email: demo@rp9.com</div>
+              <div>Email: admin@agentevirtualia.com</div>
               <div>Password: demo123</div>
             </div>
           </div>

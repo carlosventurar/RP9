@@ -22,7 +22,7 @@ export function Header() {
       <SidebarTrigger className="-ml-1" />
       <div className="flex flex-1 items-center justify-between">
         <div className="flex items-center gap-2">
-          <h1 className="text-lg font-semibold">RP9 Portal</h1>
+          <h1 className="text-lg font-semibold">Agente Virtual IA</h1>
         </div>
         <div className="flex items-center gap-2">
           <Button
@@ -30,7 +30,7 @@ export function Header() {
             size="sm"
             onClick={() => {
               // Preserve locale prefix in the path
-              const locale = (typeof window !== 'undefined' ? document.cookie.match(/rp9-locale=([^;]+)/)?.[1] : undefined) || 'es'
+              const locale = (typeof window !== 'undefined' ? document.cookie.match(/agentevirtualia-locale=([^;]+)/)?.[1] : undefined) || 'es'
               router.push(`/${locale}/search`)
             }}
             className="gap-2"

@@ -1,5 +1,5 @@
--- RP9 Portal - Initial Database Schema
--- This migration creates the core tables for the RP9 Portal application
+-- Agente Virtual IA - Initial Database Schema
+-- This migration creates the core tables for the Agente Virtual IA application
 
 -- Enable necessary extensions
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";

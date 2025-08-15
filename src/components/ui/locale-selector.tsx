@@ -45,7 +45,7 @@ export function LocaleSelector({
 
   const handleLocaleChange = (newLocale: string) => {
     // Set cookie
-    document.cookie = `rp9-locale=${newLocale}; max-age=${60 * 60 * 24 * 365}; path=/`
+    document.cookie = `agentevirtualia-locale=${newLocale}; max-age=${60 * 60 * 24 * 365}; path=/`
     
     // Navigate to new locale path
     const newPath = pathname.replace(`/${locale}`, `/${newLocale}`)

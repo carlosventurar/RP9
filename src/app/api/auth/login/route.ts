@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
 
     // For MVP, we'll use mock authentication
     // In production, you would validate against a real user database
-    if (email === 'demo@rp9.com' && password === 'demo123') {
+    if (email === 'admin@agentevirtualia.com' && password === 'demo123') {
       const user = createMockUser()
       const token = signToken(user)
 
