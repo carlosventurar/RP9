@@ -90,7 +90,7 @@ export function AppSidebar() {
             <SidebarMenuButton size="lg" asChild>
               <a href="/app/dashboard">
                 <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500 to-violet-600 text-sidebar-primary-foreground">
-                  <span className="text-sm font-bold">R9</span>
+                  <span className="text-sm font-bold">IA</span>
                 </div>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-semibold">{authT('title')}</span>

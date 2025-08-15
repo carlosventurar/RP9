@@ -30,7 +30,7 @@ export function Header() {
             size="sm"
             onClick={() => {
               // Preserve locale prefix in the path
-              const locale = (typeof window !== 'undefined' ? document.cookie.match(/rp9-locale=([^;]+)/)?.[1] : undefined) || 'es'
+              const locale = (typeof window !== 'undefined' ? document.cookie.match(/agentevirtualia-locale=([^;]+)/)?.[1] : undefined) || 'es'
               router.push(`/${locale}/search`)
             }}
             className="gap-2"

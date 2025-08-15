@@ -49,7 +49,7 @@ export async function middleware(request: NextRequest) {
     redirectUrl.search = request.nextUrl.search
     
     const response = NextResponse.redirect(redirectUrl)
-    response.cookies.set('rp9-locale', targetLocale, {
+    response.cookies.set('agentevirtualia-locale', targetLocale, {
       maxAge: 60 * 60 * 24 * 365,
       httpOnly: false,
       secure: process.env.NODE_ENV === 'production',
@@ -135,7 +135,7 @@ export async function middleware(request: NextRequest) {
     }
 
     // PRIORITY 5: Saved cookie preference (lower priority than geo/utm)
-    const localeCookie = request.cookies.get('rp9-locale')
+    const localeCookie = request.cookies.get('agentevirtualia-locale')
     if (!utmLocale && !countryCode && localeCookie?.value && isValidLocale(localeCookie.value)) {
       locale = localeCookie.value
     }
@@ -147,7 +147,7 @@ export async function middleware(request: NextRequest) {
     const response = NextResponse.redirect(redirectUrl)
     
     // Set/update locale cookie
-    response.cookies.set('rp9-locale', locale, {
+    response.cookies.set('agentevirtualia-locale', locale, {
       maxAge: 60 * 60 * 24 * 365, // 1 year
       httpOnly: false,
       secure: process.env.NODE_ENV === 'production',
@@ -165,10 +165,10 @@ export async function middleware(request: NextRequest) {
   }
 
   // Update cookie if different from current locale
-  const localeCookie = request.cookies.get('rp9-locale')
+  const localeCookie = request.cookies.get('agentevirtualia-locale')
   if (!localeCookie || localeCookie.value !== currentLocale) {
     const response = NextResponse.next()
-    response.cookies.set('rp9-locale', currentLocale, {
+    response.cookies.set('agentevirtualia-locale', currentLocale, {
       maxAge: 60 * 60 * 24 * 365,
       httpOnly: false,
       secure: process.env.NODE_ENV === 'production',

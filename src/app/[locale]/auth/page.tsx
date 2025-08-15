@@ -113,7 +113,7 @@ export default function AuthPage() {
         <div className="text-center">
           <div className="inline-flex items-center gap-3 mb-2">
             <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-600 to-violet-600 flex items-center justify-center">
-              <span className="text-xl font-bold text-white">R9</span>
+              <span className="text-xl font-bold text-white">IA</span>
             </div>
             <div>
               <h1 className="text-2xl font-bold text-white">{t('title')}</h1>
@@ -232,7 +232,7 @@ export default function AuthPage() {
               <p className="text-xs font-medium text-slate-400">{t('adminCredentials')}</p>
               <div className="text-xs text-slate-300 space-y-1">
                 <p>Email: admin@agentevirtualia.com</p>
-                <p>Password: RP9Admin2024!</p>
+                <p>Password: AgenteVirtualIA2024!</p>
               </div>
             </div>
           </CardContent>

@@ -37,11 +37,11 @@ export function MarketingHeader() {
           <div className="flex items-center space-x-4">
             <Link href="/" className="flex items-center space-x-2">
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500 to-violet-600 text-white">
-                <span className="text-sm font-bold">R9</span>
+                <span className="text-sm font-bold">IA</span>
               </div>
               <div className="hidden md:block">
-                <div className="text-lg font-semibold">RP9 Portal</div>
-                <div className="text-xs text-muted-foreground">Automation Hub</div>
+                <div className="text-lg font-semibold">Agente Virtual IA</div>
+                <div className="text-xs text-muted-foreground">Plataforma de Automatización</div>
               </div>
             </Link>
           </div>

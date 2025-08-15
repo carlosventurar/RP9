@@ -19,8 +19,8 @@ feature/* (Development)
 | Ambiente | Rama | URL | Propósito |
 |----------|------|-----|-----------|
 | **Desarrollo** | `feature/*` | Local | Desarrollo de features |
-| **QA** | `qa` | `https://qa-rp9portal.netlify.app` | Testing y validación |
-| **Producción** | `main` | `https://rp9portal.com` | Aplicación en vivo |
+| **QA** | `qa` | `https://qa-agentevirtualia.netlify.app` | Testing y validación |
+| **Producción** | `main` | `https://agentevirtualia.com` | Aplicación en vivo |
 
 ## 🔄 Workflow de Desarrollo
 

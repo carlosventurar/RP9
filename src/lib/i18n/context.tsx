@@ -109,7 +109,7 @@ export function I18nProvider({
       const newPath = `/${newLocale}${pathWithoutLocale}`
       
       // Set cookie
-      document.cookie = `rp9-locale=${newLocale}; max-age=${60 * 60 * 24 * 365}; path=/`
+      document.cookie = `agentevirtualia-locale=${newLocale}; max-age=${60 * 60 * 24 * 365}; path=/`
       
       // Navigate to new locale
       router.push(newPath)
