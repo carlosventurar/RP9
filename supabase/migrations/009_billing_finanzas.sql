@@ -1,4 +1,4 @@
--- RP9 • Fase 8 • Billing & Finance (Stripe)
+-- Agente Virtual IA • Fase 8 • Billing & Finance (Stripe)
 -- Planes, suscripciones, uso metered, add-ons y eventos de billing
 
 -- Create plans table only if it doesn't exist (check for existing from phase1)

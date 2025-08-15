@@ -1,4 +1,4 @@
-# 📚 RP9 Phase 5 - Documentation Center
+# 📚 Agente Virtual IA Phase 5 - Documentation Center
 
 Documentación completa del sistema de **Onboarding & Time-to-Value** implementado en Phase 5.
 

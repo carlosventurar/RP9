@@ -282,7 +282,7 @@
       }
     },
     "localMarket": {
-      "title": "RP9 Portal en {country}",
+      "title": "Agente Virtual IA en {country}",
       "currency": "Facturación local",
       "support": "Horario de soporte",
       "regulations": "Regulaciones soportadas",
@@ -291,7 +291,7 @@
     },
     "cta": {
       "title": "¿Listo para Automatizar tu Operación?",
-      "subtitle": "Únete a las {count}+ empresas en {country} que ya confían en RP9 Portal.",
+      "subtitle": "Únete a las {count}+ empresas en {country} que ya confían en Agente Virtual IA.",
       "startTrial": "Comenzar Prueba Gratuita",
       "scheduleDemo": "Agendar Demo"
     }
@@ -300,7 +300,7 @@
     "header": {
       "badge": "Contacta nuestro equipo en",
       "title": "¿Listo para Transformar tu Negocio?",
-      "subtitle": "Ponte en contacto con nuestros expertos locales y descubre cómo RP9 Portal puede revolucionar tus operaciones."
+      "subtitle": "Ponte en contacto con nuestros expertos locales y descubre cómo Agente Virtual IA puede revolucionar tus operaciones."
     },
     "info": {
       "office": {
@@ -370,7 +370,7 @@
       "nextSteps": "Próximos pasos: Nuestros especialistas en automatización revisarán tu solicitud y programarán una consulta personalizada para discutir tus necesidades específicas."
     },
     "whyChoose": {
-      "title": "¿Por Qué Elegir RP9 Portal?",
+      "title": "¿Por Qué Elegir Agente Virtual IA?",
       "subtitle": "Únete a cientos de empresas que confían en nuestra plataforma de automatización.",
       "local": {
         "title": "Experiencia Local",

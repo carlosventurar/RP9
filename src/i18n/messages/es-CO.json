@@ -20,10 +20,15 @@
   },
   "navigation": {
     "platform": "Plataforma",
+    "home": "Inicio",
+    "pricing": "Precios",
+    "contact": "Contacto",
+    "login": "Iniciar Sesión",
+    "getStarted": "Comenzar",
     "dashboard": "Panel Principal",
     "workflows": "Flujos de Trabajo",
     "templates": "Plantillas",
-    "analytics": "Analíticas", 
+    "analytics": "Analíticas",
     "settings": "Configuración",
     "billing": "Facturación",
     "logout": "Cerrar Sesión",
@@ -207,5 +212,88 @@
     "unauthorized": "No estás autorizado para realizar esta acción",
     "notFound": "El recurso solicitado no fue encontrado",
     "serverError": "Error interno del servidor"
+  },
+  "home": {
+    "hero": {
+      "badge": "Confiado por más de 150 empresas en",
+      "title": "Automatización Empresarial Sin Código",
+      "subtitle": "Transforma procesos manuales en flujos de trabajo automatizados. Ahorra tiempo, reduce errores y escala tu operación.",
+      "startFree": "Comenzar Gratis",
+      "viewDemo": "Ver Demo"
+    },
+    "features": {
+      "title": "Todo lo que Necesitas para Automatizar",
+      "subtitle": "Herramientas potentes y fáciles de usar para transformar tu operación",
+      "contactCenter": {
+        "title": "Centro de Contacto",
+        "description": "Automatiza respuestas y gestión de clientes"
+      },
+      "finance": {
+        "title": "Finanzas",
+        "description": "Procesa facturas y pagos automáticamente"
+      },
+      "integrations": {
+        "title": "Integraciones",
+        "description": "Conecta todas tus herramientas favoritas"
+      }
+    },
+    "pricing": {
+      "title": "Planes Diseñados para Crecer Contigo",
+      "subtitle": "Elige el plan perfecto para tu equipo",
+      "taxNote": "Precios en {currency}. Impuestos del {taxRate}% aplicables según tu ubicación.",
+      "plans": {
+        "starter": {
+          "name": "Inicial",
+          "price": "Gratis",
+          "description": "Perfecto para equipos pequeños que están comenzando",
+          "features": {
+            "users": "Hasta 3 usuarios",
+            "executions": "1,000 ejecuciones/mes",
+            "workflows": "5 flujos activos",
+            "support": "Soporte por email"
+          },
+          "button": "Comenzar Gratis"
+        },
+        "pro": {
+          "name": "Profesional",
+          "price": "$29",
+          "description": "Para empresas en crecimiento con necesidades avanzadas",
+          "popular": "Más Popular",
+          "features": {
+            "users": "Usuarios ilimitados",
+            "executions": "10,000 ejecuciones/mes",
+            "workflows": "Flujos ilimitados",
+            "support": "Soporte prioritario"
+          },
+          "button": "Actualizar"
+        },
+        "enterprise": {
+          "name": "Empresarial",
+          "price": "$99",
+          "description": "Para organizaciones grandes con requisitos personalizados",
+          "features": {
+            "unlimited": "Todo ilimitado",
+            "support": "Soporte 24/7 dedicado",
+            "sla": "SLA del 99.9%",
+            "customization": "Personalización completa"
+          },
+          "button": "Contactar Ventas"
+        }
+      }
+    },
+    "localMarket": {
+      "title": "Diseñado para {country}",
+      "currency": "Moneda local",
+      "support": "Horario de soporte",
+      "regulations": "Regulaciones cumplidas",
+      "compliance": "Cumplimos con {regulations} y otras regulaciones locales",
+      "contactTeam": "Contactar Equipo Local"
+    },
+    "cta": {
+      "title": "Comienza tu Transformación Digital Hoy",
+      "subtitle": "Únete a más de {count} empresas en {country} que ya confían en Agente Virtual IA",
+      "startTrial": "Comenzar Prueba Gratuita",
+      "scheduleDemo": "Agendar Demo"
+    }
   }
 }

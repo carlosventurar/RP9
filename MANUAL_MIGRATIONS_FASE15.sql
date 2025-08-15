@@ -1,4 +1,4 @@
--- RP9 Fase 15: MIGRACIONES COMPLETAS PARA EJECUTAR EN SUPABASE SQL EDITOR
+-- Agente Virtual IA Fase 15: MIGRACIONES COMPLETAS PARA EJECUTAR EN SUPABASE SQL EDITOR
 -- Copiar y pegar TODO este archivo en el SQL Editor de Supabase
 -- =====================================================================
 

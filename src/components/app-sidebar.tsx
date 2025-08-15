@@ -46,12 +46,12 @@ export function AppSidebar() {
       icon: Home,
     },
     {
-      title: "Search Templates",
+      title: navT('searchTemplates'),
       url: "/app/search",
       icon: Search,
     },
     {
-      title: "Favorites",
+      title: navT('favorites'),
       url: "/app/favorites",
       icon: Heart,
     },
@@ -61,13 +61,13 @@ export function AppSidebar() {
       icon: Workflow,
     },
     {
-      title: "Flow Builder",
+      title: navT('flowBuilder'),
       url: "/app/flows/new",
       icon: Plus,
     },
     {
       title: navT('analytics'),
-      url: "/app/analytics", 
+      url: "/app/analytics",
       icon: BarChart3,
     },
     {

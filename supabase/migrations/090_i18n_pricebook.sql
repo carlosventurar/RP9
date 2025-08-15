@@ -1,4 +1,4 @@
--- RP9 Fase 15: Internacionalización LatAm-first
+-- Agente Virtual IA Fase 15: Internacionalización LatAm-first
 -- Migración para soporte completo de i18n, price books, y configuración por país
 
 -- Configuración de países/regiones soportadas

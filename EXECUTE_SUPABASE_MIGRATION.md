@@ -6,7 +6,7 @@
 
 #### 1. Acceder a Supabase Dashboard
 1. Abrir: https://app.supabase.com/projects
-2. **Seleccionar proyecto RP9 Portal PRODUCCIÓN** (verificar nombre/URL)
+2. **Seleccionar proyecto Agente Virtual IA PRODUCCIÓN** (verificar nombre/URL)
 3. Clic en **SQL Editor** en sidebar izquierdo
 
 #### 2. Preparar Migración

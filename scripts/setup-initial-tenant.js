@@ -36,7 +36,7 @@ async function setupInitialTenant() {
     console.log('👤 Creando usuario administrador inicial...')
     const { data: authData, error: authError } = await supabase.auth.admin.createUser({
       email: 'admin@rp9portal.com',
-      password: 'RP9Admin2024!',
+      password: 'AgenteVirtualIA2024!',
       email_confirm: true,
       user_metadata: {
         name: 'Administrador RP9',
@@ -134,7 +134,7 @@ async function setupInitialTenant() {
     console.log('\n🎉 ¡Configuración inicial completada exitosamente!')
     console.log('📋 Credenciales del administrador:')
     console.log('   - Email: admin@rp9portal.com')
-    console.log('   - Password: RP9Admin2024!')
+    console.log('   - Password: AgenteVirtualIA2024!')
     console.log('\n⚠️  IMPORTANTE: Cambia la contraseña después del primer login')
     
     return newTenant

@@ -503,10 +503,10 @@ INSERT INTO subprocessors (name, description, purpose, data_categories, location
 
 -- Insert base legal document templates (ToS and Privacy in both languages)
 INSERT INTO legal_documents (document_type, version, language, title, content, requires_signature, effective_date, status) VALUES
-('tos', '2025-01', 'es', 'Términos de Servicio - RP9 Portal', 'Placeholder content for Spanish ToS', false, NOW(), 'draft'),
-('tos', '2025-01', 'en', 'Terms of Service - RP9 Portal', 'Placeholder content for English ToS', false, NOW(), 'draft'),
-('privacy', '2025-01', 'es', 'Política de Privacidad - RP9 Portal', 'Placeholder content for Spanish Privacy Policy', false, NOW(), 'draft'),
-('privacy', '2025-01', 'en', 'Privacy Policy - RP9 Portal', 'Placeholder content for English Privacy Policy', false, NOW(), 'draft');
+('tos', '2025-01', 'es', 'Términos de Servicio - Agente Virtual IA', 'Placeholder content for Spanish ToS', false, NOW(), 'draft'),
+('tos', '2025-01', 'en', 'Terms of Service - Agente Virtual IA', 'Placeholder content for English ToS', false, NOW(), 'draft'),
+('privacy', '2025-01', 'es', 'Política de Privacidad - Agente Virtual IA', 'Placeholder content for Spanish Privacy Policy', false, NOW(), 'draft'),
+('privacy', '2025-01', 'en', 'Privacy Policy - Agente Virtual IA', 'Placeholder content for English Privacy Policy', false, NOW(), 'draft');
 
 -- Refresh materialized view
 REFRESH MATERIALIZED VIEW sla_monthly_summary;

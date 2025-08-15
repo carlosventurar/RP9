@@ -1,4 +1,4 @@
-# Guía del Workflow QA - RP9 Portal
+# Guía del Workflow QA - Agente Virtual IA
 
 ## 🎯 Objetivo
 
@@ -54,7 +54,7 @@ gh pr create --base qa --title "feat: Nueva funcionalidad" --body "Descripción 
 ### 3. Testing en QA
 
 1. **Auto-deploy**: PR merged → QA environment actualizado automáticamente
-2. **Testing**: Validar funcionalidad en `https://qa-rp9portal.netlify.app`
+2. **Testing**: Validar funcionalidad en `https://qa-agentevirtualia.netlify.app`
 3. **Labels**: Agregar `qa-testing` → `qa-ready` cuando esté validado
 
 ### 4. Promoción a Producción
