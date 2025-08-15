@@ -146,7 +146,7 @@ export default function LocalizedHomePage() {
       </section>
 
       {/* Pricing Section */}
-      <section className="space-y-8">
+      <section id="pricing" className="space-y-8">
         <div className="text-center space-y-4">
           <h2 className="text-3xl font-bold">{t('pricing.title')}</h2>
           <p className="text-xl text-muted-foreground">
