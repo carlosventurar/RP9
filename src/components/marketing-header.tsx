@@ -25,7 +25,7 @@ export function MarketingHeader() {
 
   const navigationItems = [
     { name: t('home'), href: '/' },
-    { name: t('pricing'), href: '/#pricing' },
+    { name: t('pricing'), href: '/pricing' },
     { name: t('contact'), href: '/contacto' }
   ]
 
