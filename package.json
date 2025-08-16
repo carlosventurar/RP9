@@ -18,7 +18,9 @@
     "docs": "node docs/server.js",
     "docs:dev": "node docs/server.js",
     "export-i18n": "tsx scripts/export-i18n.ts",
-    "export-i18n:locale": "tsx scripts/export-i18n.ts"
+    "export-i18n:locale": "tsx scripts/export-i18n.ts",
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
+    "changelog:auto": "auto-changelog"
   },
   "dependencies": {
     "@netlify/functions": "^4.2.1",
@@ -77,6 +79,8 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "auto-changelog": "^2.5.0",
+    "conventional-changelog-cli": "^5.0.0",
     "eslint": "^9",
     "eslint-config-next": "15.4.6",
     "jest": "^29.7.0",
