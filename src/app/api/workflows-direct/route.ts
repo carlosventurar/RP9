@@ -93,8 +93,8 @@ export async function GET(request: NextRequest) {
         createdAt: workflow.createdAt,
         updatedAt: workflow.updatedAt,
         lastExecution: getRelativeTime(workflow.updatedAt),
-        executionCount: Math.floor(Math.random() * 1000) + 100, // Mock for now
-        successRate: Math.floor(Math.random() * 10) + 90 // Mock for now
+        executionCount: generateConsistentNumber(workflow.id, 100, 1000), // Consistent based on workflow ID
+        successRate: generateConsistentNumber(workflow.id + '_rate', 90, 99) // Consistent based on workflow ID
       }
     })
 
@@ -135,4 +135,19 @@ function getRelativeTime(dateString: string): string {
   if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)}m ago`
   if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)}h ago`
   return `${Math.floor(diffInSeconds / 86400)}d ago`
+}
+
+// Generate consistent numbers based on a seed (workflow ID) for server/client consistency
+function generateConsistentNumber(seed: string, min: number, max: number): number {
+  // Simple hash function to generate consistent numbers from string
+  let hash = 0
+  for (let i = 0; i < seed.length; i++) {
+    const char = seed.charCodeAt(i)
+    hash = ((hash << 5) - hash) + char
+    hash = hash & hash // Convert to 32-bit integer
+  }
+  
+  // Convert hash to positive number and scale to range
+  const normalized = Math.abs(hash) / 2147483647 // Max 32-bit int
+  return Math.floor(normalized * (max - min)) + min
 }

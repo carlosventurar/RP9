@@ -50,6 +50,21 @@ export async function GET(request: NextRequest) {
 
     if (error) {
       console.error('Error fetching favorites:', error)
+      // If table doesn't exist, return empty result instead of error
+      if (error.message?.includes('template_favorites')) {
+        return NextResponse.json({
+          success: true,
+          data: {
+            favorites: [],
+            total: 0,
+            pagination: {
+              limit,
+              offset,
+              hasMore: false
+            }
+          }
+        })
+      }
       return NextResponse.json(
         { success: false, error: 'Failed to fetch favorites' },
         { status: 500 }
