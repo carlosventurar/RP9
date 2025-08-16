@@ -65,7 +65,12 @@ export async function GET(request: NextRequest) {
       .single()
 
     if (tenantError || !tenant) {
-      console.error('Tenant lookup error:', tenantError)
+      // Log tenant lookup issues as info instead of error since this is expected for users without tenants
+      if (tenantError && tenantError.code === 'PGRST116') {
+        console.log('No tenant configured for user - using mock Finance data')
+      } else {
+        console.error('Unexpected tenant lookup error:', tenantError)
+      }
       // Return mock data instead of error for better UX
       const mockKPIs = generateMockFinanceKPIs()
       return NextResponse.json({

@@ -49,9 +49,9 @@ export async function GET(request: NextRequest) {
       .range(offset, offset + limit - 1)
 
     if (error) {
-      console.error('Error fetching favorites:', error)
-      // If table doesn't exist, return empty result instead of error
-      if (error.message?.includes('template_favorites')) {
+      // Handle table not found gracefully - this is expected when favorites feature isn't set up
+      if (error.code === 'PGRST205' || error.message?.includes('template_favorites')) {
+        console.log('Favorites table not found - returning empty favorites list')
         return NextResponse.json({
           success: true,
           data: {
@@ -65,6 +65,8 @@ export async function GET(request: NextRequest) {
           }
         })
       }
+      
+      console.error('Unexpected error fetching favorites:', error)
       return NextResponse.json(
         { success: false, error: 'Failed to fetch favorites' },
         { status: 500 }
