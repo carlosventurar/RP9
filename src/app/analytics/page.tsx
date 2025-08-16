@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { 
   Search, 
   Filter,
@@ -15,8 +16,21 @@ import {
   Loader2,
   PlayCircle,
   Calendar,
-  ArrowUpDown
+  ArrowUpDown,
+  Activity,
+  Server,
+  Database,
+  Cpu,
+  MemoryStick,
+  AlertTriangle,
+  TrendingUp,
+  TrendingDown,
+  Minus,
+  Zap,
+  BarChart3,
+  Gauge
 } from "lucide-react"
+import { LineChart, Line, AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts'
 import { N8nExecution } from '@/lib/n8n'
 
 interface ExecutionWithWorkflow extends N8nExecution {

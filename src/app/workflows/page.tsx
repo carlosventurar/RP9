@@ -160,9 +160,10 @@ export default function WorkflowsPage() {
 
     // Filter by search term
     if (searchTerm) {
-      filtered = filtered.filter(workflow =>
-        workflow.name.toLowerCase().includes(searchTerm.toLowerCase())
-      )
+      filtered = filtered.filter(workflow => {
+        const workflowName = typeof workflow.name === 'string' ? workflow.name : workflow.name?.toString() || ''
+        return workflowName.toLowerCase().includes(searchTerm.toLowerCase())
+      })
     }
 
     // Filter by status
@@ -331,7 +332,9 @@ export default function WorkflowsPage() {
             <CardHeader className="pb-3">
               <div className="flex items-start justify-between">
                 <div className="space-y-1 flex-1">
-                  <CardTitle className="text-lg leading-tight">{workflow.name}</CardTitle>
+                  <CardTitle className="text-lg leading-tight">
+                    {typeof workflow.name === 'string' ? workflow.name : workflow.name?.toString() || 'Untitled Workflow'}
+                  </CardTitle>
                   <div className="flex items-center gap-2 flex-wrap">
                     <Badge variant={workflow.active ? "default" : "secondary"}>
                       {workflow.active ? t('active') : t('inactive')}
