@@ -11,7 +11,10 @@ import {
   Search,
   Heart,
   Plus,
+  LogOut,
 } from "lucide-react"
+import { useRouter } from 'next/navigation'
+import { createClient } from '@/lib/supabase/client'
 
 import {
   Sidebar,
@@ -38,6 +41,17 @@ import { useNavigationTranslations, useAuthTranslations } from '@/hooks/use-tran
 export function AppSidebar() {
   const navT = useNavigationTranslations()
   const authT = useAuthTranslations()
+  const router = useRouter()
+  const supabase = createClient()
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut()
+    router.push('/auth')
+  }
+
+  const handleAccountSettings = () => {
+    router.push('/app/settings/account')
+  }
 
   const translatedItems = [
     {
@@ -143,12 +157,13 @@ export function AppSidebar() {
                 align="end"
                 sideOffset={4}
               >
-                <DropdownMenuItem>
+                <DropdownMenuItem onClick={handleAccountSettings}>
                   <Settings />
                   {navT('accountSettings')}
                 </DropdownMenuItem>
-                <DropdownMenuItem>
-                  {authT('signOut')}
+                <DropdownMenuItem onClick={handleSignOut}>
+                  <LogOut />
+                  {navT('logout')}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

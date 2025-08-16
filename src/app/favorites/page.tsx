@@ -140,7 +140,13 @@ export default function FavoritesPage() {
       if (response.ok) {
         const data = await response.json()
         if (data.success) {
-          setFavorites(data.data.favorites)
+          // Handle the API response structure - favorites is an array, need to separate templates/collections
+          const favoritesArray = data.data.favorites || []
+          const separatedFavorites = {
+            templates: favoritesArray.filter((item: any) => !item.bundle_price && !item.template_count), // Templates don't have bundle_price or template_count
+            collections: favoritesArray.filter((item: any) => item.bundle_price !== undefined || item.template_count !== undefined) // Collections have these properties
+          }
+          setFavorites(separatedFavorites)
           setStats(data.data.stats)
         } else {
           throw new Error(data.error || 'Failed to fetch favorites')

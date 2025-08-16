@@ -1,359 +1,266 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { useTranslations, useLocale } from 'next-intl'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Textarea } from '@/components/ui/textarea'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Badge } from '@/components/ui/badge'
-import { 
-  Mail, 
-  Phone, 
-  MapPin, 
-  Clock,
-  Send,
-  CheckCircle,
-  Building2,
-  Users,
-  MessageSquare,
-  ArrowRight
-} from 'lucide-react'
-import { getCountryConfig } from '@/lib/i18n/config'
-import { toast } from 'sonner'
-import Link from 'next/link'
+import { useState } from 'react';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
+import { Mail, Phone, MessageSquare, Send, CheckCircle } from "lucide-react";
+import { toast } from "sonner";
 
-export default function ContactPage() {
-  const t = useTranslations('contact')
-  const locale = useLocale()
-  const countryConfig = getCountryConfig(locale)
-  
+export default function ContactoPage() {
   const [formData, setFormData] = useState({
-    name: '',
+    nombre: '',
     email: '',
-    company: '',
-    phone: '',
-    employees: '',
-    subject: '',
-    message: '',
-    country: countryConfig.country
-  })
-  
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [isSubmitted, setIsSubmitted] = useState(false)
+    empresa: '',
+    telefono: '',
+    interes: '',
+    mensaje: ''
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
+  const handleInputChange = (field: string, value: string) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsSubmitting(true)
+    e.preventDefault();
+    setIsSubmitting(true);
 
     try {
-      const response = await fetch('/api/contact', {
+      const webhookUrl = process.env.NEXT_PUBLIC_CONTACT_WEBHOOK_URL;
+      
+      if (!webhookUrl) {
+        // Fallback si no está configurada la variable de entorno
+        console.log('Formulario enviado:', formData);
+        toast.success('Mensaje enviado correctamente. Te contactaremos pronto.');
+        setIsSubmitted(true);
+        return;
+      }
+
+      const response = await fetch(webhookUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           ...formData,
-          locale,
-          timestamp: new Date().toISOString()
+          timestamp: new Date().toISOString(),
+          source: 'contacto_page'
         }),
-      })
+      });
 
       if (response.ok) {
-        setIsSubmitted(true)
-        toast.success(t('form.success'))
+        toast.success('Mensaje enviado correctamente. Te contactaremos pronto.');
+        setIsSubmitted(true);
       } else {
-        throw new Error('Failed to submit')
+        throw new Error('Error al enviar el mensaje');
       }
     } catch (error) {
-      console.error('Contact form error:', error)
-      toast.error(t('form.error'))
+      console.error('Error:', error);
+      toast.error('Error al enviar el mensaje. Inténtalo de nuevo.');
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
-  }
-
-  const handleChange = (field: string, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }))
-  }
+  };
 
   if (isSubmitted) {
     return (
-      <div className="max-w-4xl mx-auto space-y-8">
-        <div className="text-center space-y-4">
-          <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto">
-            <CheckCircle className="w-8 h-8 text-green-600" />
-          </div>
-          <h1 className="text-3xl font-bold">{t('success.title')}</h1>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            {t('success.message')}
-          </p>
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-            <p className="text-sm text-blue-800">
-              {t('success.nextSteps')}
+      <div className="min-h-screen bg-gradient-to-b from-slate-950 to-slate-900 text-slate-100 flex items-center justify-center">
+        <Card className="border-slate-800 bg-slate-900/60 max-w-md mx-auto">
+          <CardContent className="p-8 text-center">
+            <CheckCircle className="w-16 h-16 text-emerald-400 mx-auto mb-4" />
+            <h2 className="text-2xl font-bold mb-2">¡Mensaje enviado!</h2>
+            <p className="text-slate-300 mb-6">
+              Gracias por contactarnos. Nuestro equipo te responderá en las próximas 24 horas.
             </p>
-          </div>
-        </div>
+            <Button 
+              onClick={() => setIsSubmitted(false)}
+              variant="outline"
+              className="border-slate-700"
+            >
+              Enviar otro mensaje
+            </Button>
+          </CardContent>
+        </Card>
       </div>
-    )
+    );
   }
 
   return (
-    <div className="max-w-6xl mx-auto space-y-8 py-8 px-4">
-      {/* Header */}
-      <div className="text-center space-y-4">
-        <Badge variant="outline" className="px-4 py-2">
-          {t('header.badge')} {countryConfig.countryName}
-        </Badge>
-        <h1 className="text-4xl font-bold tracking-tight">
-          {t('header.title')}
-        </h1>
-        <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-          {t('header.subtitle')}
-        </p>
-      </div>
-
-      <div className="grid lg:grid-cols-3 gap-8">
-        {/* Contact Information */}
-        <div className="lg:col-span-1 space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <MapPin className="w-5 h-5" />
-                {t('info.office.title')}
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <h4 className="font-semibold">{countryConfig.countryName}</h4>
-                <p className="text-sm text-muted-foreground">
-                  {t('info.office.address')}
-                </p>
-              </div>
-              
-              <div className="flex items-center gap-2">
-                <Clock className="w-4 h-4 text-muted-foreground" />
-                <span className="text-sm">{countryConfig.businessHours}</span>
-              </div>
-              
-              <div className="flex items-center gap-2">
-                <Phone className="w-4 h-4 text-muted-foreground" />
-                <span className="text-sm">{countryConfig.phoneCode}</span>
-              </div>
-              
-              <div className="flex items-center gap-2">
-                <Mail className="w-4 h-4 text-muted-foreground" />
-                <span className="text-sm">contact@rp9portal.com</span>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>{t('info.compliance.title')}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground mb-3">
-                {t('info.compliance.description')}
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {countryConfig.regulations.map((reg, index) => (
-                  <Badge key={index} variant="secondary" className="text-xs">
-                    {reg}
-                  </Badge>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Contact Form */}
-        <div className="lg:col-span-2">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <MessageSquare className="w-5 h-5" />
-                {t('form.title')}
-              </CardTitle>
-              <CardDescription>
-                {t('form.description')}
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="name">{t('form.fields.name.label')}</Label>
-                    <Input
-                      id="name"
-                      type="text"
-                      placeholder={t('form.fields.name.placeholder')}
-                      value={formData.name}
-                      onChange={(e) => handleChange('name', e.target.value)}
-                      required
-                    />
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label htmlFor="email">{t('form.fields.email.label')}</Label>
-                    <Input
-                      id="email"
-                      type="email"
-                      placeholder={t('form.fields.email.placeholder')}
-                      value={formData.email}
-                      onChange={(e) => handleChange('email', e.target.value)}
-                      required
-                    />
-                  </div>
-                </div>
-
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="company">{t('form.fields.company.label')}</Label>
-                    <Input
-                      id="company"
-                      type="text"
-                      placeholder={t('form.fields.company.placeholder')}
-                      value={formData.company}
-                      onChange={(e) => handleChange('company', e.target.value)}
-                      required
-                    />
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label htmlFor="phone">{t('form.fields.phone.label')}</Label>
-                    <Input
-                      id="phone"
-                      type="tel"
-                      placeholder={t('form.fields.phone.placeholder')}
-                      value={formData.phone}
-                      onChange={(e) => handleChange('phone', e.target.value)}
-                    />
-                  </div>
-                </div>
-
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="employees">{t('form.fields.employees.label')}</Label>
-                    <Select value={formData.employees} onValueChange={(value) => handleChange('employees', value)}>
-                      <SelectTrigger>
-                        <SelectValue placeholder={t('form.fields.employees.placeholder')} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="1-10">{t('form.fields.employees.options.small')}</SelectItem>
-                        <SelectItem value="11-50">{t('form.fields.employees.options.medium')}</SelectItem>
-                        <SelectItem value="51-200">{t('form.fields.employees.options.large')}</SelectItem>
-                        <SelectItem value="201+">{t('form.fields.employees.options.enterprise')}</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label htmlFor="subject">{t('form.fields.subject.label')}</Label>
-                    <Select value={formData.subject} onValueChange={(value) => handleChange('subject', value)}>
-                      <SelectTrigger>
-                        <SelectValue placeholder={t('form.fields.subject.placeholder')} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="demo">{t('form.fields.subject.options.demo')}</SelectItem>
-                        <SelectItem value="pricing">{t('form.fields.subject.options.pricing')}</SelectItem>
-                        <SelectItem value="support">{t('form.fields.subject.options.support')}</SelectItem>
-                        <SelectItem value="partnership">{t('form.fields.subject.options.partnership')}</SelectItem>
-                        <SelectItem value="other">{t('form.fields.subject.options.other')}</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="message">{t('form.fields.message.label')}</Label>
-                  <Textarea
-                    id="message"
-                    placeholder={t('form.fields.message.placeholder')}
-                    rows={4}
-                    value={formData.message}
-                    onChange={(e) => handleChange('message', e.target.value)}
-                    required
-                  />
-                </div>
-
-                <div className="flex items-center gap-4 pt-4">
-                  <Button type="submit" disabled={isSubmitting} className="flex items-center gap-2">
-                    {isSubmitting ? (
-                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                    ) : (
-                      <Send className="w-4 h-4" />
-                    )}
-                    {isSubmitting ? t('form.sending') : t('form.submit')}
-                  </Button>
-                  
-                  <p className="text-xs text-muted-foreground">
-                    {t('form.privacy')}
-                  </p>
-                </div>
-              </form>
-            </CardContent>
-          </Card>
-        </div>
-      </div>
-
-      {/* Why Choose Us */}
-      <div className="bg-muted/50 rounded-lg p-8">
-        <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold mb-4">{t('whyChoose.title')}</h2>
-          <p className="text-xl text-muted-foreground">
-            {t('whyChoose.subtitle')}
-          </p>
-        </div>
-        
-        <div className="grid md:grid-cols-3 gap-6">
-          <div className="text-center space-y-3">
-            <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mx-auto">
-              <Users className="w-6 h-6 text-blue-600" />
-            </div>
-            <h3 className="font-semibold">{t('whyChoose.local.title')}</h3>
-            <p className="text-sm text-muted-foreground">
-              {t('whyChoose.local.description')}
+    <div className="min-h-screen bg-gradient-to-b from-slate-950 to-slate-900 text-slate-100">
+      <div className="container mx-auto px-4 py-16">
+        <div className="max-w-4xl mx-auto">
+          {/* Header */}
+          <div className="text-center mb-12">
+            <Badge className="mb-4 bg-emerald-400 text-black">
+              <MessageSquare className="w-4 h-4 mr-2" />
+              Contacto
+            </Badge>
+            <h1 className="text-4xl sm:text-5xl font-bold mb-6">
+              Habla con nuestro equipo
+            </h1>
+            <p className="text-xl text-slate-300 max-w-2xl mx-auto">
+              ¿Listo para automatizar tu operación? Cuéntanos sobre tu proyecto y te ayudamos a encontrar la mejor solución.
             </p>
           </div>
-          
-          <div className="text-center space-y-3">
-            <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mx-auto">
-              <Building2 className="w-6 h-6 text-green-600" />
+
+          <div className="grid lg:grid-cols-3 gap-8">
+            {/* Formulario */}
+            <div className="lg:col-span-2">
+              <Card className="border-slate-800 bg-slate-900/60">
+                <CardHeader>
+                  <CardTitle>Envíanos un mensaje</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <form onSubmit={handleSubmit} className="space-y-6">
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div>
+                        <Label htmlFor="nombre">Nombre completo *</Label>
+                        <Input
+                          id="nombre"
+                          value={formData.nombre}
+                          onChange={(e) => handleInputChange('nombre', e.target.value)}
+                          required
+                          className="bg-slate-950 border-slate-700"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="email">Email corporativo *</Label>
+                        <Input
+                          id="email"
+                          type="email"
+                          value={formData.email}
+                          onChange={(e) => handleInputChange('email', e.target.value)}
+                          required
+                          className="bg-slate-950 border-slate-700"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div>
+                        <Label htmlFor="empresa">Empresa</Label>
+                        <Input
+                          id="empresa"
+                          value={formData.empresa}
+                          onChange={(e) => handleInputChange('empresa', e.target.value)}
+                          className="bg-slate-950 border-slate-700"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="telefono">Teléfono</Label>
+                        <Input
+                          id="telefono"
+                          value={formData.telefono}
+                          onChange={(e) => handleInputChange('telefono', e.target.value)}
+                          className="bg-slate-950 border-slate-700"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <Label htmlFor="interes">¿En qué estás interesado?</Label>
+                      <Select onValueChange={(value) => handleInputChange('interes', value)}>
+                        <SelectTrigger className="bg-slate-950 border-slate-700">
+                          <SelectValue placeholder="Selecciona una opción" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="piloto">Piloto 30 días</SelectItem>
+                          <SelectItem value="core">Plan Core</SelectItem>
+                          <SelectItem value="pro">Plan Pro</SelectItem>
+                          <SelectItem value="scale">Plan Scale</SelectItem>
+                          <SelectItem value="enterprise">Enterprise Dedicado</SelectItem>
+                          <SelectItem value="demo">Demo personalizada</SelectItem>
+                          <SelectItem value="consultoria">Consultoría</SelectItem>
+                          <SelectItem value="otro">Otro</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div>
+                      <Label htmlFor="mensaje">Cuéntanos sobre tu proyecto *</Label>
+                      <Textarea
+                        id="mensaje"
+                        value={formData.mensaje}
+                        onChange={(e) => handleInputChange('mensaje', e.target.value)}
+                        required
+                        rows={4}
+                        placeholder="Describe qué procesos quieres automatizar, cuántas personas están involucradas, y qué resultados esperas..."
+                        className="bg-slate-950 border-slate-700"
+                      />
+                    </div>
+
+                    <Button 
+                      type="submit" 
+                      disabled={isSubmitting}
+                      className="w-full bg-emerald-400 hover:bg-emerald-300 text-black font-semibold"
+                    >
+                      {isSubmitting ? (
+                        'Enviando...'
+                      ) : (
+                        <>
+                          Enviar mensaje
+                          <Send className="w-4 h-4 ml-2" />
+                        </>
+                      )}
+                    </Button>
+                  </form>
+                </CardContent>
+              </Card>
             </div>
-            <h3 className="font-semibold">{t('whyChoose.compliance.title')}</h3>
-            <p className="text-sm text-muted-foreground">
-              {t('whyChoose.compliance.description')}
-            </p>
-          </div>
-          
-          <div className="text-center space-y-3">
-            <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mx-auto">
-              <CheckCircle className="w-6 h-6 text-purple-600" />
+
+            {/* Información de contacto */}
+            <div className="space-y-6">
+              <Card className="border-slate-800 bg-slate-900/60">
+                <CardContent className="p-6">
+                  <h3 className="text-lg font-semibold mb-4">Otras formas de contacto</h3>
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-3">
+                      <Mail className="w-5 h-5 text-emerald-400" />
+                      <div>
+                        <p className="font-medium">Email</p>
+                        <p className="text-sm text-slate-400">hola@agentevirtualia.com</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <Phone className="w-5 h-5 text-emerald-400" />
+                      <div>
+                        <p className="font-medium">WhatsApp</p>
+                        <p className="text-sm text-slate-400">+52 55 1234 5678</p>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="border-slate-800 bg-slate-900/60">
+                <CardContent className="p-6">
+                  <h3 className="text-lg font-semibold mb-4">Tiempo de respuesta</h3>
+                  <div className="space-y-2 text-sm">
+                    <p className="flex justify-between">
+                      <span>Consultas generales:</span>
+                      <span className="text-emerald-400">24 horas</span>
+                    </p>
+                    <p className="flex justify-between">
+                      <span>Demos y pilotos:</span>
+                      <span className="text-emerald-400">4 horas</span>
+                    </p>
+                    <p className="flex justify-between">
+                      <span>Enterprise:</span>
+                      <span className="text-emerald-400">2 horas</span>
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
             </div>
-            <h3 className="font-semibold">{t('whyChoose.proven.title')}</h3>
-            <p className="text-sm text-muted-foreground">
-              {t('whyChoose.proven.description')}
-            </p>
           </div>
-        </div>
-        
-        {/* CTA to Login */}
-        <div className="text-center mt-8 p-6 bg-primary/5 rounded-lg border border-primary/20">
-          <h4 className="text-lg font-semibold mb-2">¿Ya tienes cuenta?</h4>
-          <p className="text-sm text-muted-foreground mb-4">
-            Accede a tu portal de automatización y comienza a optimizar tus procesos.
-          </p>
-          <Button asChild className="gap-2">
-            <Link href="/login">
-              Iniciar Sesión
-              <ArrowRight className="w-4 h-4" />
-            </Link>
-          </Button>
         </div>
       </div>
     </div>
-  )
+  );
 }

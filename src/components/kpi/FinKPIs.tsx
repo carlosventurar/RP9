@@ -94,7 +94,7 @@ export default function FinKPIs() {
         return
       }
 
-      const response = await fetch(`/.netlify/functions/kpi-fin?period=${period}&details=true`, {
+      const response = await fetch(`/api/kpi-fin?period=${period}&details=true`, {
         headers: {
           'Authorization': `Bearer ${session.access_token}`
         }

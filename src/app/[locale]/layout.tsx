@@ -1,22 +1,10 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "../globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
-import { MarketingHeader } from "@/components/marketing-header";
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { i18nConfig } from '@/lib/i18n/config';
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono", 
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
   title: "Agente Virtual IA - Plataforma de Automatización Inteligente",
@@ -44,9 +32,7 @@ export default async function LocaleLayout({
   
   return (
     <html lang={locale.split('-')[0]} suppressHydrationWarning>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body>
         <NextIntlClientProvider messages={messages}>
           <ThemeProvider
             attribute="class"
@@ -54,11 +40,8 @@ export default async function LocaleLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <div className="min-h-screen flex flex-col">
-              <MarketingHeader />
-              <main className="flex-1">
-                {children}
-              </main>
+            <div className="min-h-screen">
+              {children}
             </div>
           </ThemeProvider>
         </NextIntlClientProvider>

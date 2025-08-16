@@ -53,7 +53,7 @@ export default function Dashboard() {
           throw new Error('No valid session found')
         }
 
-        const response = await fetch('/.netlify/functions/dashboard', {
+        const response = await fetch('/api/dashboard', {
           headers: {
             'Authorization': `Bearer ${session.access_token}`,
             'Content-Type': 'application/json'

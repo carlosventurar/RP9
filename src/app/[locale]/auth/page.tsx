@@ -24,15 +24,16 @@ export default function AuthPage() {
   const supabase = createClient()
   const t = useTranslations('auth')
   
-  // Get redirect URL from search params
-  const redirectUrl = searchParams.get('redirect') || `/app/dashboard`
+  // Get redirect URL from search params, ensure it doesn't have duplicate locale
+  const rawRedirectUrl = searchParams.get('redirect') || `/app/dashboard`
+  const redirectUrl = rawRedirectUrl.startsWith(`/${locale}`) ? rawRedirectUrl : `/${locale}${rawRedirectUrl}`
 
   useEffect(() => {
     // Check if user is already logged in
     const checkUser = async () => {
       const { data: { user } } = await supabase.auth.getUser()
       if (user) {
-        router.replace(`/${locale}${redirectUrl}`)
+        router.replace(redirectUrl)
       }
     }
     checkUser()
@@ -55,7 +56,7 @@ export default function AuthPage() {
 
         if (data.user) {
           setMessage(t('loginSuccessful'))
-          router.replace(`/${locale}${redirectUrl}`)
+          router.replace(redirectUrl)
         }
       } else {
         const { data, error } = await supabase.auth.signUp({
@@ -91,7 +92,7 @@ export default function AuthPage() {
       const { error } = await supabase.auth.signInWithOtp({
         email,
         options: {
-          emailRedirectTo: `${window.location.origin}/${locale}${redirectUrl}`
+          emailRedirectTo: `${window.location.origin}${redirectUrl}`
         }
       })
 
