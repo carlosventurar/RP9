@@ -21,7 +21,7 @@ import {
 } from "lucide-react"
 import { N8nWorkflow } from '@/lib/n8n'
 // import { useWorkflowTranslations } from '@/hooks/use-translations'
-// import CreateWorkflowModal from '@/components/workflows/CreateWorkflowModal'
+import CreateWorkflowModal from '@/components/workflows/CreateWorkflowModal'
 
 interface WorkflowWithStats extends N8nWorkflow {
   lastExecution?: string
@@ -469,12 +469,12 @@ export default function WorkflowsPage() {
       )}
 
       {/* Create Workflow Modal */}
-      {/* <CreateWorkflowModal
+      <CreateWorkflowModal
         open={showCreateModal}
         onOpenChange={setShowCreateModal}
         onSuccess={handleCreateSuccess}
         availableTags={availableTags}
-      /> */}
+      />
     </div>
   )
 }

@@ -151,3 +151,133 @@ function generateConsistentNumber(seed: string, min: number, max: number): numbe
   const normalized = Math.abs(hash) / 2147483647 // Max 32-bit int
   return Math.floor(normalized * (max - min)) + min
 }
+
+// POST method for creating new workflows
+export async function POST(request: NextRequest) {
+  try {
+    // Get n8n credentials from environment
+    const n8nUrl = process.env.N8N_BASE_URL
+    const n8nApiKey = process.env.N8N_API_KEY
+
+    if (!n8nUrl || !n8nApiKey) {
+      return NextResponse.json(
+        { error: 'N8N configuration missing' },
+        { status: 500 }
+      )
+    }
+
+    // Parse request body
+    const body = await request.json()
+    const { name, description, tags, active } = body
+
+    // Validate required fields
+    if (!name || !name.trim()) {
+      return NextResponse.json(
+        { error: 'Workflow name is required' },
+        { status: 400 }
+      )
+    }
+
+    // Create basic workflow structure for n8n
+    const workflowData = {
+      name: name.trim(),
+      nodes: [
+        {
+          id: 'start',
+          name: 'Start',
+          type: 'n8n-nodes-base.manual',
+          position: [240, 300],
+          parameters: {},
+          typeVersion: 1
+        }
+      ],
+      connections: {},
+      settings: {}
+    }
+
+    // Create workflow in n8n
+    let attempts = 0
+    const maxAttempts = 2
+    let response
+    
+    while (attempts < maxAttempts) {
+      try {
+        const controller = new AbortController()
+        const timeoutId = setTimeout(() => controller.abort(), 15000) // 15 second timeout for creation
+        
+        response = await fetch(`${n8nUrl}/api/v1/workflows`, {
+          method: 'POST',
+          headers: {
+            'X-N8N-API-KEY': n8nApiKey,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify(workflowData),
+          signal: controller.signal
+        })
+        
+        clearTimeout(timeoutId)
+        
+        if (!response.ok) {
+          const errorText = await response.text()
+          throw new Error(`N8N API error: ${response.status} ${response.statusText} - ${errorText}`)
+        }
+
+        const createdWorkflow = await response.json()
+        
+        // Transform the response to match our interface
+        const transformedWorkflow = {
+          id: createdWorkflow.id,
+          name: createdWorkflow.name,
+          active: createdWorkflow.active,
+          nodes: createdWorkflow.nodes || [],
+          tags: createdWorkflow.tags || [],
+          createdAt: createdWorkflow.createdAt || new Date().toISOString(),
+          updatedAt: createdWorkflow.updatedAt || new Date().toISOString(),
+          lastExecution: 'Never',
+          executionCount: 0,
+          successRate: 0
+        }
+
+        return NextResponse.json({
+          success: true,
+          data: transformedWorkflow,
+          message: 'Workflow created successfully'
+        }, { status: 201 })
+        
+      } catch (error) {
+        attempts++
+        console.error(`N8N workflow creation attempt ${attempts} failed:`, error)
+        
+        if (attempts >= maxAttempts) {
+          return NextResponse.json(
+            { 
+              error: 'Failed to create workflow in N8N after multiple attempts',
+              details: error instanceof Error ? error.message : 'Unknown error'
+            },
+            { status: 500 }
+          )
+        }
+        
+        // Wait before retry
+        await new Promise(resolve => setTimeout(resolve, 1000))
+      }
+    }
+
+    // This code should never be reached as we return from within the loop
+    return NextResponse.json(
+      { error: 'Unexpected error in workflow creation flow' },
+      { status: 500 }
+    )
+
+  } catch (error) {
+    console.error('Workflow creation error:', error)
+    return NextResponse.json(
+      { 
+        error: 'Failed to create workflow',
+        details: error instanceof Error ? error.message : 'Unknown error'
+      },
+      { status: 500 }
+    )
+  }
+}
