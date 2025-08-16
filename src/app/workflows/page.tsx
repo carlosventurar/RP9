@@ -161,7 +161,7 @@ export default function WorkflowsPage() {
     // Filter by search term
     if (searchTerm) {
       filtered = filtered.filter(workflow => {
-        const workflowName = typeof workflow.name === 'string' ? workflow.name : workflow.name?.toString() || ''
+        const workflowName = typeof workflow.name === 'string' ? workflow.name : (workflow.name ? String(workflow.name) : '')
         return workflowName.toLowerCase().includes(searchTerm.toLowerCase())
       })
     }
@@ -251,19 +251,19 @@ export default function WorkflowsPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
+          <h1 className="text-3xl font-bold tracking-tight">{String(t('title'))}</h1>
           <div className="flex items-center gap-2">
             <p className="text-muted-foreground">
-              {t('subtitle')}
+              {String(t('subtitle'))}
             </p>
             <Badge variant="secondary" className="text-xs">
-              {t('crossnetFilterActive')}
+              {String(t('crossnetFilterActive'))}
             </Badge>
           </div>
         </div>
         <Button>
           <Plus className="h-4 w-4 mr-2" />
-          {t('newWorkflow')}
+          {String(t('newWorkflow'))}
         </Button>
       </div>
 
@@ -272,7 +272,7 @@ export default function WorkflowsPage() {
         <div className="relative flex-1 max-w-sm">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
           <Input
-            placeholder={t('searchWorkflows')}
+            placeholder={String(t('searchWorkflows'))}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="pl-10"
@@ -333,23 +333,23 @@ export default function WorkflowsPage() {
               <div className="flex items-start justify-between">
                 <div className="space-y-1 flex-1">
                   <CardTitle className="text-lg leading-tight">
-                    {typeof workflow.name === 'string' ? workflow.name : workflow.name?.toString() || 'Untitled Workflow'}
+                    {typeof workflow.name === 'string' ? workflow.name : (workflow.name ? String(workflow.name) : 'Untitled Workflow')}
                   </CardTitle>
                   <div className="flex items-center gap-2 flex-wrap">
                     <Badge variant={workflow.active ? "default" : "secondary"}>
-                      {workflow.active ? t('active') : t('inactive')}
+                      {workflow.active ? String(t('active')) : String(t('inactive'))}
                     </Badge>
                     {workflow.successRate && (
                       <Badge variant="outline" className="text-xs">
-                        {workflow.successRate}% {t('success')}
+                        {typeof workflow.successRate === 'number' ? workflow.successRate : 0}% {String(t('success'))}
                       </Badge>
                     )}
                   </div>
                   {workflow.tags && workflow.tags.length > 0 && (
                     <div className="flex items-center gap-1 mt-2 flex-wrap">
                       {workflow.tags.slice(0, 3).map(tag => (
-                        <Badge key={tag} variant="secondary" className="text-xs px-2 py-0">
-                          {tag}
+                        <Badge key={String(tag)} variant="secondary" className="text-xs px-2 py-0">
+                          {String(tag)}
                         </Badge>
                       ))}
                       {workflow.tags.length > 3 && (
@@ -379,17 +379,17 @@ export default function WorkflowsPage() {
             <CardContent className="space-y-3">
               <div className="grid grid-cols-2 gap-4 text-sm">
                 <div className="space-y-1">
-                  <div className="text-muted-foreground">{t('lastRun')}</div>
+                  <div className="text-muted-foreground">{String(t('lastRun'))}</div>
                   <div className="flex items-center gap-1">
                     <Clock className="h-3 w-3" />
-                    {workflow.lastExecution || t('never')}
+                    {typeof workflow.lastExecution === 'string' ? workflow.lastExecution : String(t('never'))}
                   </div>
                 </div>
                 <div className="space-y-1">
-                  <div className="text-muted-foreground">{t('executions')}</div>
+                  <div className="text-muted-foreground">{String(t('executions'))}</div>
                   <div className="flex items-center gap-1">
                     <CheckCircle className="h-3 w-3" />
-                    {workflow.executionCount || 0}
+                    {typeof workflow.executionCount === 'number' ? workflow.executionCount : 0}
                   </div>
                 </div>
               </div>
@@ -407,7 +407,7 @@ export default function WorkflowsPage() {
                   ) : (
                     <Play className="h-3 w-3 mr-1" />
                   )}
-                  {t('run')}
+                  {String(t('run'))}
                 </Button>
                 <Button variant="ghost" size="sm">
                   <Settings className="h-3 w-3" />
@@ -422,13 +422,13 @@ export default function WorkflowsPage() {
         <div className="text-center py-12">
           <div className="text-muted-foreground mb-4">
             {searchTerm || statusFilter !== 'all' ? 
-              t('noWorkflowsMatchFilters') : 
-              t('noWorkflowsFound')
+              String(t('noWorkflowsMatchFilters')) : 
+              String(t('noWorkflowsFound'))
             }
           </div>
           <Button>
             <Plus className="h-4 w-4 mr-2" />
-            {t('createFirstWorkflow')}
+            {String(t('createFirstWorkflow'))}
           </Button>
         </div>
       )}
