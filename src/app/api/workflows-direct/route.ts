@@ -81,8 +81,22 @@ export async function GET(request: NextRequest) {
       if (name.includes('aws') || name.includes('lambda')) smartTags.push('aws', 'cloud')
       if (name.includes('email') || name.includes('ses')) smartTags.push('email', 'notifications')
       
-      // Use n8n tags if available, otherwise use smart tags
-      const finalTags = (workflow.tags && workflow.tags.length > 0) ? workflow.tags : smartTags
+      // Normalize n8n tags (convert objects to strings) and merge with smart tags
+      let n8nTags: string[] = []
+      if (workflow.tags && Array.isArray(workflow.tags)) {
+        n8nTags = workflow.tags.map((tag: any) => {
+          // If tag is an object with name property, use the name
+          if (typeof tag === 'object' && tag.name) {
+            return String(tag.name).toLowerCase().trim()
+          }
+          // If tag is already a string, normalize it
+          return String(tag).toLowerCase().trim()
+        }).filter((tag: string) => tag) // Remove empty tags
+      }
+      
+      // Combine n8n tags with smart tags, removing duplicates (all lowercase)
+      const allTagsSet = new Set([...n8nTags, ...smartTags])
+      const finalTags = Array.from(allTagsSet)
       
       return {
         id: workflow.id,
@@ -98,11 +112,16 @@ export async function GET(request: NextRequest) {
       }
     })
 
-    // Extract all unique tags from workflows
+    // Extract all unique tags from workflows (ensure all are normalized strings)
     const allTags = new Set<string>()
     transformedWorkflows.forEach((workflow: any) => {
       if (workflow.tags && Array.isArray(workflow.tags)) {
-        workflow.tags.forEach((tag: string) => allTags.add(tag))
+        workflow.tags.forEach((tag: any) => {
+          const tagString = String(tag).toLowerCase().trim()
+          if (tagString) {
+            allTags.add(tagString)
+          }
+        })
       }
     })
 
