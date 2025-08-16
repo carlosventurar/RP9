@@ -81,7 +81,7 @@ export default function CCKPIs() {
         return
       }
 
-      const response = await fetch(`/.netlify/functions/kpi-cc?period=${period}&hourly=true`, {
+      const response = await fetch(`/api/kpi-cc?period=${period}&hourly=true`, {
         headers: {
           'Authorization': `Bearer ${session.access_token}`
         }

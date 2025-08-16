@@ -22,17 +22,39 @@
     "platform": "Plataforma",
     "home": "Inicio",
     "pricing": "Precios",
-    "contact": "Contacto",
+    "contact": "Contacto", 
     "login": "Iniciar Sesión",
     "getStarted": "Comenzar",
     "dashboard": "Panel Principal",
     "workflows": "Flujos de Trabajo",
     "templates": "Plantillas",
-    "analytics": "Analíticas",
+    "searchTemplates": "Buscar Plantillas",
+    "favorites": "Favoritos",
+    "flowBuilder": "Constructor de Flujos",
+    "analytics": "Analíticas", 
     "settings": "Configuración",
     "billing": "Facturación",
     "logout": "Cerrar Sesión",
     "accountSettings": "Configuración de Cuenta"
+  },
+  "workflows": {
+    "title": "Flujos de Trabajo",
+    "subtitle": "Gestiona y monitorea tus flujos de trabajo de automatización",
+    "newWorkflow": "Nuevo Flujo",
+    "searchWorkflows": "Buscar flujos de trabajo...",
+    "lastRun": "Última Ejecución",
+    "executions": "Ejecuciones",
+    "run": "Ejecutar",
+    "never": "Nunca",
+    "all": "Todos",
+    "active": "Activo",
+    "inactive": "Inactivo",
+    "success": "Éxito",
+    "crossnetFilterActive": "Filtro Crossnet Activo",
+    "noWorkflowsMatchFilters": "No hay flujos de trabajo que coincidan con los filtros",
+    "noWorkflowsFound": "No se encontraron flujos de trabajo",
+    "createFirstWorkflow": "Crear Primer Flujo de Trabajo",
+    "status": "Estado"
   },
   "auth": {
     "title": "Agente Virtual IA",
@@ -212,5 +234,178 @@
     "unauthorized": "No estás autorizado para realizar esta acción",
     "notFound": "El recurso solicitado no fue encontrado",
     "serverError": "Error interno del servidor"
+  },
+  "home": {
+    "hero": {
+      "badge": "Confiado por 150+ empresas en",
+      "title": "Automatización Empresarial Sin Código",
+      "subtitle": "Transforma procesos manuales en workflows automatizados. Ahorra tiempo, reduce errores y escala tu operación.",
+      "startFree": "Comenzar Gratis",
+      "viewDemo": "Ver Demo"
+    },
+    "features": {
+      "title": "Todo lo que Necesitas para Automatizar",
+      "subtitle": "Herramientas poderosas y fáciles de usar para transformar tu operación",
+      "contactCenter": {
+        "title": "Contact Center",
+        "description": "Automatiza respuestas y gestión de clientes"
+      },
+      "finance": {
+        "title": "Finanzas",
+        "description": "Procesa facturas y pagos automáticamente"
+      },
+      "integrations": {
+        "title": "Integraciones",
+        "description": "Conecta todas tus herramientas favoritas"
+      }
+    },
+    "pricing": {
+      "title": "Precios Transparentes",
+      "subtitle": "Planes que crecen contigo. Sin costos ocultos.",
+      "taxNote": "Precios en {currency} • {taxRate}% impuestos incluidos",
+      "plans": {
+        "starter": {
+          "name": "Starter",
+          "price": "Gratis",
+          "description": "Perfecto para equipos pequeños",
+          "features": {
+            "users": "Hasta 5 usuarios",
+            "executions": "1,000 ejecuciones/mes",
+            "workflows": "10 workflows activos",
+            "support": "Soporte estándar"
+          },
+          "button": "Comenzar Ahora"
+        },
+        "pro": {
+          "name": "Pro", 
+          "price": "$29 USD",
+          "description": "Para empresas en crecimiento",
+          "popular": "Más Popular",
+          "features": {
+            "users": "Usuarios ilimitados",
+            "executions": "10,000 ejecuciones/mes",
+            "workflows": "100 workflows activos",
+            "support": "Soporte prioritario"
+          },
+          "button": "Elegir Plan"
+        },
+        "enterprise": {
+          "name": "Enterprise",
+          "price": "$99 USD",
+          "description": "Para grandes organizaciones",
+          "features": {
+            "unlimited": "Todo ilimitado",
+            "support": "Soporte dedicado 24/7",
+            "sla": "SLA garantizado",
+            "customization": "Personalización completa"
+          },
+          "button": "Elegir Plan"
+        }
+      }
+    },
+    "localMarket": {
+      "title": "Agente Virtual IA en {country}",
+      "currency": "Facturación local",
+      "support": "Horario de soporte",
+      "regulations": "Regulaciones soportadas",
+      "compliance": "Cumplimos con: {regulations}",
+      "contactTeam": "Contactar Equipo Local"
+    },
+    "cta": {
+      "title": "¿Listo para Automatizar tu Operación?",
+      "subtitle": "Únete a las {count}+ empresas en {country} que ya confían en Agente Virtual IA.",
+      "startTrial": "Comenzar Prueba Gratuita",
+      "scheduleDemo": "Agendar Demo"
+    }
+  },
+  "contact": {
+    "header": {
+      "badge": "Contacta nuestro equipo en",
+      "title": "¿Listo para Transformar tu Negocio?",
+      "subtitle": "Ponte en contacto con nuestros expertos locales y descubre cómo Agente Virtual IA puede revolucionar tus operaciones."
+    },
+    "info": {
+      "office": {
+        "title": "Oficina Local",
+        "address": "Distrito de Negocios, Edificio Profesional"
+      },
+      "compliance": {
+        "title": "Cumplimiento Regulatorio",
+        "description": "Garantizamos el cumplimiento total con las regulaciones y estándares locales."
+      }
+    },
+    "form": {
+      "title": "Contactar Nuestro Equipo",
+      "description": "Completa el formulario a continuación y te responderemos en menos de 24 horas.",
+      "fields": {
+        "name": {
+          "label": "Nombre Completo",
+          "placeholder": "Tu nombre completo"
+        },
+        "email": {
+          "label": "Correo Electrónico",
+          "placeholder": "tu.correo@empresa.com"
+        },
+        "company": {
+          "label": "Empresa",
+          "placeholder": "Nombre de tu empresa"
+        },
+        "phone": {
+          "label": "Número de Teléfono",
+          "placeholder": "Tu número de teléfono"
+        },
+        "employees": {
+          "label": "Tamaño de Empresa",
+          "placeholder": "Selecciona el tamaño de empresa",
+          "options": {
+            "small": "1-10 empleados",
+            "medium": "11-50 empleados",
+            "large": "51-200 empleados",
+            "enterprise": "201+ empleados"
+          }
+        },
+        "subject": {
+          "label": "Tipo de Consulta",
+          "placeholder": "Selecciona el tipo de consulta",
+          "options": {
+            "demo": "Solicitar una Demo",
+            "pricing": "Información de Precios",
+            "support": "Soporte Técnico",
+            "partnership": "Oportunidades de Alianza",
+            "other": "Otro"
+          }
+        },
+        "message": {
+          "label": "Mensaje",
+          "placeholder": "Cuéntanos sobre tus necesidades de automatización y desafíos..."
+        }
+      },
+      "submit": "Enviar Mensaje",
+      "sending": "Enviando...",
+      "privacy": "Tu información está protegida y nunca será compartida.",
+      "success": "¡Mensaje enviado exitosamente!",
+      "error": "Error al enviar mensaje. Por favor intenta de nuevo."
+    },
+    "success": {
+      "title": "¡Gracias por Contactarnos!",
+      "message": "Hemos recibido tu consulta y nuestro equipo te responderá en menos de 24 horas.",
+      "nextSteps": "Próximos pasos: Nuestros especialistas en automatización revisarán tu solicitud y programarán una consulta personalizada para discutir tus necesidades específicas."
+    },
+    "whyChoose": {
+      "title": "¿Por Qué Elegir Agente Virtual IA?",
+      "subtitle": "Únete a cientos de empresas que confían en nuestra plataforma de automatización.",
+      "local": {
+        "title": "Experiencia Local",
+        "description": "Nuestro equipo entiende tu mercado y cultura empresarial."
+      },
+      "compliance": {
+        "title": "Cumplimiento Total",
+        "description": "Aseguramos que tu automatización cumpla todos los requisitos regulatorios."
+      },
+      "proven": {
+        "title": "Resultados Comprobados",
+        "description": "Historial de implementaciones exitosas y ROI."
+      }
+    }
   }
 }
