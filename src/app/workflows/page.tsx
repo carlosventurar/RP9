@@ -20,7 +20,8 @@ import {
   X
 } from "lucide-react"
 import { N8nWorkflow } from '@/lib/n8n'
-import { useWorkflowTranslations } from '@/hooks/use-translations'
+// import { useWorkflowTranslations } from '@/hooks/use-translations'
+import CreateWorkflowModal from '@/components/workflows/CreateWorkflowModal'
 
 interface WorkflowWithStats extends N8nWorkflow {
   lastExecution?: string
@@ -38,31 +39,26 @@ export default function WorkflowsPage() {
   const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'inactive'>('all')
   const [tagFilter, setTagFilter] = useState<string>('all')
   const [actionLoading, setActionLoading] = useState<string | null>(null)
+  const [showCreateModal, setShowCreateModal] = useState(false)
   
-  // Use translations with error handling
-  let t: any = {}
-  try {
-    t = useWorkflowTranslations()
-  } catch (error) {
-    // Fallback translations if hook fails
-    t = {
-      title: 'Workflows',
-      subtitle: 'Manage and monitor your automation workflows',
-      newWorkflow: 'New Workflow',
-      searchWorkflows: 'Search workflows...',
-      lastRun: 'Last Run',
-      executions: 'Executions',
-      run: 'Run',
-      never: 'Never',
-      all: 'All',
-      active: 'Active',
-      inactive: 'Inactive',
-      success: 'Success',
-      crossnetFilterActive: 'Crossnet Filter Active',
-      noWorkflowsMatchFilters: 'No workflows match your filters',
-      noWorkflowsFound: 'No workflows found',
-      createFirstWorkflow: 'Create First Workflow'
-    }
+  // Use fallback translations for debugging
+  const t = {
+    title: 'Workflows',
+    subtitle: 'Manage and monitor your automation workflows',
+    newWorkflow: 'New Workflow',
+    searchWorkflows: 'Search workflows...',
+    lastRun: 'Last Run',
+    executions: 'Executions',
+    run: 'Run',
+    never: 'Never',
+    all: 'All',
+    active: 'Active',
+    inactive: 'Inactive',
+    success: 'Success',
+    crossnetFilterActive: 'Crossnet Filter Active',
+    noWorkflowsMatchFilters: 'No workflows match your filters',
+    noWorkflowsFound: 'No workflows found',
+    createFirstWorkflow: 'Create First Workflow'
   }
 
   // Mock data for development
@@ -184,10 +180,11 @@ export default function WorkflowsPage() {
   }, [workflows, searchTerm, statusFilter, tagFilter])
 
   const handleToggleWorkflow = async (workflow: WorkflowWithStats) => {
-    setActionLoading(workflow.id!)
+    const workflowId = String(workflow.id)
+    setActionLoading(workflowId)
     try {
       const endpoint = workflow.active ? 'deactivate' : 'activate'
-      const response = await fetch(`/api/workflows-direct/${workflow.id}/${endpoint}`, {
+      const response = await fetch(`/api/workflows-direct/${workflowId}/${endpoint}`, {
         method: 'POST'
       })
       
@@ -195,7 +192,7 @@ export default function WorkflowsPage() {
         // Update local state
         setWorkflows(prev =>
           prev.map(w =>
-            w.id === workflow.id ? { ...w, active: !w.active } : w
+            String(w.id) === workflowId ? { ...w, active: !w.active } : w
           )
         )
       } else {
@@ -239,6 +236,45 @@ export default function WorkflowsPage() {
     setTagFilter('all')
   }
 
+  const handleCreateSuccess = () => {
+    // Refrescar la lista de workflows
+    const fetchWorkflows = async () => {
+      setLoading(true)
+      try {
+        // Try direct n8n API first
+        const response = await fetch('/api/workflows-direct')
+        if (response.ok) {
+          const data = await response.json()
+          
+          // Check if we got fallback data (API was unavailable)
+          if (data.fallback) {
+            console.warn('N8N API temporarily unavailable, using fallback data')
+            setWorkflows(mockWorkflows)
+            setAvailableTags(['finance', 'automation', 'email', 'marketing', 'crm', 'leads', 'campaigns', 'onboarding', 'customers', 'accounting', 'welcome'])
+          } else {
+            // Use real data from n8n
+            setWorkflows(data.data || [])
+            setAvailableTags(data.tags || [])
+          }
+        } else {
+          console.error('Failed to fetch workflows from n8n:', response.statusText)
+          // Fallback to mock data if API fails
+          setWorkflows(mockWorkflows)
+          setAvailableTags(['finance', 'automation', 'email', 'marketing', 'crm', 'leads', 'campaigns', 'onboarding', 'customers', 'accounting', 'welcome'])
+        }
+      } catch (error) {
+        console.error('Failed to fetch workflows:', error)
+        // Fallback to mock data if API fails
+        setWorkflows(mockWorkflows)
+        setAvailableTags(['finance', 'automation', 'email', 'marketing', 'crm', 'leads', 'campaigns', 'onboarding', 'customers', 'accounting', 'welcome'])
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchWorkflows()
+  }
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -251,19 +287,19 @@ export default function WorkflowsPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">{String(t('title'))}</h1>
+          <h1 className="text-3xl font-bold tracking-tight">{t.title}</h1>
           <div className="flex items-center gap-2">
             <p className="text-muted-foreground">
-              {String(t('subtitle'))}
+              {t.subtitle}
             </p>
             <Badge variant="secondary" className="text-xs">
-              {String(t('crossnetFilterActive'))}
+              {t.crossnetFilterActive}
             </Badge>
           </div>
         </div>
-        <Button>
+        <Button onClick={() => setShowCreateModal(true)}>
           <Plus className="h-4 w-4 mr-2" />
-          {String(t('newWorkflow'))}
+          {t.newWorkflow}
         </Button>
       </div>
 
@@ -272,7 +308,7 @@ export default function WorkflowsPage() {
         <div className="relative flex-1 max-w-sm">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
           <Input
-            placeholder={String(t('searchWorkflows'))}
+            placeholder={t.searchWorkflows}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="pl-10"
@@ -296,11 +332,11 @@ export default function WorkflowsPage() {
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">Todos los tags</SelectItem>
-            {availableTags.map(tag => (
-              <SelectItem key={tag} value={tag}>
+            {availableTags.map((tag, index) => (
+              <SelectItem key={`tag-${index}-${String(tag)}`} value={String(tag)}>
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 rounded-full bg-primary"></div>
-                  {tag}
+                  {String(tag)}
                 </div>
               </SelectItem>
             ))}
@@ -327,8 +363,8 @@ export default function WorkflowsPage() {
 
       {/* Workflows Grid */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {filteredWorkflows.map((workflow) => (
-          <Card key={workflow.id} className="hover:shadow-md transition-shadow">
+        {filteredWorkflows.map((workflow, index) => (
+          <Card key={`workflow-${workflow.id || index}`} className="hover:shadow-md transition-shadow">
             <CardHeader className="pb-3">
               <div className="flex items-start justify-between">
                 <div className="space-y-1 flex-1">
@@ -337,18 +373,18 @@ export default function WorkflowsPage() {
                   </CardTitle>
                   <div className="flex items-center gap-2 flex-wrap">
                     <Badge variant={workflow.active ? "default" : "secondary"}>
-                      {workflow.active ? String(t('active')) : String(t('inactive'))}
+                      {workflow.active ? t.active : t.inactive}
                     </Badge>
                     {workflow.successRate && (
                       <Badge variant="outline" className="text-xs">
-                        {typeof workflow.successRate === 'number' ? workflow.successRate : 0}% {String(t('success'))}
+                        {typeof workflow.successRate === 'number' ? workflow.successRate : 0}% {t.success}
                       </Badge>
                     )}
                   </div>
                   {workflow.tags && workflow.tags.length > 0 && (
                     <div className="flex items-center gap-1 mt-2 flex-wrap">
-                      {workflow.tags.slice(0, 3).map(tag => (
-                        <Badge key={String(tag)} variant="secondary" className="text-xs px-2 py-0">
+                      {workflow.tags.slice(0, 3).map((tag, index) => (
+                        <Badge key={`workflow-${workflow.id}-tag-${index}-${String(tag)}`} variant="secondary" className="text-xs px-2 py-0">
                           {String(tag)}
                         </Badge>
                       ))}
@@ -364,9 +400,9 @@ export default function WorkflowsPage() {
                   variant="ghost" 
                   size="icon"
                   onClick={() => handleToggleWorkflow(workflow)}
-                  disabled={actionLoading === workflow.id}
+                  disabled={actionLoading === String(workflow.id)}
                 >
-                  {actionLoading === workflow.id ? (
+                  {actionLoading === String(workflow.id) ? (
                     <Loader2 className="h-4 w-4 animate-spin" />
                   ) : workflow.active ? (
                     <Pause className="h-4 w-4" />
@@ -379,14 +415,14 @@ export default function WorkflowsPage() {
             <CardContent className="space-y-3">
               <div className="grid grid-cols-2 gap-4 text-sm">
                 <div className="space-y-1">
-                  <div className="text-muted-foreground">{String(t('lastRun'))}</div>
+                  <div className="text-muted-foreground">{t.lastRun}</div>
                   <div className="flex items-center gap-1">
                     <Clock className="h-3 w-3" />
-                    {typeof workflow.lastExecution === 'string' ? workflow.lastExecution : String(t('never'))}
+                    {typeof workflow.lastExecution === 'string' ? workflow.lastExecution : t.never}
                   </div>
                 </div>
                 <div className="space-y-1">
-                  <div className="text-muted-foreground">{String(t('executions'))}</div>
+                  <div className="text-muted-foreground">{t.executions}</div>
                   <div className="flex items-center gap-1">
                     <CheckCircle className="h-3 w-3" />
                     {typeof workflow.executionCount === 'number' ? workflow.executionCount : 0}
@@ -399,15 +435,15 @@ export default function WorkflowsPage() {
                   variant="outline" 
                   size="sm" 
                   className="flex-1"
-                  onClick={() => handleRunWorkflow(workflow.id!)}
-                  disabled={actionLoading === workflow.id}
+                  onClick={() => handleRunWorkflow(String(workflow.id))}
+                  disabled={actionLoading === String(workflow.id)}
                 >
-                  {actionLoading === workflow.id ? (
+                  {actionLoading === String(workflow.id) ? (
                     <Loader2 className="h-3 w-3 animate-spin mr-1" />
                   ) : (
                     <Play className="h-3 w-3 mr-1" />
                   )}
-                  {String(t('run'))}
+                  {t.run}
                 </Button>
                 <Button variant="ghost" size="sm">
                   <Settings className="h-3 w-3" />
@@ -422,16 +458,24 @@ export default function WorkflowsPage() {
         <div className="text-center py-12">
           <div className="text-muted-foreground mb-4">
             {searchTerm || statusFilter !== 'all' ? 
-              String(t('noWorkflowsMatchFilters')) : 
-              String(t('noWorkflowsFound'))
+              t.noWorkflowsMatchFilters : 
+              t.noWorkflowsFound
             }
           </div>
-          <Button>
+          <Button onClick={() => setShowCreateModal(true)}>
             <Plus className="h-4 w-4 mr-2" />
-            {String(t('createFirstWorkflow'))}
+            {t.createFirstWorkflow}
           </Button>
         </div>
       )}
+
+      {/* Create Workflow Modal */}
+      <CreateWorkflowModal
+        open={showCreateModal}
+        onOpenChange={setShowCreateModal}
+        onSuccess={handleCreateSuccess}
+        availableTags={availableTags}
+      />
     </div>
   )
 }
