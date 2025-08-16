@@ -180,10 +180,11 @@ export default function WorkflowsPage() {
   }, [workflows, searchTerm, statusFilter, tagFilter])
 
   const handleToggleWorkflow = async (workflow: WorkflowWithStats) => {
-    setActionLoading(workflow.id!)
+    const workflowId = String(workflow.id)
+    setActionLoading(workflowId)
     try {
       const endpoint = workflow.active ? 'deactivate' : 'activate'
-      const response = await fetch(`/api/workflows-direct/${workflow.id}/${endpoint}`, {
+      const response = await fetch(`/api/workflows-direct/${workflowId}/${endpoint}`, {
         method: 'POST'
       })
       
@@ -191,7 +192,7 @@ export default function WorkflowsPage() {
         // Update local state
         setWorkflows(prev =>
           prev.map(w =>
-            w.id === workflow.id ? { ...w, active: !w.active } : w
+            String(w.id) === workflowId ? { ...w, active: !w.active } : w
           )
         )
       } else {
@@ -331,11 +332,11 @@ export default function WorkflowsPage() {
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">Todos los tags</SelectItem>
-            {availableTags.map(tag => (
-              <SelectItem key={tag} value={tag}>
+            {availableTags.map((tag, index) => (
+              <SelectItem key={`tag-${index}-${String(tag)}`} value={String(tag)}>
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 rounded-full bg-primary"></div>
-                  {tag}
+                  {String(tag)}
                 </div>
               </SelectItem>
             ))}
@@ -362,8 +363,8 @@ export default function WorkflowsPage() {
 
       {/* Workflows Grid */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {filteredWorkflows.map((workflow) => (
-          <Card key={workflow.id} className="hover:shadow-md transition-shadow">
+        {filteredWorkflows.map((workflow, index) => (
+          <Card key={`workflow-${workflow.id || index}`} className="hover:shadow-md transition-shadow">
             <CardHeader className="pb-3">
               <div className="flex items-start justify-between">
                 <div className="space-y-1 flex-1">
@@ -382,8 +383,8 @@ export default function WorkflowsPage() {
                   </div>
                   {workflow.tags && workflow.tags.length > 0 && (
                     <div className="flex items-center gap-1 mt-2 flex-wrap">
-                      {workflow.tags.slice(0, 3).map(tag => (
-                        <Badge key={String(tag)} variant="secondary" className="text-xs px-2 py-0">
+                      {workflow.tags.slice(0, 3).map((tag, index) => (
+                        <Badge key={`workflow-${workflow.id}-tag-${index}-${String(tag)}`} variant="secondary" className="text-xs px-2 py-0">
                           {String(tag)}
                         </Badge>
                       ))}
@@ -399,9 +400,9 @@ export default function WorkflowsPage() {
                   variant="ghost" 
                   size="icon"
                   onClick={() => handleToggleWorkflow(workflow)}
-                  disabled={actionLoading === workflow.id}
+                  disabled={actionLoading === String(workflow.id)}
                 >
-                  {actionLoading === workflow.id ? (
+                  {actionLoading === String(workflow.id) ? (
                     <Loader2 className="h-4 w-4 animate-spin" />
                   ) : workflow.active ? (
                     <Pause className="h-4 w-4" />
@@ -434,10 +435,10 @@ export default function WorkflowsPage() {
                   variant="outline" 
                   size="sm" 
                   className="flex-1"
-                  onClick={() => handleRunWorkflow(workflow.id!)}
-                  disabled={actionLoading === workflow.id}
+                  onClick={() => handleRunWorkflow(String(workflow.id))}
+                  disabled={actionLoading === String(workflow.id)}
                 >
-                  {actionLoading === workflow.id ? (
+                  {actionLoading === String(workflow.id) ? (
                     <Loader2 className="h-3 w-3 animate-spin mr-1" />
                   ) : (
                     <Play className="h-3 w-3 mr-1" />
