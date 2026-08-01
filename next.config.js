@@ -13,6 +13,12 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   serverExternalPackages: ['sharp'],
+  // La pagina de novedades lee el CHANGELOG.md de la raiz en tiempo de ejecucion del
+  // servidor. El rastreo automatico no lo detecta (la ruta se arma con process.cwd()),
+  // asi que hay que incluirlo a mano o en el despliegue no existe.
+  outputFileTracingIncludes: {
+    '/[locale]/novedades': ['./CHANGELOG.md'],
+  },
   // Configure for serverless deployment  
   images: {
     unoptimized: true,

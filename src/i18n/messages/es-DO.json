@@ -298,5 +298,22 @@
       "startTrial": "Comenzar Prueba Gratuita",
       "scheduleDemo": "Agendar Demo"
     }
+  },
+  "changelog": {
+    "metaTitle": "Novedades — Agente Virtual IA",
+    "metaDescription": "Todas las versiones de la plataforma: qué se agregó, qué se mejoró y qué se corrigió en cada una.",
+    "title": "Novedades",
+    "subtitle": "Lo que trae cada versión de la plataforma, con su fecha.",
+    "currentVersion": "Versión actual",
+    "versionLink": "Enlace directo a la versión {version}",
+    "empty": "Todavía no hay versiones publicadas.",
+    "historyNote": "Las versiones anteriores al inicio de este registro no están desglosadas aquí.",
+    "sections": {
+      "Nuevo": "Nuevo",
+      "Mejorado": "Mejorado",
+      "Corregido": "Corregido",
+      "Eliminado": "Eliminado",
+      "Seguridad": "Seguridad"
+    }
   }
 }

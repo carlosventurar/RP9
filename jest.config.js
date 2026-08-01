@@ -12,6 +12,9 @@ const customJestConfig = {
   testPathIgnorePatterns: ['<rootDir>/.next/', '<rootDir>/node_modules/'],
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
+    // marked solo publica ESM y jest corre en CJS: apuntamos al bundle UMD, que si carga.
+    // Next.js resuelve el ESM por su cuenta, esto no afecta al build.
+    '^marked$': '<rootDir>/node_modules/marked/lib/marked.umd.js',
   },
   transform: {
     '^.+\\.(js|jsx|ts|tsx)$': ['babel-jest', { presets: ['next/babel'] }]

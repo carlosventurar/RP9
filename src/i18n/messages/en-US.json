@@ -385,5 +385,22 @@
         "description": "Track record of successful implementations and ROI."
       }
     }
+  },
+  "changelog": {
+    "metaTitle": "What's new — Agente Virtual IA",
+    "metaDescription": "Every release of the platform: what was added, improved and fixed in each one.",
+    "title": "What's new",
+    "subtitle": "What each release of the platform brings, with its date.",
+    "currentVersion": "Current version",
+    "versionLink": "Direct link to version {version}",
+    "empty": "No releases published yet.",
+    "historyNote": "Releases from before this log began are not broken down here.",
+    "sections": {
+      "Nuevo": "New",
+      "Mejorado": "Improved",
+      "Corregido": "Fixed",
+      "Eliminado": "Removed",
+      "Seguridad": "Security"
+    }
   }
 }
