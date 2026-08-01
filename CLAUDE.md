@@ -87,3 +87,12 @@ Para bugs críticos que requieren deploy inmediato:
 ## Notes
 
 This CLAUDE.md will be updated as the project grows and the codebase structure becomes more defined.
+## Historial de cambios
+
+`CHANGELOG.md` en la raiz. **Antes de tocar codigo**: revisar la ultima version y `[Unreleased]`
+para saber que se movio. **Al terminar**: agregar la entrada bajo `[Unreleased]` en el mismo
+commit — linea de negocio + linea `<!-- tec: -->`.
+
+Si `[Unreleased]` da conflicto al mergear: se conservan **los dos** bullets, nunca se elige lado.
+
+Estandar completo: skill `changelog-proyecto`.
